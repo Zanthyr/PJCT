@@ -8,4 +8,10 @@ router
   .get(jobController.getAllJobs)
   .post(jobController.createJob);
 
+router
+  .route('/:id')
+  .get(jobController.findJob)
+  .patch(jobController.updateJob)
+  .delete(jobController.deleteJob);
+
 module.exports = router;
