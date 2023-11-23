@@ -4,7 +4,7 @@ const jobSchema = new mongoose.Schema(
   {
     jobName: {
       type: String,
-      required: [true, 'A jo must have a name']
+      required: [true, 'A job must have a name']
     },
     jobDescription: {
       type: String
