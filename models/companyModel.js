@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 
 const companySchema = new mongoose.Schema(
   {
-    name: {
+    companyName: {
       type: String,
       required: [true, 'A Company must have a name'],
     },
-    type: {
+    companyType: {
       type: String,
       enum: ['Printer', 'PrePress', 'BrandOwner'],
       default: 'Printer',

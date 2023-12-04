@@ -14,7 +14,7 @@ console.log(`App is running in ${process.env.NODE_ENV}...`);
 app.use(express.json());
 
 app.use('/api/v1/users', userRouter);
-app.use('/api/v1/companys', companyRouter);
+app.use('/api/v1/companies', companyRouter);
 app.use('/api/v1/brands', brandRouter);
 app.use('/api/v1/jobs', jobRouter);
 

@@ -2,18 +2,18 @@ const mongoose = require('mongoose');
 
 const artworkSchema = new mongoose.Schema(
   {
-    name: {
+    artworkName: {
       type: String,
       required: [true, 'A job must have a name'],
     },
-    description: {
+    artworkDescription: {
       type: String,
     },
-    image: {
+    artworkImage: {
       type: String,
       required: [true, 'A tour must have a design image'],
     },
-    creator: {
+    artworkCreator: {
       type: mongoose.Schema.ObjectId,
       ref: 'Company',
       required: [true, 'A job must have a creator (company ID)'],
@@ -24,7 +24,7 @@ const artworkSchema = new mongoose.Schema(
         ref: 'Company',
       },
     ],
-    colors: [
+    artworkColors: [
       {
         type: mongoose.Schema.ObjectId,
         ref: 'Color',

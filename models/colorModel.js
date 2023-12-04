@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const colorSchema = new mongoose.Schema(
   {
-    name: {
+    ColorName: {
       type: String,
       required: [true, 'A job must have a name'],
     },

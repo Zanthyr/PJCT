@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 
 const userSchema = new mongoose.Schema({
-  name: {
+  userName: {
     type: String,
     required: [true, 'Please tell us your name!'],
   },
@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
     ref: 'Company',
     required: [true, 'A user must belong to a company'],
   },
-  photo: {
+  userPhoto: {
     type: String,
     default: 'default.jpg',
   },
