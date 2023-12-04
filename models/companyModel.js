@@ -4,14 +4,25 @@ const companySchema = new mongoose.Schema(
   {
     companyName: {
       type: String,
-      required: [true, 'A job must have a name']
+      required: [true, 'A Company must have a name']
     },
-    companType: {
-      type: String
+    companyType: {
+      type: String,
+      enum: ['Printer', 'PrePress', 'BrandOwner'],
+      default: 'Printer'
     },
-    // adress  - geo
-    // brands?
-    jobCreatedAt: {
+    adressLocation: {
+      // GeoJSON
+      type: {
+        type: String,
+        default: 'Point',
+        enum: ['Point']
+      },
+      coordinates: [Number],
+      address: String,
+      description: String
+    },
+    companyCreatedAt: {
       type: Date,
       default: Date.now()
     }

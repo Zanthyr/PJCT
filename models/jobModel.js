@@ -9,6 +9,27 @@ const jobSchema = new mongoose.Schema(
     jobDescription: {
       type: String
     },
+    designImage: {
+      type: String,
+      required: [true, 'A tour must have a design image']
+    },
+    jobCreator: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Company',
+      required: [true, 'A job must have a creator (company ID)']
+    },
+    printers: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Company'
+      }
+    ],
+    colors: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Color'
+      }
+    ],
     jobCreatedAt: {
       type: Date,
       default: Date.now()

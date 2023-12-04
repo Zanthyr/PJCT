@@ -8,7 +8,7 @@ const brandSchema = new mongoose.Schema(
       required: [true, 'A job must have a name']
     },
     productGroup: {
-      type: [Array]
+      type: [String]
     },
     CreatedAt: {
       type: Date,
