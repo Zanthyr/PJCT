@@ -37,6 +37,18 @@ const artworkSchema = new mongoose.Schema(
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } },
 );
+
+artworkSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'artworkCreator',
+    select: 'companyName',
+  }).populate({
+    path: 'artworkColors',
+    select: 'colorName',
+  });
+  next();
+});
+
 const Artwork = mongoose.model('Artwork', artworkSchema);
 
 module.exports = Artwork;

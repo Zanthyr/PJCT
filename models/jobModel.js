@@ -10,11 +10,12 @@ const jobSchema = new mongoose.Schema(
     jobCreator: {
       type: mongoose.Schema.ObjectId,
       ref: 'Company',
-      required: [true, 'A job must have a creator (company ID)'],
+      required: [true, 'A job must have a creator'],
     },
     printer: {
       type: mongoose.Schema.ObjectId,
       ref: 'Company',
+      required: [true, 'A job must have a Printer'],
     },
     createdAt: {
       type: Date,
@@ -23,6 +24,16 @@ const jobSchema = new mongoose.Schema(
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } },
 );
+
+jobSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'artworkId',
+    select: '-__v -sharedwithComapnies -_id',
+  });
+
+  next();
+});
+
 const Job = mongoose.model('Job', jobSchema);
 
 module.exports = Job;

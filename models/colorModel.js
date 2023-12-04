@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 
 const colorSchema = new mongoose.Schema(
   {
-    ColorName: {
+    colorName: {
       type: String,
-      required: [true, 'A job must have a name'],
+      required: [true, 'A color must have a name'],
     },
     createdAt: {
       type: Date,
@@ -13,6 +13,6 @@ const colorSchema = new mongoose.Schema(
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } },
 );
-const Color = mongoose.model('Job', colorSchema);
+const Color = mongoose.model('Color', colorSchema);
 
 module.exports = Color;

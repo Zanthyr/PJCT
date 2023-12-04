@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
     lowercase: true,
     validate: [validator.isEmail, 'Please provide a valid email'],
   },
-  Company: {
+  company: {
     type: mongoose.Schema.ObjectId,
     ref: 'Company',
     required: [true, 'A user must belong to a company'],
@@ -56,6 +56,14 @@ const userSchema = new mongoose.Schema({
     default: true,
     select: false,
   },
+});
+
+userSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'company',
+    select: 'companyName',
+  });
+  next();
 });
 
 const User = mongoose.model('User', userSchema);
