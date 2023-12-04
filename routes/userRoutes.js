@@ -5,13 +5,13 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(userController.getAllJobs)
-  .post(userController.createJob);
+  .get(userController.getAllUsers)
+  .post(userController.createUser);
 
 router
   .route('/:id')
-  .get(userController.findJob)
-  .patch(userController.updateJob)
-  .delete(userController.deleteJob);
+  .get(userController.getUser)
+  .patch(userController.updateUser)
+  .delete(userController.deleteUser);
 
 module.exports = router;

@@ -4,8 +4,8 @@
   "description": "Print Job Colaboration tool",
   "main": "server.js",
   "scripts": {
-    "start": "MODE_ENV=production nodemon server.js",
-    "dev": "nodemon server.js"
+    "start:prod": "MODE_ENV=production nodemon server.js",
+    "start:dev": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -17,26 +17,22 @@
     "url": "https://github.com/Zanthyr/PrintJobbor/issues"
   },
   "homepage": "https://github.com/Zanthyr/PrintJobbor#readme",
-  "devDependencies": {
-    "eslint": "^5.16.0",
-    "eslint-config-airbnb": "^17.1.0",
-    "eslint-config-prettier": "^4.1.0",
-    "eslint-plugin-import": "^2.17.2",
-    "eslint-plugin-jsx-a11y": "^6.2.1",
-    "eslint-plugin-node": "^8.0.1",
-    "eslint-plugin-prettier": "^3.0.1",
-    "eslint-plugin-react": "^7.12.4",
-    "nodemon": "^3.0.1",
-    "prettier": "^1.17.0"
-  },
   "dependencies": {
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "mongoose": "^8.0.1",
+    "mongoose": "^8.0.2",
     "morgan": "^1.10.0",
     "validator": "^13.11.0"
   },
   "engines": {
     "node": ">=10.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.55.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "prettier": "^3.1.0"
   }
 }

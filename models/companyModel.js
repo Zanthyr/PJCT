@@ -2,32 +2,32 @@ const mongoose = require('mongoose');
 
 const companySchema = new mongoose.Schema(
   {
-    companyName: {
+    name: {
       type: String,
-      required: [true, 'A Company must have a name']
+      required: [true, 'A Company must have a name'],
     },
-    companyType: {
+    type: {
       type: String,
       enum: ['Printer', 'PrePress', 'BrandOwner'],
-      default: 'Printer'
+      default: 'Printer',
     },
     adressLocation: {
       // GeoJSON
       type: {
         type: String,
         default: 'Point',
-        enum: ['Point']
+        enum: ['Point'],
       },
       coordinates: [Number],
       address: String,
-      description: String
+      description: String,
     },
-    companyCreatedAt: {
+    createdAt: {
       type: Date,
-      default: Date.now()
-    }
+      default: Date.now(),
+    },
   },
-  { toJSON: { virtuals: true }, toObject: { virtuals: true } }
+  { toJSON: { virtuals: true }, toObject: { virtuals: true } },
 );
 const Company = mongoose.model('Company', companySchema);
 

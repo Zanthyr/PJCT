@@ -5,17 +5,22 @@ const brandSchema = new mongoose.Schema(
     // gekoppeld aan company dmv Brandowner ID
     brandName: {
       type: String,
-      required: [true, 'A job must have a name']
+      required: [true, 'A brand must have a name'],
     },
     productGroup: {
-      type: [String]
+      type: String,
     },
-    CreatedAt: {
+    brandOwner: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Company',
+      required: [true, 'A Barnd must have a company'],
+    },
+    createdAt: {
       type: Date,
-      default: Date.now()
-    }
+      default: Date.now(),
+    },
   },
-  { toJSON: { virtuals: true }, toObject: { virtuals: true } }
+  { toJSON: { virtuals: true }, toObject: { virtuals: true } },
 );
 const Brand = mongoose.model('Brand', brandSchema);
 

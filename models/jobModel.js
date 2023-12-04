@@ -2,40 +2,26 @@ const mongoose = require('mongoose');
 
 const jobSchema = new mongoose.Schema(
   {
-    jobName: {
-      type: String,
-      required: [true, 'A job must have a name']
-    },
-    jobDescription: {
-      type: String
-    },
-    designImage: {
-      type: String,
-      required: [true, 'A tour must have a design image']
+    artworkId: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Artwork',
+      required: [true, 'Job must have an Artwork'],
     },
     jobCreator: {
       type: mongoose.Schema.ObjectId,
       ref: 'Company',
-      required: [true, 'A job must have a creator (company ID)']
+      required: [true, 'A job must have a creator (company ID)'],
     },
-    printers: [
-      {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Company'
-      }
-    ],
-    colors: [
-      {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Color'
-      }
-    ],
-    jobCreatedAt: {
+    printer: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Company',
+    },
+    createdAt: {
       type: Date,
-      default: Date.now()
-    }
+      default: Date.now(),
+    },
   },
-  { toJSON: { virtuals: true }, toObject: { virtuals: true } }
+  { toJSON: { virtuals: true }, toObject: { virtuals: true } },
 );
 const Job = mongoose.model('Job', jobSchema);
 
