@@ -22,6 +22,15 @@ const brandSchema = new mongoose.Schema(
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } },
 );
+
+brandSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'brandOwner',
+    select: 'companyName',
+  });
+  next();
+});
+
 const Brand = mongoose.model('Brand', brandSchema);
 
 module.exports = Brand;

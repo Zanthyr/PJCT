@@ -2,9 +2,13 @@ const mongoose = require('mongoose');
 
 const artworkSchema = new mongoose.Schema(
   {
+    artworkId: {
+      type: Number,
+      required: [true, 'The artwork must have a identification number'],
+    },
     artworkName: {
       type: String,
-      required: [true, 'A job must have a name'],
+      required: [true, 'The artwork must have a name'],
     },
     artworkDescription: {
       type: String,
