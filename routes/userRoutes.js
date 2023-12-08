@@ -9,12 +9,25 @@ router.post('/signup', authController.signUp);
 router.post('/login', authController.login);
 router.post('/logout', authController.logout);
 
+// pwd reset route - forget pwd  - reset pwd
+router.post('/forgotPassword', authController.forgotPassword);
+router.patch('/resetPassword/:token', authController.resetPassword);
+
 // Protect all routes from this point on
 router.use(authController.protect);
 
-// pwd reset route - forget pwd  - reset pwd
-
 // route for updating pwd
+router.patch('/updateMyPassword', authController.updatePassword);
+
+// route for updateMe
+router.get('/me', userController.getMe, userController.getUser);
+router.patch(
+  '/updateMe',
+  userController.uploadUserPhoto,
+  userController.resizeUserPhoto,
+  userController.updateMe,
+);
+router.delete('/deleteMe', userController.deleteMe);
 
 // admin only from this poit on
 router.use(authController.restrictTo('admin'));

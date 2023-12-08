@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Zanthyr/PrintJobbor#readme",
   "dependencies": {
+    "@img/sharp-win32-x64": "^0.33.0",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.3.1",
@@ -28,6 +29,7 @@
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.7",
     "pug": "^3.0.2",
+    "sharp": "^0.33.0",
     "validator": "^13.11.0"
   },
   "engines": {
