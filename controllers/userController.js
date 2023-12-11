@@ -5,7 +5,7 @@ const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
 
 exports.getAllUsers = factory.getAll(User);
-exports.getUser = factory.getOne(User); // factory.getOne(Tour, { path: 'reviews' });
+exports.getUser = factory.getOne(User);
 exports.createUser = (req, res) => {
   res.status(500).json({
     status: 'error',
@@ -14,16 +14,6 @@ exports.createUser = (req, res) => {
 };
 exports.updateUser = factory.updateOne(User);
 exports.deleteUser = factory.deleteOne(User);
-
-// const multerStorage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, 'public/img/users');
-//   },
-//   filename: (req, file, cb) => {
-//     const ext = file.mimetype.split('/')[1];
-//     cb(null, `user-${req.user.id}-${Date.now()}.${ext}`);
-//   },
-// });
 
 const multerStorage = multer.memoryStorage();
 
@@ -67,7 +57,7 @@ exports.getMe = (req, res, next) => {
 };
 
 exports.updateMe = catchAsync(async (req, res, next) => {
-  // 1) Create error if user POSTs password data
+  // Create error if user POSTs password data
   if (req.body.password || req.body.passwordConfirm) {
     return next(
       new AppError(
@@ -77,10 +67,10 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     );
   }
 
-  // 2) Filtered out unwanted fields names that are not allowed to be updated
-  const filteredBody = filterObj(req.body, 'name', 'email');
-  if (req.file) filteredBody.photo = req.file.filename;
-  // 3) Update user document
+  // Filtered out unwanted fields
+  const filteredBody = filterObj(req.body, 'userName', 'email');
+  if (req.file) filteredBody.userPhoto = req.file.filename;
+  // Update user document
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,
     runValidators: true,
