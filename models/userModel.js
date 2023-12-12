@@ -49,6 +49,14 @@ const userSchema = new mongoose.Schema({
     enum: ['user', 'companyAdmin'],
     default: 'user',
   },
+  jobCreator: {
+    type: Boolean,
+    default: false,
+  },
+  artworkCreator: {
+    type: Boolean,
+    default: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now(),

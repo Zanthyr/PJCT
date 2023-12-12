@@ -9,7 +9,7 @@ router.use(authController.protect);
 router
   .route('/')
   .get(artworkController.getAllArtworks)
-  .post(artworkController.createArtwork);
+  .post(authController.isArtworkCreator(), artworkController.createArtwork);
 
 router
   .route('/:id')

@@ -21,12 +21,12 @@ const artworkSchema = new mongoose.Schema(
     },
     artworkImage: {
       type: String,
-      required: [true, 'A tour must have a design image'],
+      required: [true, 'The artwork must have a design image'],
     },
     artworkCreator: {
       type: mongoose.Schema.ObjectId,
       ref: 'Company',
-      required: [true, 'A job must have a creator (company ID)'],
+      required: [true, 'The artwork have a creator (company ID)'],
     },
     sharedwithComapnies: [
       {

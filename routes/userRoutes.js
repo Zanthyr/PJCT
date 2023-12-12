@@ -28,7 +28,7 @@ router.patch(
 router.delete('/deleteMe', userController.deleteMe);
 
 // admin only from this poit on
-router.use(authController.restrictTo('systemAdmin'));
+router.use(authController.restrictTo('systemAdmin', 'companyAdmin'));
 
 router.post('/signup', authController.signUp);
 
@@ -43,5 +43,9 @@ router
   .patch(userController.updateUser);
 
 router.route('/delete/:id').patch(userController.softDelete);
+
+router.use(authController.restrictTo('systemAdmin'));
+
+router.route('/:id').delete(userController.deleteUser);
 
 module.exports = router;

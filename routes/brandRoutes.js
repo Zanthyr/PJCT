@@ -6,19 +6,20 @@ const router = express.Router();
 
 router.use(authController.protect);
 
-router
-  .route('/')
-  .get(brandController.getAllBrands)
-  .post(brandController.createBrand);
+router.route('/').get(brandController.getAllBrands);
 
-router
-  .route('/:id')
-  .get(brandController.getBrand)
-  .patch(brandController.updateBrand);
+router.route('/:id').get(brandController.getBrand);
+
+router.use(authController.restrictTo('systemAdmin', 'companyAdmin'));
+
+router.route('/').post(brandController.createBrand);
 
 router.use(authController.restrictTo('systemAdmin'));
 
 router.route('/delete/:id').patch(brandController.softDeleteBrand);
-//router.route('/:id').delete(brandController.deleteBrand);
+router
+  .route('/:id')
+  .patch(brandController.updateBrand)
+  .delete(brandController.deleteBrand);
 
 module.exports = router;

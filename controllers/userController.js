@@ -3,18 +3,100 @@ const multer = require('multer');
 const User = require('./../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
+const AppError = require('../utils/appError');
+const APIFeatures = require('../utils/apiFeatures');
 
-exports.getAllUsers = factory.getAll(User);
-exports.getUser = factory.getOne(User);
 exports.createUser = (req, res) => {
   res.status(500).json({
     status: 'error',
     message: 'This route is not defined! Please use /signup instead',
   });
 };
-exports.updateUser = factory.updateOne(User);
-exports.softDelete = factory.softDelete(User);
-exports.deleteUser = factory.deleteOne(User);
+
+exports.getAllUsers = catchAsync(async (req, res, next) => {
+  if (req.user.role !== 'systemAdmin') req.query.company = req.user.company.id;
+  const features = new APIFeatures(User.find(), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+  const doc = await features.query;
+
+  // SEND RESPONSE
+  res.status(200).json({
+    status: 'success',
+    results: doc.length,
+    data: {
+      data: doc,
+    },
+  });
+});
+
+exports.getUser = catchAsync(async (req, res, next, popOptions) => {
+  let query = User.findById(req.params.id);
+  if (popOptions) query = query.populate(popOptions);
+  const doc = await query;
+
+  if (!doc) {
+    return next(new AppError('No document found with that ID', 404));
+  }
+
+  if (req.user.company.id !== doc.company.id && req.user.role !== 'systemAdmin')
+    return next(
+      new AppError(
+        'You can only request user information for your own company!',
+        401,
+      ),
+    );
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      data: doc,
+    },
+  });
+});
+
+exports.updateUser = catchAsync(async (req, res, next) => {
+  const doc = await User.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!doc) {
+    return next(new AppError('No document found with that ID', 404));
+  }
+
+  if (req.user.company.id !== doc.company.id && req.user.role !== 'systemAdmin')
+    return next(
+      new AppError('You can only update users for your own company!', 401),
+    );
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      data: doc,
+    },
+  });
+});
+
+exports.softDelete = catchAsync(async (req, res, next) => {
+  const doc = await User.findByIdAndUpdate(req.params.id, { active: false });
+
+  if (!doc) {
+    return next(new AppError('No document found with that ID', 404));
+  }
+
+  if (req.user.company.id !== doc.company.id && req.user.role !== 'systemAdmin')
+    return next(
+      new AppError('You can only delte users for your own company!', 401),
+    );
+
+  res.status(204).json({
+    status: 'success',
+    data: null,
+  });
+});
 
 const multerStorage = multer.memoryStorage();
 
@@ -93,3 +175,6 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
     data: null,
   });
 });
+
+// admin only
+exports.deleteUser = factory.deleteOne(User);

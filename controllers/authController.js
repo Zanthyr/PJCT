@@ -35,6 +35,14 @@ const createAndSendToken = (user, statusCode, res) => {
 };
 
 exports.signUp = catchAsync(async (req, res, next) => {
+  if (
+    req.user.company.id !== req.body.company &&
+    req.user.role !== 'systemAdmin'
+  )
+    return next(
+      new AppError('You can only create users for your own company!', 401),
+    );
+
   const newUser = await User.create(req.body);
 
   // send welcome mail
@@ -116,6 +124,28 @@ exports.protect = catchAsync(async (req, res, next) => {
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
+      return next(
+        new AppError('You do not have permission to perform this action', 403),
+      );
+    }
+    next();
+  };
+};
+
+exports.isJobCreator = () => {
+  return (req, res, next) => {
+    if (!req.user.jobCreator) {
+      return next(
+        new AppError('You do not have permission to perform this action', 403),
+      );
+    }
+    next();
+  };
+};
+
+exports.isArtworkCreator = () => {
+  return (req, res, next) => {
+    if (!req.user.artworkCreator) {
       return next(
         new AppError('You do not have permission to perform this action', 403),
       );
