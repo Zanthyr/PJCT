@@ -1,7 +1,10 @@
 const express = require('express');
 const companyController = require('./../controllers/companyController');
+const authController = require('./../controllers/authController');
 
 const router = express.Router();
+
+router.use(authController.protect);
 
 router
   .route('/')
@@ -11,7 +14,10 @@ router
 router
   .route('/:id')
   .get(companyController.getCompany)
-  .patch(companyController.updateCompany)
-  .delete(companyController.deleteCompany);
+  .patch(companyController.updateCompany);
+
+router.use(authController.restrictTo('systemAdmin'));
+
+router.route('/:id').delete(companyController.deleteCompany);
 
 module.exports = router;

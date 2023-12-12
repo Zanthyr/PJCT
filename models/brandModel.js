@@ -13,11 +13,15 @@ const brandSchema = new mongoose.Schema(
     brandOwner: {
       type: mongoose.Schema.ObjectId,
       ref: 'Company',
-      required: [true, 'A Barnd must have a company'],
     },
     createdAt: {
       type: Date,
       default: Date.now(),
+    },
+    active: {
+      type: Boolean,
+      default: true,
+      select: false,
     },
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } },
@@ -28,6 +32,12 @@ brandSchema.pre(/^find/, function (next) {
     path: 'brandOwner',
     select: 'companyName',
   });
+  next();
+});
+
+// dont return deactivated accounds when 'find' query
+brandSchema.pre(/^find/, function (next) {
+  this.find({ active: { $ne: false } });
   next();
 });
 

@@ -4,7 +4,7 @@ const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
-  userNname: {
+  userName: {
     type: String,
     required: [true, 'Please tell us your name!'],
   },
@@ -46,7 +46,7 @@ const userSchema = new mongoose.Schema({
   passwordResetExpires: Date,
   role: {
     type: String,
-    enum: ['user', 'admin'],
+    enum: ['user', 'companyAdmin'],
     default: 'user',
   },
   createdAt: {
