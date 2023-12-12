@@ -4,7 +4,13 @@ const artworkSchema = new mongoose.Schema(
   {
     artworkId: {
       type: Number,
+      unique: true,
       required: [true, 'The artwork must have a identification number'],
+    },
+    artworkVersion: {
+      type: Number,
+      default: 1,
+      select: false,
     },
     artworkName: {
       type: String,
@@ -38,6 +44,11 @@ const artworkSchema = new mongoose.Schema(
       type: Date,
       default: Date.now(),
     },
+    active: {
+      type: Boolean,
+      default: true,
+      select: false,
+    },
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } },
 );
@@ -50,6 +61,12 @@ artworkSchema.pre(/^find/, function (next) {
     path: 'artworkColors',
     select: 'colorName',
   });
+  next();
+});
+
+// dont return deactivated accounds when 'find' query
+artworkSchema.pre(/^find/, function (next) {
+  this.find({ active: { $ne: false } });
   next();
 });
 

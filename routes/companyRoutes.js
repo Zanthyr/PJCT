@@ -18,6 +18,7 @@ router
 
 router.use(authController.restrictTo('systemAdmin'));
 
-router.route('/:id').delete(companyController.deleteCompany);
+router.route('/delete/:id').patch(companyController.softDeleteCompany);
+//router.route('/:id').delete(companyController.deleteCompany);
 
 module.exports = router;

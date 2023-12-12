@@ -4,8 +4,8 @@ const companySchema = new mongoose.Schema(
   {
     companyName: {
       type: String,
-      required: [true, 'A Company must have a name'],
       unique: true,
+      required: [true, 'A Company must have a name'],
     },
     companyType: {
       type: String,
@@ -27,9 +27,21 @@ const companySchema = new mongoose.Schema(
       type: Date,
       default: Date.now(),
     },
+    active: {
+      type: Boolean,
+      default: true,
+      select: false,
+    },
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } },
 );
+
+// dont return deactivated accounds when 'find' query
+companySchema.pre(/^find/, function (next) {
+  this.find({ active: { $ne: false } });
+  next();
+});
+
 const Company = mongoose.model('Company', companySchema);
 
 module.exports = Company;

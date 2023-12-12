@@ -18,6 +18,7 @@ router
 
 router.use(authController.restrictTo('systemAdmin'));
 
-router.route('/:id').delete(brandController.deleteBrand);
+router.route('/delete/:id').patch(brandController.softDeleteBrand);
+//router.route('/:id').delete(brandController.deleteBrand);
 
 module.exports = router;

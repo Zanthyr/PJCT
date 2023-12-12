@@ -5,10 +5,12 @@ const brandSchema = new mongoose.Schema(
     // gekoppeld aan company dmv Brandowner ID
     brandName: {
       type: String,
+      unique: true,
       required: [true, 'A brand must have a name'],
     },
     productGroup: {
       type: String,
+      default: 'not aplicable',
     },
     brandOwner: {
       type: mongoose.Schema.ObjectId,

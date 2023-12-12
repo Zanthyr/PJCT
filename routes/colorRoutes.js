@@ -18,6 +18,7 @@ router
 
 router.use(authController.restrictTo('systemAdmin'));
 
-router.route('/:id').delete(colorController.deleteColor);
+router.route('/delete/:id').patch(colorController.softDeleteColor);
+//router.route('/:id').delete(colorController.deleteColor);
 
 module.exports = router;

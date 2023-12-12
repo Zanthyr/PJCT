@@ -13,6 +13,7 @@ exports.createUser = (req, res) => {
   });
 };
 exports.updateUser = factory.updateOne(User);
+exports.softDelete = factory.softDelete(User);
 exports.deleteUser = factory.deleteOne(User);
 
 const multerStorage = multer.memoryStorage();

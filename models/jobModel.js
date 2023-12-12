@@ -2,8 +2,9 @@ const mongoose = require('mongoose');
 
 const jobSchema = new mongoose.Schema(
   {
-    jobkId: {
+    jobId: {
       type: Number,
+      unique: true,
       required: [true, 'Job must have an number'],
     },
     artworkId: {

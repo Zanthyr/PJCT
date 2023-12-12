@@ -18,6 +18,7 @@ router
 
 router.use(authController.restrictTo('systemAdmin'));
 
-router.route('/:id').delete(artworkController.deleteArtwork);
+router.route('/delete/:id').patch(artworkController.softDeleteArtwork);
+//router.route('/:id').delete(artworkController.deleteArtwork);
 
 module.exports = router;
