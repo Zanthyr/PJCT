@@ -11,6 +11,19 @@ const colorSchema = new mongoose.Schema(
       default: 1,
       select: false,
     },
+    colorType: {
+      type: String,
+      enum: ['BrandColor', 'SpotColor', 'SystemColor'],
+      default: 'BrandColor',
+    },
+    brandName: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Brand',
+    },
+    createdBy: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+    },
     createdAt: {
       type: Date,
       default: Date.now(),
@@ -23,6 +36,21 @@ const colorSchema = new mongoose.Schema(
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } },
 );
+
+colorSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'createdBy',
+    select: 'userName',
+  });
+  next();
+});
+
+colorSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'brandName',
+  });
+  next();
+});
 
 // dont return deactivated accounds when 'find' query
 colorSchema.pre(/^find/, function (next) {

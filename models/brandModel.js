@@ -58,6 +58,7 @@ brandSchema.pre(/^find/, function (next) {
 brandSchema.post(/^find/, function (docs, next) {
   if (docs.length === undefined) newDoc = [docs];
   else newDoc = docs;
+  console.log('here', docs[0].brandSuppliers);
   newDoc.forEach((element) => {
     let array = element.brandManagers.concat(element.brandSuppliers);
     newArr = array.map((element) => {

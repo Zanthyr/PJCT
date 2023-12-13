@@ -6,19 +6,19 @@ const router = express.Router();
 
 router.use(authController.protect);
 
-router
-  .route('/')
-  .get(colorController.getAllColors)
-  .post(colorController.createColor);
+router.route('/').get(colorController.getAllColors);
 
-router
-  .route('/:id')
-  .get(colorController.getColor)
-  .patch(colorController.updateColor);
+router.route('/:id').get(colorController.getColor);
+
+router.use(authController.restrictTo('systemAdmin', 'companyAdmin'));
+
+router.route('/').post(colorController.createColor);
+
+router.route('/:id').patch(colorController.updateColor);
 
 router.use(authController.restrictTo('systemAdmin'));
 
 router.route('/delete/:id').patch(colorController.softDeleteColor);
-//router.route('/:id').delete(colorController.deleteColor);
+router.route('/:id').delete(colorController.deleteColor);
 
 module.exports = router;
