@@ -35,7 +35,6 @@ jobSchema.pre(/^find/, function (next) {
     path: 'artworkId',
     select: '-__v -sharedwithComapnies -_id',
   });
-
   next();
 });
 

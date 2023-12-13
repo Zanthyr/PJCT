@@ -8,6 +8,7 @@ const userRouter = require('./routes/userRoutes');
 const artworkRouter = require('./routes/artworkRoutes');
 const jobRouter = require('./routes/jobRoutes');
 const colorRouter = require('./routes/colorRoutes');
+const viewRouter = require('./routes/viewRoutes');
 const globalErrorHandeler = require('./controllers/errorController');
 
 const app = express();
@@ -28,6 +29,7 @@ app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(cookieParser());
 
+app.use('/', viewRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/companies', companyRouter);
 app.use('/api/v1/brands', brandRouter);

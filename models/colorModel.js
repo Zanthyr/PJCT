@@ -41,12 +41,7 @@ colorSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'createdBy',
     select: 'userName',
-  });
-  next();
-});
-
-colorSchema.pre(/^find/, function (next) {
-  this.populate({
+  }).populate({
     path: 'brandName',
   });
   next();
