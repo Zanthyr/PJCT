@@ -22,9 +22,7 @@ const createAndSendToken = (user, statusCode, res) => {
     httpOnly: true,
   };
   if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-
   res.cookie('jwt', token, cookieOptions);
-
   user.password = undefined;
 
   res.status(statusCode).json({
@@ -124,6 +122,19 @@ exports.protect = catchAsync(async (req, res, next) => {
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
+      return next(
+        new AppError('You do not have permission to perform this action', 403),
+      );
+    }
+    next();
+  };
+};
+
+// companyType;
+exports.restrictToCompanyType = (...types) => {
+  return (req, res, next) => {
+    console.log(req.user.company.companyType);
+    if (!types.includes(req.user.company.companyType)) {
       return next(
         new AppError('You do not have permission to perform this action', 403),
       );

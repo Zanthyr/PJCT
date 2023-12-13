@@ -1,10 +1,8 @@
 const sendError = (err, res) => {
-  console.log('BOOOOM ERROR', err.stack);
+  console.log('BOOOOM ERROR', err.message, err, err.stack);
   res.status(err.statusCode).json({
     status: err.status,
-    error: err,
     message: err.message,
-    stack: err.stack,
   });
 };
 
