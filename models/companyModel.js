@@ -23,6 +23,10 @@ const companySchema = new mongoose.Schema(
       address: String,
       description: String,
     },
+    companyPhoto: {
+      type: String,
+      default: 'default.jpg',
+    },
     createdAt: {
       type: Date,
       default: Date.now(),

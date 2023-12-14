@@ -71,22 +71,24 @@ exports.createColor = catchAsync(async (req, res, next) => {
 });
 
 exports.updateColor = catchAsync(async (req, res, next) => {
-  const doc = await Color.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
+  let query = Color.findById(req.params.id);
 
-  if (!doc) {
+  if (!query) {
     return next(new AppError('No document found with that ID', 404));
   }
 
   if (
-    req.user.company.id !== doc.createdBy.company.id &&
+    req.user.company.id !== query.createdBy.company.id &&
     req.user.role !== 'systemAdmin'
   )
     return next(
       new AppError('You can only update colors for your own company!', 401),
     );
+
+  const doc = await Color.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
 
   res.status(200).json({
     status: 'success',

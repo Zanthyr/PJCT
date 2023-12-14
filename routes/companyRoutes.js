@@ -10,7 +10,13 @@ router.route('/:id').get(companyController.getCompany);
 
 router.use(authController.restrictTo('systemAdmin', 'companyAdmin'));
 
-router.route('/:id').patch(companyController.updateCompany);
+router
+  .route('/:id')
+  .patch(
+    companyController.uploadCompanyPhoto,
+    companyController.resizeCompanyPhoto,
+    companyController.updateCompany,
+  );
 
 router.use(authController.restrictTo('systemAdmin'));
 

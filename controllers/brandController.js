@@ -72,19 +72,24 @@ exports.createBrand = catchAsync(async (req, res, next) => {
 });
 
 exports.updateBrand = catchAsync(async (req, res, next) => {
+  let query = Brand.findById(req.params.id);
+
+  if (!query) {
+    return next(new AppError('No document found with that ID', 404));
+  }
+
+  if (
+    req.user.company.id !== query.brandOwner &&
+    req.user.role !== 'systemAdmin'
+  )
+    return next(
+      new AppError('You can only update users for your own company!', 401),
+    );
+
   const doc = await Brand.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
   });
-
-  if (!doc) {
-    return next(new AppError('No document found with that ID', 404));
-  }
-
-  if (req.user.company.id !== doc.brandOwner && req.user.role !== 'systemAdmin')
-    return next(
-      new AppError('You can only update users for your own company!', 401),
-    );
 
   res.status(200).json({
     status: 'success',

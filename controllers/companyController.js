@@ -1,7 +1,37 @@
+const sharp = require('sharp');
+const multer = require('multer');
 const catchAsync = require('../utils/catchAsync');
 const Company = require('./../models/companyModel');
 const factory = require('./handlerFactory');
 const AppError = require('../utils/appError');
+
+const multerStorage = multer.memoryStorage();
+
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true);
+  } else {
+    cb(new AppError('Not an immage, please only upload images', 400), false);
+  }
+};
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
+});
+
+exports.uploadCompanyPhoto = upload.single('photo');
+
+exports.resizeCompanyPhoto = catchAsync(async (req, res, next) => {
+  if (!req.file) return next();
+  req.file.filename = `company-${req.user.id}-${Date.now()}.jpg`;
+  await sharp(req.file.buffer)
+    .resize(500, 500)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/companies/${req.file.filename}`);
+
+  next();
+});
 
 exports.getAllCompanies = factory.getAll(Company);
 exports.createCompany = factory.createOne(Company);
@@ -34,17 +64,20 @@ exports.getCompany = catchAsync(async (req, res, next, popOptions) => {
 });
 
 exports.updateCompany = catchAsync(async (req, res, next) => {
+  let query = Company.findById(req.params.id);
+
+  if (!query) {
+    return next(new AppError('No Company found with that ID', 404));
+  }
+
+  if (req.user.company.id !== query.id && req.user.role !== 'systemAdmin')
+    return next(new AppError('You can only update your own company!', 401));
+
+  if (req.file) req.body.companyPhoto = req.file.filename;
   const doc = await Company.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
   });
-
-  if (!doc) {
-    return next(new AppError('No Company found with that ID', 404));
-  }
-
-  if (req.user.company.id !== doc.id && req.user.role !== 'systemAdmin')
-    return next(new AppError('You can only update your own company!', 401));
 
   res.status(200).json({
     status: 'success',

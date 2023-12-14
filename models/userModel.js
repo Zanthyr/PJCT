@@ -71,7 +71,7 @@ const userSchema = new mongoose.Schema({
 userSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'company',
-    select: 'companyName companyType',
+    select: 'companyName companyType companyPhoto',
   });
   next();
 });

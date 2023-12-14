@@ -6,6 +6,34 @@ const factory = require('./handlerFactory');
 const AppError = require('../utils/appError');
 const APIFeatures = require('../utils/apiFeatures');
 
+const multerStorage = multer.memoryStorage();
+
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true);
+  } else {
+    cb(new AppError('Not an immage, please only upload images', 400), false);
+  }
+};
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
+});
+
+exports.uploadUserPhoto = upload.single('photo');
+
+exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
+  if (!req.file) return next();
+  req.file.filename = `user-${req.user.id}-${Date.now()}.jpg`;
+  await sharp(req.file.buffer)
+    .resize(500, 500)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/users/${req.file.filename}`);
+
+  next();
+});
+
 exports.createUser = (req, res) => {
   res.status(500).json({
     status: 'error',
@@ -59,19 +87,23 @@ exports.getUser = catchAsync(async (req, res, next, popOptions) => {
 });
 
 exports.updateUser = catchAsync(async (req, res, next) => {
+  let query = User.findById(req.params.id);
+  if (!query) {
+    return next(new AppError('No document found with that ID', 404));
+  }
+
+  if (
+    req.user.company.id !== query.company.id &&
+    req.user.role !== 'systemAdmin'
+  )
+    return next(
+      new AppError('You can only update users for your own company!', 401),
+    );
+
   const doc = await User.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
   });
-
-  if (!doc) {
-    return next(new AppError('No document found with that ID', 404));
-  }
-
-  if (req.user.company.id !== doc.company.id && req.user.role !== 'systemAdmin')
-    return next(
-      new AppError('You can only update users for your own company!', 401),
-    );
 
   res.status(200).json({
     status: 'success',
@@ -97,34 +129,6 @@ exports.softDelete = catchAsync(async (req, res, next) => {
     status: 'success',
     data: null,
   });
-});
-
-const multerStorage = multer.memoryStorage();
-
-const multerFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith('image')) {
-    cb(null, true);
-  } else {
-    cb(new AppError('Not an immage, please only upload images', 400), false);
-  }
-};
-const upload = multer({
-  storage: multerStorage,
-  fileFilter: multerFilter,
-});
-
-exports.uploadUserPhoto = upload.single('photo');
-
-exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
-  if (!req.file) return next();
-  req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
-  await sharp(req.file.buffer)
-    .resize(500, 500)
-    .toFormat('jpeg')
-    .jpeg({ quality: 90 })
-    .toFile(`public/img/users/${req.file.filename}`);
-
-  next();
 });
 
 const filterObj = (obj, ...allowedFields) => {
