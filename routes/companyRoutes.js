@@ -10,13 +10,12 @@ router.route('/:id').get(companyController.getCompany);
 
 router.use(authController.restrictTo('systemAdmin', 'companyAdmin'));
 
-router
-  .route('/:id')
-  .patch(
-    companyController.uploadCompanyPhoto,
-    companyController.resizeCompanyPhoto,
-    companyController.updateCompany,
-  );
+router.patch(
+  '/updateMy',
+  companyController.uploadCompanyPhoto,
+  companyController.resizeCompanyPhoto,
+  companyController.updateMyCompany,
+);
 
 router.use(authController.restrictTo('systemAdmin'));
 
@@ -25,6 +24,7 @@ router
   .get(companyController.getAllCompanies)
   .post(companyController.createCompany);
 
+router.route('/:id').patch(companyController.updateCompany);
 router.route('/delete/:id').patch(companyController.softDeleteCompany);
 router.route('/:id').delete(companyController.deleteCompany);
 

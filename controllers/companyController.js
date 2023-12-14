@@ -34,6 +34,7 @@ exports.resizeCompanyPhoto = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllCompanies = factory.getAll(Company);
+exports.updateCompany = factory.updateOne(Company);
 exports.createCompany = factory.createOne(Company);
 exports.softDeleteCompany = factory.softDelete(Company);
 exports.deleteCompany = factory.deleteOne(Company);
@@ -63,18 +64,13 @@ exports.getCompany = catchAsync(async (req, res, next, popOptions) => {
   });
 });
 
-exports.updateCompany = catchAsync(async (req, res, next) => {
-  let query = Company.findById(req.params.id);
-
-  if (!query) {
-    return next(new AppError('No Company found with that ID', 404));
-  }
-
-  if (req.user.company.id !== query.id && req.user.role !== 'systemAdmin')
-    return next(new AppError('You can only update your own company!', 401));
-
+exports.updateMyCompany = catchAsync(async (req, res, next) => {
+  console.log(req.body.companyName);
+  //const filteredBody = filterObj(req.body, 'companyName');
   if (req.file) req.body.companyPhoto = req.file.filename;
-  const doc = await Company.findByIdAndUpdate(req.params.id, req.body, {
+  else req.body.companyPhoto = req.user.company.companyPhoto;
+
+  const doc = await Company.findByIdAndUpdate(req.user.company.id, req.body, {
     new: true,
     runValidators: true,
   });

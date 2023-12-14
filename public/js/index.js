@@ -8,6 +8,8 @@ const logOutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-password');
 
+const companyDataForm = document.querySelector('.form-company-data');
+
 if (loginForm)
   loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -25,7 +27,7 @@ if (userDataForm)
     form.append('userName', document.getElementById('name').value);
     form.append('email', document.getElementById('email').value);
     form.append('userPhoto', document.getElementById('photo').files[0]);
-    updateSettings(form, 'data');
+    updateSettings(form, 'userData');
   });
 
 if (userPasswordForm)
@@ -45,4 +47,13 @@ if (userPasswordForm)
     document.getElementById('password-current').value = '';
     document.getElementById('password').value = '';
     document.getElementById('password-confirm').value = '';
+  });
+
+if (companyDataForm)
+  companyDataForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const form = new FormData();
+    form.append('companyName', document.getElementById('name').value);
+    form.append('companyPhoto', document.getElementById('photo').files[0]);
+    updateSettings(form, 'companyData');
   });

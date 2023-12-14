@@ -2,7 +2,7 @@ header.header
   nav.nav.nav--login
     a.nav__el(href='/') Home
     if user
-      a.nav__el(href='#')
+      a.nav__el(href='/my')
         img.header__logo(src=`/img/companies/${user.company.companyPhoto}` alt=`${user.company.companyName} Logo`)
         span= user.company.companyName
     else

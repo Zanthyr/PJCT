@@ -5503,7 +5503,7 @@ var logout = exports.logout = /*#__PURE__*/function () {
           });
         case 3:
           res = _context2.sent;
-          if (res.data.status = 'success') location.reload(true);
+          if (res.data.status = 'success') location.assign('/');
           _context2.next = 10;
           break;
         case 7:
@@ -5542,7 +5542,7 @@ var updateSettings = exports.updateSettings = /*#__PURE__*/function () {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           _context.prev = 0;
-          url = type === 'password' ? 'http://127.0.0.1:3000/api/v1/users/updateMyPassword' : 'http://127.0.0.1:3000/api/v1/users/updateMe';
+          url = type === 'password' ? 'http://127.0.0.1:3000/api/v1/users/updateMyPassword' : type === 'userData' ? 'http://127.0.0.1:3000/api/v1/users/updateMe' : 'http://127.0.0.1:3000/api/v1/companies/updateMy';
           _context.next = 4;
           return (0, _axios.default)({
             method: 'PATCH',
@@ -5584,6 +5584,7 @@ var loginForm = document.querySelector('.form--login');
 var logOutBtn = document.querySelector('.nav__el--logout');
 var userDataForm = document.querySelector('.form-user-data');
 var userPasswordForm = document.querySelector('.form-user-password');
+var companyDataForm = document.querySelector('.form-company-data');
 if (loginForm) loginForm.addEventListener('submit', function (e) {
   e.preventDefault();
   var email = document.getElementById('email').value;
@@ -5597,7 +5598,7 @@ if (userDataForm) userDataForm.addEventListener('submit', function (e) {
   form.append('userName', document.getElementById('name').value);
   form.append('email', document.getElementById('email').value);
   form.append('userPhoto', document.getElementById('photo').files[0]);
-  (0, _updateSettings.updateSettings)(form, 'data');
+  (0, _updateSettings.updateSettings)(form, 'userData');
 });
 if (userPasswordForm) userPasswordForm.addEventListener('submit', /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
@@ -5631,6 +5632,13 @@ if (userPasswordForm) userPasswordForm.addEventListener('submit', /*#__PURE__*/f
     return _ref.apply(this, arguments);
   };
 }());
+if (companyDataForm) companyDataForm.addEventListener('submit', function (e) {
+  e.preventDefault();
+  var form = new FormData();
+  form.append('companyName', document.getElementById('name').value);
+  form.append('companyPhoto', document.getElementById('photo').files[0]);
+  (0, _updateSettings.updateSettings)(form, 'companyData');
+});
 },{"./login":"login.js","./updateSettings":"updateSettings.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -5656,7 +5664,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50487" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54456" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

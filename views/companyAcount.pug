@@ -1,0 +1,41 @@
+extends base
+
+mixin navItem(link, text, icon, active)
+  li(class=`${active ? 'side-nav--active' : ''}`)
+    a(href=`${link}`)
+      svg
+        use(xlink:href=`img/icons.svg#icon-${icon}`)
+      | #{text}
+
+block content
+  main.main
+    .user-view
+      nav.user-view__menu
+        ul.side-nav
+          +navItem('/me', 'Settings', 'settings')
+          +navItem('/my', 'My Company', 'briefcase', true)
+          +navItem('#', 'My Artworks', 'star')
+          +navItem('#', 'Colors', 'credit-card')
+
+        //- - if (user.role === 'companyAdmin')
+        //-   .admin-nav
+        //-     h5.admin-nav__heading Admin
+        //-     ul.side-nav
+        //-       +navItem('#', 'Manage tours', 'map')
+        //-       +navItem('#', 'Manage users', 'users')
+        //-       +navItem('#', 'Manage reviews', 'star')
+        //-       +navItem('#', 'Manage bookings', 'briefcase')
+
+      .user-view__content
+        .user-view__form-container
+          h2.heading-secondary.ma-bt-md Your Company settings
+          form.form.form-company-data
+            .form__group
+              label.form__label(for='name') Name
+              input#name.form__input(type='text', value=`${user.company.companyName}`, required, name='name')
+            .form__group.form__photo-upload
+              img.form__user-photo(src=`/img/companies/${user.company.companyPhoto}`, alt='Company photo')
+              input.form__upload(type='file', accept='image/*',id='photo', name='photo')
+              label(for='photo') Choose new photo
+            .form__group.right
+              button.btn.btn--small.btn--green Save settings

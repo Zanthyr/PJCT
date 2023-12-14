@@ -17,8 +17,14 @@ exports.getLoginForm = (req, res) => {
 };
 
 exports.getAccount = (req, res) => {
-  res.status(200).render('account', {
-    title: 'Your account',
+  res.status(200).render('userAccount', {
+    title: 'Your user account',
+  });
+};
+
+exports.getCompany = (req, res) => {
+  res.status(200).render('companyAcount', {
+    title: 'Your company account',
   });
 };
 
