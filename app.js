@@ -10,6 +10,7 @@ const jobRouter = require('./routes/jobRoutes');
 const colorRouter = require('./routes/colorRoutes');
 const viewRouter = require('./routes/viewRoutes');
 const globalErrorHandeler = require('./controllers/errorController');
+const AppError = require('./utils/appError');
 
 const app = express();
 

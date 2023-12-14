@@ -18,3 +18,231 @@ body {
   color: #777;
   padding: 3rem;
 }
+
+.main {
+  background-color: #f7f7f7;
+  padding: 8rem 6rem;
+  display: flex;
+  align-items: center;
+}
+
+.constrtuction {
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+/* LOGIN FORM */
+
+.heading-secondary {
+  font-size: 2.25rem;
+  background-color: #f2f2f2;
+  text-transform: uppercase;
+  font-weight: 700;
+  background-image: linear-gradient(to right, #7dd56f, #28b487);
+  color: transparent;
+  letter-spacing: 0.1rem;
+  line-height: 1.3;
+  display: inline-block;
+}
+
+.login-form {
+  margin: 0 auto;
+  max-width: 45rem;
+  background-color: #fff;
+  box-shadow: 0 2.5rem 8rem 2rem rgba(0, 0, 0, 0.06);
+  padding: 5rem 7rem;
+  border-radius: 5px;
+}
+
+.form__input {
+  display: block;
+  font-family: inherit;
+  font-size: 1.5rem;
+  color: inherit;
+  padding: 1.25rem 1.75rem;
+  border: none;
+  width: 100%;
+  background-color: #fff;
+  background-color: #f2f2f2;
+  border-top: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.form__input:focus {
+  outline: none;
+  border-bottom: 3px solid #55c57a;
+}
+.form__input:focus:invalid {
+  border-bottom: 3px solid #ff7730;
+}
+
+.form__group:not(:last-child) {
+  margin-bottom: 2.5rem;
+}
+
+.form__label {
+  display: block;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.ma-bt-md {
+  margin-bottom: 3rem !important;
+}
+
+.ma-bt-lg {
+  margin-bottom: 3.5rem !important;
+}
+/* BTN */
+
+.btn,
+.btn:link,
+.btn:visited {
+  font-size: 1.6rem;
+  padding: 1.4rem 3rem;
+  border-radius: 10rem;
+  text-transform: uppercase;
+  display: inline-block;
+  text-decoration: none;
+  position: relative;
+  transition: all 0.4s;
+  font-weight: 400;
+  backface-visibility: hidden;
+  border: none;
+  cursor: pointer;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
+}
+
+.btn:active {
+  transform: translateY(-1px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.btn:focus {
+  outline: none;
+  background-color: #2e864b;
+}
+
+.btn--green {
+  background-color: #55c57a;
+  color: #fff;
+}
+
+/* HEADER */
+
+.header {
+  background-color: #444;
+  padding: 0 5rem;
+  height: 8rem;
+  position: relative;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  align-items: center;
+}
+
+.nav--login {
+  flex: 0 1 40%;
+}
+
+.nav--user {
+  flex: 0 1 40%;
+  justify-content: flex-end;
+}
+.nav__el,
+.nav__el:link,
+.nav__el:visited {
+  color: #f7f7f7;
+  text-transform: uppercase;
+  font-size: 1.6rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.2s;
+  font-weight: 400;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+.nav__el:hover,
+.nav__el:active {
+  transform: translateY(-2px);
+  text-shadow: 0 0.7rem 1rem black;
+}
+.nav__el:not(:last-child) {
+  margin-right: 3rem;
+}
+.nav__el:focus {
+  outline: none;
+}
+.nav__el--cta {
+  padding: 1rem 3rem;
+  border-radius: 10rem;
+  border: 1px solid currentColor !important;
+  transition: all 0.3s;
+}
+.nav__el--cta:hover {
+  background-color: #f7f7f7;
+  color: #777;
+  text-shadow: none;
+  border-color: #f7f7f7;
+}
+
+/* FOOTER */
+
+.footer {
+  background-color: #f7f7f7;
+  padding: 6rem 4rem 3rem 4rem;
+  font-size: 1.4rem;
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-row-gap: 0.75rem;
+  justify-content: space-between;
+}
+
+.footer__logo {
+  grid-row: 1 / 3;
+  align-self: center;
+}
+
+.footer__logo img {
+  height: 3rem;
+}
+
+.footer__nav {
+  list-style: none;
+  display: flex;
+  justify-content: flex-end;
+}
+.footer__nav li {
+  margin-left: 1.5rem;
+}
+.footer__nav a {
+  color: #777;
+  text-decoration: none !important;
+  transition: all 0.2s;
+}
+.footer__nav a:hover,
+.footer__nav a:active {
+  color: #55c57a;
+}
+.footer__copyright {
+  justify-self: end;
+  color: #999;
+}

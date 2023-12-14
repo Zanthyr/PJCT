@@ -35,6 +35,7 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
 exports.getUser = catchAsync(async (req, res, next, popOptions) => {
   let query = User.findById(req.params.id);
   if (popOptions) query = query.populate(popOptions);
+
   const doc = await query;
 
   if (!doc) {
