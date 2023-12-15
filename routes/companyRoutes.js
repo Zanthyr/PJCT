@@ -6,7 +6,9 @@ const router = express.Router();
 
 router.use(authController.protect);
 
-router.route('/:id').get(companyController.getCompany);
+router
+  .route('/my')
+  .get(companyController.getMyCompany, companyController.getCompany);
 
 router.use(authController.restrictTo('root', 'admin'));
 

@@ -41,7 +41,7 @@ exports.createUser = (req, res) => {
   });
 };
 
-exports.getAllUsers = catchAsync(async (req, res, next) => {
+exports.getAllUsersOfCompany = catchAsync(async (req, res, next) => {
   if (req.user.role !== 'root') req.query.company = req.user.company.id;
   const features = new APIFeatures(User.find(), req.query)
     .filter()
@@ -60,7 +60,7 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getUser = catchAsync(async (req, res, next, popOptions) => {
+exports.getUserOfComapny = catchAsync(async (req, res, next, popOptions) => {
   let query = User.findById(req.params.id);
   if (popOptions) query = query.populate(popOptions);
 
@@ -70,7 +70,7 @@ exports.getUser = catchAsync(async (req, res, next, popOptions) => {
     return next(new AppError('No document found with that ID', 404));
   }
 
-  if (req.user.company.id !== doc.company.id && req.user.role !== 'systemAdmin')
+  if (req.user.company.id !== doc.company.id)
     return next(
       new AppError(
         'You can only request user information for your own company!',
@@ -86,7 +86,7 @@ exports.getUser = catchAsync(async (req, res, next, popOptions) => {
   });
 });
 
-exports.updateUser = catchAsync(async (req, res, next) => {
+exports.updateUserOfCompany = catchAsync(async (req, res, next) => {
   let query = User.findById(req.params.id);
   if (!query) {
     return next(new AppError('No document found with that ID', 404));
@@ -110,14 +110,14 @@ exports.updateUser = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.softDelete = catchAsync(async (req, res, next) => {
+exports.softDeleteUserOfCompany = catchAsync(async (req, res, next) => {
   const doc = await User.findByIdAndUpdate(req.params.id, { active: false });
 
   if (!doc) {
     return next(new AppError('No document found with that ID', 404));
   }
 
-  if (req.user.company.id !== doc.company.id && req.user.role !== 'systemAdmin')
+  if (req.user.company.id !== doc.company.id)
     return next(
       new AppError('You can only delte users for your own company!', 401),
     );
@@ -178,5 +178,10 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getUser = factory.getOne(User);
+
 // admin only
+exports.getAllUsers = factory.getAll(User);
+exports.updateUser = factory.updateOne(User);
+exports.softDeleteUser = factory.softDelete(User);
 exports.deleteUser = factory.deleteOne(User);

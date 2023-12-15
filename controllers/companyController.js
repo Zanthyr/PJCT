@@ -33,42 +33,23 @@ exports.resizeCompanyPhoto = catchAsync(async (req, res, next) => {
   next();
 });
 
+exports.getCompany = factory.getOne(Company);
 exports.getAllCompanies = factory.getAll(Company);
 exports.updateCompany = factory.updateOne(Company);
 exports.createCompany = factory.createOne(Company);
 exports.softDeleteCompany = factory.softDelete(Company);
 exports.deleteCompany = factory.deleteOne(Company);
 
-exports.getCompany = catchAsync(async (req, res, next, popOptions) => {
-  let query = Company.findById(req.params.id);
-  if (popOptions) query = query.populate(popOptions);
-  const doc = await query;
-
-  if (!doc) {
-    return next(new AppError('No Company found with that ID', 404));
-  }
-
-  if (req.user.company.id !== doc.id && req.user.role !== 'root')
-    return next(
-      new AppError(
-        'You can only request information for your own company!',
-        401,
-      ),
-    );
-
-  res.status(200).json({
-    status: 'success',
-    data: {
-      data: doc,
-    },
-  });
-});
+exports.getMyCompany = (req, res, next) => {
+  req.params.id = req.user.company.id;
+  next();
+};
 
 exports.updateMyCompany = catchAsync(async (req, res, next) => {
   console.log(req.body.companyName);
-  //const filteredBody = filterObj(req.body, 'companyName');
+  const filteredBody = filterObj(req.body, 'companyName');
   if (req.file) req.body.companyPhoto = req.file.filename;
-  else req.body.companyPhoto = req.user.company.companyPhoto;
+  // else req.body.companyPhoto = req.user.company.companyPhoto;
 
   const doc = await Company.findByIdAndUpdate(req.user.company.id, req.body, {
     new: true,
