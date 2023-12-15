@@ -10,7 +10,7 @@ router.route('/').get(jobController.getAllJobs).post(jobController.createJob);
 
 router.route('/:id').get(jobController.getJob).patch(jobController.updateJob);
 
-router.use(authController.restrictTo('systemAdmin'));
+router.use(authController.restrictTo('root'));
 
 router.route('/:id').delete(jobController.deleteJob);
 

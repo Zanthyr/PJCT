@@ -12,7 +12,7 @@ exports.getAllColors = catchAsync(async (req, res, next) => {
     .paginate();
   const doc = await features.query;
   let newDoc = [];
-  if (req.user.role !== 'systemAdmin') {
+  if (req.user.role !== 'root') {
     newDoc = doc.filter((element) => {
       if (element.brandName.allowList.includes(req.user.company.id))
         return element;
@@ -41,7 +41,7 @@ exports.getColor = catchAsync(async (req, res, next, popOptions) => {
   console.log(doc.brandName.allowList);
   if (
     !doc.brandName.allowList.includes(req.user.company.id) &&
-    req.user.role !== 'systemAdmin'
+    req.user.role !== 'root'
   )
     return next(
       new AppError(
@@ -79,7 +79,7 @@ exports.updateColor = catchAsync(async (req, res, next) => {
 
   if (
     req.user.company.id !== query.createdBy.company.id &&
-    req.user.role !== 'systemAdmin'
+    req.user.role !== 'root'
   )
     return next(
       new AppError('You can only update colors for your own company!', 401),

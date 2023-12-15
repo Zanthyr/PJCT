@@ -48,7 +48,7 @@ exports.getCompany = catchAsync(async (req, res, next, popOptions) => {
     return next(new AppError('No Company found with that ID', 404));
   }
 
-  if (req.user.company.id !== doc.id && req.user.role !== 'systemAdmin')
+  if (req.user.company.id !== doc.id && req.user.role !== 'root')
     return next(
       new AppError(
         'You can only request information for your own company!',

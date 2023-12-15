@@ -42,7 +42,7 @@ exports.createUser = (req, res) => {
 };
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {
-  if (req.user.role !== 'systemAdmin') req.query.company = req.user.company.id;
+  if (req.user.role !== 'root') req.query.company = req.user.company.id;
   const features = new APIFeatures(User.find(), req.query)
     .filter()
     .sort()
@@ -92,10 +92,7 @@ exports.updateUser = catchAsync(async (req, res, next) => {
     return next(new AppError('No document found with that ID', 404));
   }
 
-  if (
-    req.user.company.id !== query.company.id &&
-    req.user.role !== 'systemAdmin'
-  )
+  if (req.user.company.id !== query.company.id && req.user.role !== 'root')
     return next(
       new AppError('You can only update users for your own company!', 401),
     );

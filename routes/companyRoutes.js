@@ -8,7 +8,7 @@ router.use(authController.protect);
 
 router.route('/:id').get(companyController.getCompany);
 
-router.use(authController.restrictTo('systemAdmin', 'companyAdmin'));
+router.use(authController.restrictTo('root', 'admin'));
 
 router.patch(
   '/updateMy',
@@ -17,7 +17,7 @@ router.patch(
   companyController.updateMyCompany,
 );
 
-router.use(authController.restrictTo('systemAdmin'));
+router.use(authController.restrictTo('root'));
 
 router
   .route('/')

@@ -46,7 +46,7 @@ const userSchema = new mongoose.Schema({
   passwordResetExpires: Date,
   role: {
     type: String,
-    enum: ['user', 'companyAdmin'],
+    enum: ['user', 'admin'],
     default: 'user',
   },
   jobCreator: {
