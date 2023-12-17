@@ -28,15 +28,17 @@ block content
                 label.form__label(for='group') Product group
                 input#group.form__input(type='text', value=`product group`, required, name='group')
               .form__group.ma-bt-md
-                label(for='selectBrandManagers') Select BrandManagers
+                label(for='selectBrandManagers') Select Brand Managers
                 select(id='selectBrandManagers' multiple)  
-
+              .form__group.ma-bt-md
+                label(for='selectSuppliers') Select Brand Suppliers
+                select(id='selectSuppliers' multiple)  
 
 
               .form__group.right
-                button.btn.btn--small.btn--green Save user
-              each company in cleanCompanies 
-                p= `${company.name} / ${company.id}`
+                button.btn.btn--small.btn--green Save Brand
+              //- each company in cleanCompanies 
+              //-   p= `${company.name} / ${company.id}`
 
         .line &nbsp;
         

@@ -5578,29 +5578,31 @@ var updateSettings = exports.updateSettings = /*#__PURE__*/function () {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           _context.prev = 0;
-          url = type === 'password' ? 'http://127.0.0.1:3000/api/v1/users/updateMyPassword' : type === 'userData' ? 'http://127.0.0.1:3000/api/v1/users/updateMe' : 'http://127.0.0.1:3000/api/v1/companies/updateMy';
-          _context.next = 4;
+          console.log(type);
+          url = type === 'password' ? '/api/v1/users/updateMyPassword' : type === 'userData' ? '/api/v1/users/updateMe' : '/api/v1/companies/updateMy';
+          console.log(url);
+          _context.next = 6;
           return (0, _axios.default)({
             method: 'PATCH',
             url: url,
             data: data
           });
-        case 4:
+        case 6:
           res = _context.sent;
           if (res.data.status === 'success') {
             (0, _alerts.showAlert)('success', "".concat(type.toUpperCase(), " updated successfully!"));
           }
-          _context.next = 11;
+          _context.next = 13;
           break;
-        case 8:
-          _context.prev = 8;
+        case 10:
+          _context.prev = 10;
           _context.t0 = _context["catch"](0);
           (0, _alerts.showAlert)('error', _context.t0.response.data.message);
-        case 11:
+        case 13:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[0, 8]]);
+    }, _callee, null, [[0, 10]]);
   }));
   return function updateSettings(_x, _x2) {
     return _ref.apply(this, arguments);
@@ -5621,14 +5623,11 @@ var loginForm = document.querySelector('.form--login');
 var logOutBtn = document.querySelector('.nav__el--logout');
 var userDataForm = document.querySelector('.form-user-data');
 var userPasswordForm = document.querySelector('.form-user-password');
-var userSoftDelete = document.querySelectorAll('.btn__userDelete');
-var showAddUserFormBtn = document.querySelector('.btn__showAddForm');
+var deleteUser = document.querySelector('.card-container');
+var showAddFormBtn = document.querySelector('.btn__showAddForm');
 var addContentForm = document.querySelector('.add__content');
 var companyDataForm = document.querySelector('.form-company-data');
 var brandDataForm = document.querySelector('.form-brand-data');
-if (showAddUserFormBtn) showAddUserFormBtn.addEventListener('click', function () {
-  addContentForm.classList.toggle('hidden');
-});
 if (loginForm) loginForm.addEventListener('submit', function (e) {
   e.preventDefault();
   var email = document.getElementById('email').value;
@@ -5636,21 +5635,34 @@ if (loginForm) loginForm.addEventListener('submit', function (e) {
   (0, _login.login)(email, password);
 });
 if (logOutBtn) logOutBtn.addEventListener('click', _login.logout);
-if (userSoftDelete) {
-  userSoftDelete.forEach(function (button) {
-    button.addEventListener('click', function () {
-      (0, _delete.softDelete)(button.getAttribute('userID'));
-    });
+
+// remove or show add user/brand/color menu
+if (showAddFormBtn) showAddFormBtn.addEventListener('click', function () {
+  addContentForm.classList.toggle('hidden');
+});
+
+// User managmet delete user button
+if (deleteUser) {
+  deleteUser.addEventListener('click', function (event) {
+    var targetButton = event.target.closest('.btn__userDelete');
+    if (targetButton) {
+      var userID = targetButton.getAttribute('userID');
+      (0, _delete.softDelete)(userID);
+    }
   });
 }
+
+//submit user data
 if (userDataForm) userDataForm.addEventListener('submit', function (e) {
   e.preventDefault();
   var form = new FormData();
-  form.append('userName', document.getElementById('name').value);
+  form.append('name', document.getElementById('name').value);
   form.append('email', document.getElementById('email').value);
-  form.append('userPhoto', document.getElementById('photo').files[0]);
+  form.append('photo', document.getElementById('photo').files[0]);
   (0, _updateSettings.updateSettings)(form, 'userData');
 });
+
+//submit pwd change
 if (userPasswordForm) userPasswordForm.addEventListener('submit', /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
     var passwordCurrent, password, passwordConfirm;
@@ -5683,33 +5695,39 @@ if (userPasswordForm) userPasswordForm.addEventListener('submit', /*#__PURE__*/f
     return _ref.apply(this, arguments);
   };
 }());
+
+// submit comapnay data
 if (companyDataForm) companyDataForm.addEventListener('submit', function (e) {
   e.preventDefault();
   var form = new FormData();
   form.append('companyName', document.getElementById('name').value);
-  form.append('companyPhoto', document.getElementById('photo').files[0]);
+  form.append('photo', document.getElementById('photo').files[0]);
   (0, _updateSettings.updateSettings)(form, 'companyData');
 });
+
+// load companies for adding brand owner
+function populateDropdown(elementId, companies) {
+  var element = document.getElementById(elementId);
+  companies.forEach(function (item) {
+    var option = document.createElement('option');
+    option.value = item.id;
+    option.text = item.name;
+    element.appendChild(option);
+  });
+}
+
+// add brand owner company lists
 if (brandDataForm) {
   var companies = JSON.parse(brandDataForm.getAttribute('companies'));
-  function populateDropdown() {
-    var selectElement = document.getElementById('selectBrandManagers');
-    companies.forEach(function (item) {
-      var option = document.createElement('option');
-      option.value = item.id;
-      option.text = item.name;
-      selectElement.appendChild(option);
-    });
-  }
-  populateDropdown();
+  populateDropdown('selectBrandManagers', companies);
+  populateDropdown('selectSuppliers', companies);
 
-  // Function to handle the form submission
+  // handle form submission
   function submitSelection() {
     var selectedIds = Array.from(document.getElementById('selectBrandManagers').selectedOptions).map(function (option) {
       return option.value;
     });
     alert('Selected IDs: ' + selectedIds.join(', '));
-    // You can perform further actions with the selected IDs here, such as sending them to a server.
   }
 }
 },{"./login":"login.js","./delete":"delete.js","./updateSettings":"updateSettings.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
@@ -5737,7 +5755,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51151" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55985" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

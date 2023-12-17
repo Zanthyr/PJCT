@@ -4,7 +4,6 @@ const User = require('./../models/userModel');
 const Color = require('./../models/colorModel');
 const Brand = require('./../models/brandModel');
 const Company = require('./../models/companyModel');
-const factory = require('./handlerFactory');
 const APIFeatures = require('../utils/apiFeatures');
 
 exports.getHome = catchAsync(async (req, res, next) => {
@@ -25,15 +24,14 @@ exports.getLoginForm = (req, res) => {
 exports.getAccount = (req, res) => {
   res.status(200).render('account', {
     title: 'Your user account',
-    page: 'users',
-    siednavActive: 1,
+    activeMenu: 'My Acount',
   });
 };
 
 exports.getCompany = (req, res) => {
   res.status(200).render('company', {
     title: 'Your company account',
-    siednavActive: 2,
+    activeMenu: 'My Company',
   });
 };
 
@@ -82,9 +80,9 @@ exports.getUsers = catchAsync(async (req, res, next) => {
   }));
 
   res.status(200).render('users', {
-    title: 'Company Users',
+    title: 'Manage users',
     newDoc,
-    siednavActive: 7,
+    activeMenu: 'Manage users',
   });
 });
 
@@ -103,11 +101,17 @@ exports.getBrands = catchAsync(async (req, res, next) => {
     });
   else newDoc = doc;
 
-  const companies = await Company.find();
-  const cleanCompanies = companies.map((item) => ({
-    name: item.companyName,
-    id: item.id,
-  }));
+  let cleanCompanies = [];
+  if (
+    req.user.role === 'root' ||
+    eq.user.company.companyType === 'BrandOwner'
+  ) {
+    const companies = await Company.find();
+    cleanCompanies = companies.map((item) => ({
+      name: item.companyName,
+      id: item.id,
+    }));
+  }
 
   const cleanDoc = newDoc.map((item) => ({
     name: item.brandName,
@@ -122,10 +126,10 @@ exports.getBrands = catchAsync(async (req, res, next) => {
     id: item.id,
   }));
   res.status(200).render('brands', {
-    title: 'My Brands',
+    title: 'Manage Brands',
     cleanDoc,
     cleanCompanies,
-    siednavActive: 8,
+    activeMenu: 'Manage Brands',
   });
 });
 
@@ -145,8 +149,8 @@ exports.getColors = catchAsync(async (req, res, next) => {
   else newDoc = doc;
   console.log('test', newDoc);
   res.status(200).render('colors', {
-    title: 'My Colors',
+    title: 'Manage Colors',
     newDoc,
-    siednavActive: 9,
+    activeMenu: 'Manage Colors',
   });
 });

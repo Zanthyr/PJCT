@@ -47,7 +47,8 @@ exports.getMyCompany = (req, res, next) => {
 
 exports.updateMyCompany = catchAsync(async (req, res, next) => {
   console.log(req.body.companyName);
-  const filteredBody = filterObj(req.body, 'companyName');
+
+  //const filteredBody = filterObj(req.body, 'companyName');
   if (req.file) req.body.companyPhoto = req.file.filename;
   // else req.body.companyPhoto = req.user.company.companyPhoto;
 
