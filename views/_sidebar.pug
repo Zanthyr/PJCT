@@ -1,0 +1,23 @@
+mixin navItem(link, text, icon, active)
+  li(class=`${active === siednavActive ? 'side-nav--active' : ''}`)
+    a(href=`${link}`)
+      svg
+        use(xlink:href=`img/icons.svg#icon-${icon}`)
+      | #{text}
+
+nav.user-view__menu
+  ul.side-nav
+    +navItem('/me', 'My Acount', 'user', 1)
+    +navItem('/my', 'My Company', 'briefcase', 2)
+    +navItem('#', 'My Artworks', 'star', 3)
+    +navItem('#', 'My Jobs', 'layout', 4)
+    //- +navItem('#', 'My Settings', 'settings', 5)
+
+  - if (user.role === 'admin' || user.role === 'root')
+    .admin-nav
+      h5.admin-nav__heading Admin
+      ul.side-nav
+        //- +navItem('#', 'Statistics', 'bar-chart', 6)
+        +navItem('/users', 'Manage users', 'users', 7)
+        +navItem('/brands', 'Manage Brands', 'flag', 8)
+        +navItem('/colors', 'Manage Colors', 'database', 9)

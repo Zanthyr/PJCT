@@ -1,0 +1,45 @@
+extends base
+
+block content
+  main.main
+    .user-view
+      include _sidebar
+      
+
+      .user-view__content.txt-cntr
+        .user-view__form-container
+          h2.heading-secondary.ma-bt-md Your Company's Brands
+          
+        - if (user.company.companyType === 'BrandOwner' || user.role === 'root')
+          a.btn__showAddForm.btn.btn--green.btn--small(companyID=user.company.id) 
+            div.btn-add
+              svg.card__icon-white.mr
+                use(xlink:href='/img/icons.svg#icon-file-plus')
+              | Add Brand
+
+        .add__content.hidden
+          .user-view__form-container
+            h2.heading-secondary.ma-bt-md ADD A Brand
+            form.form.form-brand-data(companies=cleanCompanies)
+              .form__group
+                label.form__label(for='name') Brand Name
+                input#name.form__input(type='text', value=`brand name`, required, name='name')
+              .form__group.ma-bt-md
+                label.form__label(for='group') Product group
+                input#group.form__input(type='text', value=`product group`, required, name='group')
+              .form__group.ma-bt-md
+                label(for='selectBrandManagers') Select BrandManagers
+                select(id='selectBrandManagers' multiple)  
+
+
+
+              .form__group.right
+                button.btn.btn--small.btn--green Save user
+              each company in cleanCompanies 
+                p= `${company.name} / ${company.id}`
+
+        .line &nbsp;
+        
+        each brand in cleanDoc
+          p= `${brand.name} / ${brand.groep} / ${brand.Brandowner} / ${brand.brandManagers} / ${brand.brandSuppliers} / ${brand.date} `
+

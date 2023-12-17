@@ -1,0 +1,33 @@
+extends base
+
+block content
+  main.main
+    .user-view
+      include _sidebar
+
+      .user-view__content.txt-cntr
+        .user-view__form-container
+          h2.heading-secondary.ma-bt-md Your Company's Colors
+
+        a.btn__showAddForm.btn.btn--green.btn--small(companyID=user.company.id) 
+          div.btn-add
+            svg.card__icon-white.mr
+              use(xlink:href='/img/icons.svg#icon-file-plus')
+            | Add Color
+
+        .add__content.hidden
+          .user-view__form-container
+            h2.heading-secondary.ma-bt-md Add A Color
+            form.form.form-user-data
+              .form__group
+                label.form__label(for='name') Name
+                input#name.form__input(type='text', value=`${user.userName}`, required, name='name')
+              .form__group.ma-bt-md
+                label.form__label(for='email') Email address
+                input#email.form__input(type='email', value=`${user.email}`, required, name='email')
+              .form__group.right
+                button.btn.btn--small.btn--green Save user
+        .line &nbsp;
+              
+        
+        p= newDoc

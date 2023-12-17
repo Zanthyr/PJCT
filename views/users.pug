@@ -1,0 +1,68 @@
+extends base
+
+block content
+  main.main
+    .user-view
+      include _sidebar
+
+      .user-view__content.txt-cntr
+        .user-view__form-container
+          h2.heading-secondary.ma-bt-md Your Company's users
+
+        a.btn__showAddForm.btn.btn--green.btn--small(companyID=user.company.id) 
+          div.btn-add
+            svg.card__icon-white.mr
+              use(xlink:href='/img/icons.svg#icon-file-plus')
+            | Add User
+
+        .add__content.hidden
+          .user-view__form-container
+            h2.heading-secondary.ma-bt-md ADD A USER
+            form.form.form-user-data
+              .form__group
+                label.form__label(for='name') Name
+                input#name.form__input(type='text', value=`${user.userName}`, required, name='name')
+              .form__group.ma-bt-md
+                label.form__label(for='email') Email address
+                input#email.form__input(type='email', value=`${user.email}`, required, name='email')
+              .form__group.right
+                button.btn.btn--small.btn--green Save user
+        .line &nbsp;
+              
+        
+
+        .card-container
+          each user in newDoc
+            .card
+              .card__header
+                .card__picture
+                  .card__picture-overlay &nbsp;
+                  img.card__picture-img(src=`/img/users/${user.photo}`, alt=`${user.name}`)
+                h3.heading-tertirary
+                  span= user.name.split(' ')[0]
+
+              .card__details
+                h4.card__sub-heading= user.company
+                  span.card__textSubHeading= user.role
+                p.card__text= user.name
+                p.card__data
+                  svg.card__icon
+                    use(xlink:href='/img/icons.svg#icon-mail')
+                  span= user.email
+                p.card__data
+                  svg.card__icon
+                    use(xlink:href='/img/icons.svg#icon-star')
+                  span= `${user.artwork ? 'Can create Artworks' : 'Can NOT create Artworks'}`
+                p.card__data
+                  svg.card__icon
+                    use(xlink:href='/img/icons.svg#icon-layout')
+                  span= `${user.job ? 'Can create Print Jobs' : 'Can NOT create Print Jobs'}`
+
+              .card__footer
+                p
+                  span.card__footer-text Join date:
+                  | 
+                  span.card__footer-value= user.date
+                div  
+                  a.btn__userDelete.btn.btn--red.btn--small(userID=user.id) Delete
+        
