@@ -317,7 +317,7 @@ body {
 }
 
 .user-view__menu {
-  flex: 32rem 0 0;
+  flex: 25rem 0 0;
   background-image: linear-gradient(to right bottom, #7dd56f, #28b487);
   padding: 4rem 0;
 }

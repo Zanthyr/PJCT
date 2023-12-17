@@ -45,17 +45,21 @@ if (deleteUser) {
 if (userDataForm)
   userDataForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    const url = '/api/v1/users/updateMe';
+    const method = 'PATCH';
     const form = new FormData();
-    form.append('name', document.getElementById('name').value);
+    form.append('userName', document.getElementById('name').value);
     form.append('email', document.getElementById('email').value);
     form.append('photo', document.getElementById('photo').files[0]);
-    updateSettings(form, 'userData');
+    updateSettings(form, 'userData', url, method);
   });
 
 //submit pwd change
 if (userPasswordForm)
   userPasswordForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+    const url = '/api/v1/users/updateMyPassword';
+    const method = 'PATCH';
     document.querySelector('.btn--save-password').textContent = 'Updating...';
     const passwordCurrent = document.getElementById('password-current').value;
     const password = document.getElementById('password').value;
@@ -63,6 +67,8 @@ if (userPasswordForm)
     await updateSettings(
       { passwordCurrent, password, passwordConfirm },
       'password',
+      url,
+      method,
     );
 
     document.querySelector('.btn--save-password').textContent = 'Save password';
@@ -75,10 +81,13 @@ if (userPasswordForm)
 if (companyDataForm)
   companyDataForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    const url = '/api/v1/companies/updateMy';
+    const method = 'PATCH';
     const form = new FormData();
     form.append('companyName', document.getElementById('name').value);
+    form.append('adress', document.getElementById('adress').value);
     form.append('photo', document.getElementById('photo').files[0]);
-    updateSettings(form, 'companyData');
+    updateSettings(form, 'companyData', url, method);
   });
 
 // load companies for adding brand owner
@@ -99,10 +108,40 @@ if (brandDataForm) {
   populateDropdown('selectSuppliers', companies);
 
   // handle form submission
-  function submitSelection() {
-    const selectedIds = Array.from(
-      document.getElementById('selectBrandManagers').selectedOptions,
+
+  brandDataForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    // Create a FormData object
+    const form = new FormData();
+    const url = '/api/v1/brands/createMy';
+    const method = 'POST';
+    // Append other form fields
+    form.append('brandName', document.getElementById('name').value);
+    form.append('productGroup', document.getElementById('group').value);
+    form.append('photo', document.getElementById('photo').files[0]);
+
+    // Append selected brand managers
+    const selectedBrandManagerDropdown = document.getElementById(
+      'selectBrandManagers',
+    );
+    const selectedBrandManagerIds = Array.from(
+      selectedBrandManagerDropdown.selectedOptions,
     ).map((option) => option.value);
-    alert('Selected IDs: ' + selectedIds.join(', '));
-  }
+    form.append('brandManagers', selectedBrandManagerIds);
+
+    // Append selected brand suppliers
+    const selectedSupplierDropdown = document.getElementById('selectSuppliers');
+    const selectedSupplierIds = Array.from(
+      selectedSupplierDropdown.selectedOptions,
+    ).map((option) => option.value);
+    form.append('brandSuppliers', selectedSupplierIds);
+
+    // Log the selected values (optional)
+    console.log('Selected Brand Manager IDs:', selectedBrandManagerIds);
+    console.log('Selected Supplier IDs:', selectedSupplierIds);
+
+    // Perform your form submission logic (e.g., updateSettings)
+    updateSettings(form, 'brandData', url, method);
+  });
 }

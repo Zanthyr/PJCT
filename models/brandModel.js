@@ -12,19 +12,23 @@ const brandSchema = new mongoose.Schema(
       type: String,
       default: 'not aplicable',
     },
+    brandLogo: {
+      type: String,
+      default: 'default.jpg',
+    },
     brandOwner: {
       type: mongoose.Schema.ObjectId,
       ref: 'Company',
     },
     brandManagers: [
       {
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Company',
       },
     ],
     brandSuppliers: [
       {
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Company',
       },
     ],

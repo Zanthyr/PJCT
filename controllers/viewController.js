@@ -28,12 +28,15 @@ exports.getAccount = (req, res) => {
   });
 };
 
-exports.getCompany = (req, res) => {
+exports.getCompany = catchAsync(async (req, res) => {
+  let query = Company.findById(req.user.company.id);
+  const doc = await query;
   res.status(200).render('company', {
     title: 'Your company account',
     activeMenu: 'My Company',
+    company: doc,
   });
-};
+});
 
 exports.updateUserData = catchAsync(async (req, res, next) => {
   const updatedUser = await User.findByIdAndUpdate(
@@ -104,7 +107,7 @@ exports.getBrands = catchAsync(async (req, res, next) => {
   let cleanCompanies = [];
   if (
     req.user.role === 'root' ||
-    eq.user.company.companyType === 'BrandOwner'
+    req.user.company.companyType === 'BrandOwner'
   ) {
     const companies = await Company.find();
     cleanCompanies = companies.map((item) => ({

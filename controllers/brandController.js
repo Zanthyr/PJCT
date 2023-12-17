@@ -4,6 +4,14 @@ const factory = require('./handlerFactory');
 const APIFeatures = require('../utils/apiFeatures');
 const AppError = require('../utils/appError');
 
+const filterObj = (obj, ...allowedFields) => {
+  const newObj = {};
+  Object.keys(obj).forEach((el) => {
+    if (allowedFields.includes(el)) newObj[el] = obj[el];
+  });
+  return newObj;
+};
+
 // gets a brand for a user by checking if the users copany is allowlisted
 exports.getMyBrand = catchAsync(async (req, res, next, popOptions) => {
   let query = Brand.findById(req.params.id);
@@ -56,8 +64,15 @@ exports.getAllMyBrands = catchAsync(async (req, res, next) => {
 
 // BrandOwneradmin only
 exports.createMyBrand = catchAsync(async (req, res, next) => {
-  req.body.brandOwner = req.user.company.id;
-  const doc = await Brand.create(req.body);
+  // add so taht when root we take the BO name -> covert it to id and then add the record
+
+  const filteredBody = filterObj(req.body, 'brandName', 'productGroup');
+  filteredBody.brandOwner = req.user.company.id;
+  filteredBody.brandManagers = req.body.brandManagers.split(',');
+  filteredBody.brandSuppliers = req.body.brandSuppliers.split(',');
+
+  if (req.file) filteredBody.brandLogo = req.file.filename;
+  const doc = await Brand.create(filteredBody);
 
   res.status(201).json({
     status: 'success',

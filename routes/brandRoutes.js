@@ -1,6 +1,7 @@
 const express = require('express');
 const brandController = require('../controllers/brandController.js');
 const authController = require('../controllers/authController.js');
+const imageUploadController = require('./../controllers/imageUploadController');
 
 const router = express.Router();
 
@@ -9,13 +10,13 @@ router.use(authController.protect);
 router.route('/My').get(brandController.getAllMyBrands);
 router.route('/My/:id').get(brandController.getMyBrand);
 
-router
-  .route('/createMy/')
-  .post(
-    authController.restrictTo('admin'),
-    authController.restrictToCompanyType('BrandOwner'),
-    brandController.createMyBrand,
-  );
+router.route('/createMy').post(
+  // authController.restrictTo('admin', 'root'),
+  // authController.restrictToCompanyType('BrandOwner', 'System'),
+  imageUploadController.uploadImageFile,
+  imageUploadController.resizeBrandLogo,
+  brandController.createMyBrand,
+);
 
 router
   .route('/updateMy/:id')

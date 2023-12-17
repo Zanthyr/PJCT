@@ -5572,39 +5572,36 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; } /* eslint-disable */
 // type is either 'password' or 'data'
 var updateSettings = exports.updateSettings = /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(data, type) {
-    var url, res;
+  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(data, type, url, method) {
+    var res;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           _context.prev = 0;
-          console.log(type);
-          url = type === 'password' ? '/api/v1/users/updateMyPassword' : type === 'userData' ? '/api/v1/users/updateMe' : '/api/v1/companies/updateMy';
-          console.log(url);
-          _context.next = 6;
+          _context.next = 3;
           return (0, _axios.default)({
-            method: 'PATCH',
+            method: method,
             url: url,
             data: data
           });
-        case 6:
+        case 3:
           res = _context.sent;
           if (res.data.status === 'success') {
             (0, _alerts.showAlert)('success', "".concat(type.toUpperCase(), " updated successfully!"));
           }
-          _context.next = 13;
+          _context.next = 10;
           break;
-        case 10:
-          _context.prev = 10;
+        case 7:
+          _context.prev = 7;
           _context.t0 = _context["catch"](0);
           (0, _alerts.showAlert)('error', _context.t0.response.data.message);
-        case 13:
+        case 10:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[0, 10]]);
+    }, _callee, null, [[0, 7]]);
   }));
-  return function updateSettings(_x, _x2) {
+  return function updateSettings(_x, _x2, _x3, _x4) {
     return _ref.apply(this, arguments);
   };
 }();
@@ -5655,37 +5652,41 @@ if (deleteUser) {
 //submit user data
 if (userDataForm) userDataForm.addEventListener('submit', function (e) {
   e.preventDefault();
+  var url = '/api/v1/users/updateMe';
+  var method = 'PATCH';
   var form = new FormData();
-  form.append('name', document.getElementById('name').value);
+  form.append('userName', document.getElementById('name').value);
   form.append('email', document.getElementById('email').value);
   form.append('photo', document.getElementById('photo').files[0]);
-  (0, _updateSettings.updateSettings)(form, 'userData');
+  (0, _updateSettings.updateSettings)(form, 'userData', url, method);
 });
 
 //submit pwd change
 if (userPasswordForm) userPasswordForm.addEventListener('submit', /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
-    var passwordCurrent, password, passwordConfirm;
+    var url, method, passwordCurrent, password, passwordConfirm;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           e.preventDefault();
+          url = '/api/v1/users/updateMyPassword';
+          method = 'PATCH';
           document.querySelector('.btn--save-password').textContent = 'Updating...';
           passwordCurrent = document.getElementById('password-current').value;
           password = document.getElementById('password').value;
           passwordConfirm = document.getElementById('password-confirm').value;
-          _context.next = 7;
+          _context.next = 9;
           return (0, _updateSettings.updateSettings)({
             passwordCurrent: passwordCurrent,
             password: password,
             passwordConfirm: passwordConfirm
-          }, 'password');
-        case 7:
+          }, 'password', url, method);
+        case 9:
           document.querySelector('.btn--save-password').textContent = 'Save password';
           document.getElementById('password-current').value = '';
           document.getElementById('password').value = '';
           document.getElementById('password-confirm').value = '';
-        case 11:
+        case 13:
         case "end":
           return _context.stop();
       }
@@ -5699,10 +5700,13 @@ if (userPasswordForm) userPasswordForm.addEventListener('submit', /*#__PURE__*/f
 // submit comapnay data
 if (companyDataForm) companyDataForm.addEventListener('submit', function (e) {
   e.preventDefault();
+  var url = '/api/v1/companies/updateMy';
+  var method = 'PATCH';
   var form = new FormData();
   form.append('companyName', document.getElementById('name').value);
+  form.append('adress', document.getElementById('adress').value);
   form.append('photo', document.getElementById('photo').files[0]);
-  (0, _updateSettings.updateSettings)(form, 'companyData');
+  (0, _updateSettings.updateSettings)(form, 'companyData', url, method);
 });
 
 // load companies for adding brand owner
@@ -5723,12 +5727,40 @@ if (brandDataForm) {
   populateDropdown('selectSuppliers', companies);
 
   // handle form submission
-  function submitSelection() {
-    var selectedIds = Array.from(document.getElementById('selectBrandManagers').selectedOptions).map(function (option) {
+
+  brandDataForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    // Create a FormData object
+    var form = new FormData();
+    var url = '/api/v1/brands/createMy';
+    var method = 'POST';
+    // Append other form fields
+    form.append('brandName', document.getElementById('name').value);
+    form.append('productGroup', document.getElementById('group').value);
+    form.append('photo', document.getElementById('photo').files[0]);
+
+    // Append selected brand managers
+    var selectedBrandManagerDropdown = document.getElementById('selectBrandManagers');
+    var selectedBrandManagerIds = Array.from(selectedBrandManagerDropdown.selectedOptions).map(function (option) {
       return option.value;
     });
-    alert('Selected IDs: ' + selectedIds.join(', '));
-  }
+    form.append('brandManagers', selectedBrandManagerIds);
+
+    // Append selected brand suppliers
+    var selectedSupplierDropdown = document.getElementById('selectSuppliers');
+    var selectedSupplierIds = Array.from(selectedSupplierDropdown.selectedOptions).map(function (option) {
+      return option.value;
+    });
+    form.append('brandSuppliers', selectedSupplierIds);
+
+    // Log the selected values (optional)
+    console.log('Selected Brand Manager IDs:', selectedBrandManagerIds);
+    console.log('Selected Supplier IDs:', selectedSupplierIds);
+
+    // Perform your form submission logic (e.g., updateSettings)
+    (0, _updateSettings.updateSettings)(form, 'brandData', url, method);
+  });
 }
 },{"./login":"login.js","./delete":"delete.js","./updateSettings":"updateSettings.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -5755,7 +5787,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55985" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61789" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

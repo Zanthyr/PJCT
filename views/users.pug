@@ -43,7 +43,7 @@ block content
 
               .card__details
                 h4.card__sub-heading= user.company
-                  span.card__textSubHeading= user.role
+                  span.card__textSubHeading= `(${user.role})`
                 p.card__text= user.name
                 p.card__data
                   svg.card__icon
@@ -60,7 +60,7 @@ block content
 
               .card__footer
                 p
-                  span.card__footer-text Join date:
+                  span.card__footer-text Joined:
                   | 
                   span.card__footer-value= user.date
                 div  

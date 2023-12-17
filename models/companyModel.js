@@ -27,6 +27,10 @@ const companySchema = new mongoose.Schema(
       type: String,
       default: 'default.jpg',
     },
+    adress: {
+      type: String,
+      default: 'unknown',
+    },
     createdAt: {
       type: Date,
       default: Date.now(),
