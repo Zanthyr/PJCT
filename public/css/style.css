@@ -802,3 +802,22 @@ body {
   justify-self: end;
   align-self: center;
 }
+
+.pwd-reset:link,
+.pwd-reset:visited {
+  font-size: 1rem;
+  text-align: center;
+  color: #777;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.pwd-reset a {
+  color: #777;
+  text-decoration: none !important;
+  transition: all 0.2s;
+}
+.pwd-reset a:hover,
+.fpwd-reset a:active {
+  color: #55c57a;
+}

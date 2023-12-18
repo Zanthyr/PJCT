@@ -28,6 +28,12 @@ exports.getAccount = (req, res) => {
   });
 };
 
+exports.pwdReset = (req, res) => {
+  res.status(200).render('pwdreset', {
+    title: 'password Reset',
+  });
+};
+
 exports.getCompany = catchAsync(async (req, res) => {
   let query = Company.findById(req.user.company.id);
   const doc = await query;

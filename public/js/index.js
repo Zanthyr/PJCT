@@ -13,6 +13,18 @@ const showAddFormBtn = document.querySelector('.btn__showAddForm');
 const addContentForm = document.querySelector('.add__content');
 const companyDataForm = document.querySelector('.form-company-data');
 const brandDataForm = document.querySelector('.form-brand-data');
+const resetForm = document.querySelector('.form--reset');
+
+if (resetForm) {
+  const url = '/api/v1/users/forgotPassword';
+  const method = 'PATCH';
+  const form = new FormData();
+  resetForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    console.log(email);
+  });
+}
 
 if (loginForm)
   loginForm.addEventListener('submit', (e) => {

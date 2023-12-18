@@ -5625,6 +5625,17 @@ var showAddFormBtn = document.querySelector('.btn__showAddForm');
 var addContentForm = document.querySelector('.add__content');
 var companyDataForm = document.querySelector('.form-company-data');
 var brandDataForm = document.querySelector('.form-brand-data');
+var resetForm = document.querySelector('.form--reset');
+if (resetForm) {
+  var url = '/api/v1/users/forgotPassword';
+  var method = 'PATCH';
+  var form = new FormData();
+  resetForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var email = document.getElementById('email').value;
+    console.log(email);
+  });
+}
 if (loginForm) loginForm.addEventListener('submit', function (e) {
   e.preventDefault();
   var email = document.getElementById('email').value;
@@ -5787,7 +5798,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51466" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59081" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
