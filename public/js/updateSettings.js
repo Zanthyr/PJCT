@@ -3,7 +3,7 @@ import axios from 'axios';
 import { showAlert } from './alerts';
 
 // type is either 'password' or 'data'
-export const updateSettings = async (data, type, url, method) => {
+export const updateSettings = async (data, url, method) => {
   try {
     const res = await axios({
       method,

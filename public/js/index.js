@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { login, logout } from './login';
+import { login, logout, reset, resetNew } from './login';
 import { softDelete } from './delete';
 import { updateSettings } from './updateSettings';
 
@@ -14,17 +14,26 @@ const addContentForm = document.querySelector('.add__content');
 const companyDataForm = document.querySelector('.form-company-data');
 const brandDataForm = document.querySelector('.form-brand-data');
 const resetForm = document.querySelector('.form--reset');
+const resetFormNewPass = document.querySelector('.form--resetSetNew');
 
-if (resetForm) {
-  const url = '/api/v1/users/forgotPassword';
-  const method = 'PATCH';
-  const form = new FormData();
+if (resetFormNewPass)
+  resetFormNewPass.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('password-confirm').value;
+    const currentUrl = window.location.href;
+    const urlParts = currentUrl.split('/');
+    const resetPasswordIndex = urlParts.indexOf('resetPassword');
+    const token = urlParts[resetPasswordIndex + 1];
+    resetNew(password, passwordConfirm, token);
+  });
+
+if (resetForm)
   resetForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const email = document.getElementById('email').value;
-    console.log(email);
+    reset(email);
   });
-}
 
 if (loginForm)
   loginForm.addEventListener('submit', (e) => {
@@ -63,7 +72,7 @@ if (userDataForm)
     form.append('userName', document.getElementById('name').value);
     form.append('email', document.getElementById('email').value);
     form.append('photo', document.getElementById('photo').files[0]);
-    updateSettings(form, 'userData', url, method);
+    updateSettings(form, url, method);
   });
 
 //submit pwd change
@@ -78,7 +87,6 @@ if (userPasswordForm)
     const passwordConfirm = document.getElementById('password-confirm').value;
     await updateSettings(
       { passwordCurrent, password, passwordConfirm },
-      'password',
       url,
       method,
     );
@@ -99,7 +107,7 @@ if (companyDataForm)
     form.append('companyName', document.getElementById('name').value);
     form.append('adress', document.getElementById('adress').value);
     form.append('photo', document.getElementById('photo').files[0]);
-    updateSettings(form, 'companyData', url, method);
+    updateSettings(form, url, method);
   });
 
 // load companies for adding brand owner
@@ -154,6 +162,6 @@ if (brandDataForm) {
     console.log('Selected Supplier IDs:', selectedSupplierIds);
 
     // Perform your form submission logic (e.g., updateSettings)
-    updateSettings(form, 'brandData', url, method);
+    updateSettings(form, url, method);
   });
 }

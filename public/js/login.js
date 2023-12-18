@@ -21,7 +21,6 @@ export const login = async (email, password) => {
     }
   } catch (err) {
     showAlert('error', err.response.data.message);
-    console.log('error', err.response.data.message);
   }
 };
 
@@ -34,5 +33,48 @@ export const logout = async () => {
     if ((res.data.status = 'success')) location.assign('/');
   } catch (err) {
     showAlert('error', 'Error logging out! Try again.');
+  }
+};
+
+export const reset = async (email) => {
+  try {
+    const res = await axios({
+      method: 'POST',
+      url: '/api/v1/users/forgotPassword',
+      data: {
+        email,
+      },
+    });
+
+    if (res.data.status === 'success') {
+      showAlert('success', 'reset link is send!');
+      window.setTimeout(() => {
+        location.assign('/');
+      }, 1500);
+    }
+  } catch (err) {
+    showAlert('error', err.response.data.message);
+  }
+};
+
+export const resetNew = async (password, passwordConfirm, token) => {
+  try {
+    const res = await axios({
+      method: 'PATCH',
+      url: `/api/v1/users/resetPassword/${token}`,
+      data: {
+        password,
+        passwordConfirm,
+      },
+    });
+
+    if (res.data.status === 'success') {
+      showAlert('success', 'reset Complete!');
+      window.setTimeout(() => {
+        location.assign('/');
+      }, 1500);
+    }
+  } catch (err) {
+    showAlert('error', err.response.data.message);
   }
 };

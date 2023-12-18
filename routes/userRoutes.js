@@ -10,8 +10,8 @@ router.post('/login', authController.login); // ok
 router.post('/logout', authController.logout); // ok
 
 // pwd reset route for forget pwd  - reset pwd
-router.post('/forgotPassword', authController.forgotPassword); // TODO
-router.patch('/resetPassword/:token', authController.resetPassword); // TODO
+router.post('/forgotPassword', authController.forgotPassword); // ok
+router.patch('/resetPassword/:token', authController.resetPassword); // ok -> enkel mail template nog aanpassen
 
 // Protect all routes from this point on
 router.use(authController.protect);

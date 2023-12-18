@@ -5440,7 +5440,7 @@ var showAlert = exports.showAlert = function showAlert(type, msg) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.logout = exports.login = void 0;
+exports.resetNew = exports.reset = exports.logout = exports.login = void 0;
 var _axios = _interopRequireDefault(require("axios"));
 var _alerts = require("./alerts");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -5472,14 +5472,13 @@ var login = exports.login = /*#__PURE__*/function () {
               location.assign('/');
             }, 1500);
           }
-          _context.next = 11;
+          _context.next = 10;
           break;
         case 7:
           _context.prev = 7;
           _context.t0 = _context["catch"](0);
           (0, _alerts.showAlert)('error', _context.t0.response.data.message);
-          console.log('error', _context.t0.response.data.message);
-        case 11:
+        case 10:
         case "end":
           return _context.stop();
       }
@@ -5518,6 +5517,85 @@ var logout = exports.logout = /*#__PURE__*/function () {
   }));
   return function logout() {
     return _ref2.apply(this, arguments);
+  };
+}();
+var reset = exports.reset = /*#__PURE__*/function () {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(email) {
+    var res;
+    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          _context3.prev = 0;
+          _context3.next = 3;
+          return (0, _axios.default)({
+            method: 'POST',
+            url: '/api/v1/users/forgotPassword',
+            data: {
+              email: email
+            }
+          });
+        case 3:
+          res = _context3.sent;
+          if (res.data.status === 'success') {
+            (0, _alerts.showAlert)('success', 'reset link is send!');
+            window.setTimeout(function () {
+              location.assign('/');
+            }, 1500);
+          }
+          _context3.next = 10;
+          break;
+        case 7:
+          _context3.prev = 7;
+          _context3.t0 = _context3["catch"](0);
+          (0, _alerts.showAlert)('error', _context3.t0.response.data.message);
+        case 10:
+        case "end":
+          return _context3.stop();
+      }
+    }, _callee3, null, [[0, 7]]);
+  }));
+  return function reset(_x3) {
+    return _ref3.apply(this, arguments);
+  };
+}();
+var resetNew = exports.resetNew = /*#__PURE__*/function () {
+  var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(password, passwordConfirm, token) {
+    var res;
+    return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+      while (1) switch (_context4.prev = _context4.next) {
+        case 0:
+          _context4.prev = 0;
+          _context4.next = 3;
+          return (0, _axios.default)({
+            method: 'PATCH',
+            url: "/api/v1/users/resetPassword/".concat(token),
+            data: {
+              password: password,
+              passwordConfirm: passwordConfirm
+            }
+          });
+        case 3:
+          res = _context4.sent;
+          if (res.data.status === 'success') {
+            (0, _alerts.showAlert)('success', 'reset Complete!');
+            window.setTimeout(function () {
+              location.assign('/');
+            }, 1500);
+          }
+          _context4.next = 10;
+          break;
+        case 7:
+          _context4.prev = 7;
+          _context4.t0 = _context4["catch"](0);
+          (0, _alerts.showAlert)('error', _context4.t0.response.data.message);
+        case 10:
+        case "end":
+          return _context4.stop();
+      }
+    }, _callee4, null, [[0, 7]]);
+  }));
+  return function resetNew(_x4, _x5, _x6) {
+    return _ref4.apply(this, arguments);
   };
 }();
 },{"axios":"../../node_modules/axios/index.js","./alerts":"alerts.js"}],"delete.js":[function(require,module,exports) {
@@ -5572,7 +5650,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; } /* eslint-disable */
 // type is either 'password' or 'data'
 var updateSettings = exports.updateSettings = /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(data, type, url, method) {
+  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(data, url, method) {
     var res;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
@@ -5601,7 +5679,7 @@ var updateSettings = exports.updateSettings = /*#__PURE__*/function () {
       }
     }, _callee, null, [[0, 7]]);
   }));
-  return function updateSettings(_x, _x2, _x3, _x4) {
+  return function updateSettings(_x, _x2, _x3) {
     return _ref.apply(this, arguments);
   };
 }();
@@ -5626,16 +5704,22 @@ var addContentForm = document.querySelector('.add__content');
 var companyDataForm = document.querySelector('.form-company-data');
 var brandDataForm = document.querySelector('.form-brand-data');
 var resetForm = document.querySelector('.form--reset');
-if (resetForm) {
-  var url = '/api/v1/users/forgotPassword';
-  var method = 'PATCH';
-  var form = new FormData();
-  resetForm.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var email = document.getElementById('email').value;
-    console.log(email);
-  });
-}
+var resetFormNewPass = document.querySelector('.form--resetSetNew');
+if (resetFormNewPass) resetFormNewPass.addEventListener('submit', function (e) {
+  e.preventDefault();
+  var password = document.getElementById('password').value;
+  var passwordConfirm = document.getElementById('password-confirm').value;
+  var currentUrl = window.location.href;
+  var urlParts = currentUrl.split('/');
+  var resetPasswordIndex = urlParts.indexOf('resetPassword');
+  var token = urlParts[resetPasswordIndex + 1];
+  (0, _login.resetNew)(password, passwordConfirm, token);
+});
+if (resetForm) resetForm.addEventListener('submit', function (e) {
+  e.preventDefault();
+  var email = document.getElementById('email').value;
+  (0, _login.reset)(email);
+});
 if (loginForm) loginForm.addEventListener('submit', function (e) {
   e.preventDefault();
   var email = document.getElementById('email').value;
@@ -5669,7 +5753,7 @@ if (userDataForm) userDataForm.addEventListener('submit', function (e) {
   form.append('userName', document.getElementById('name').value);
   form.append('email', document.getElementById('email').value);
   form.append('photo', document.getElementById('photo').files[0]);
-  (0, _updateSettings.updateSettings)(form, 'userData', url, method);
+  (0, _updateSettings.updateSettings)(form, url, method);
 });
 
 //submit pwd change
@@ -5691,7 +5775,7 @@ if (userPasswordForm) userPasswordForm.addEventListener('submit', /*#__PURE__*/f
             passwordCurrent: passwordCurrent,
             password: password,
             passwordConfirm: passwordConfirm
-          }, 'password', url, method);
+          }, url, method);
         case 9:
           document.querySelector('.btn--save-password').textContent = 'Save password';
           document.getElementById('password-current').value = '';
@@ -5717,7 +5801,7 @@ if (companyDataForm) companyDataForm.addEventListener('submit', function (e) {
   form.append('companyName', document.getElementById('name').value);
   form.append('adress', document.getElementById('adress').value);
   form.append('photo', document.getElementById('photo').files[0]);
-  (0, _updateSettings.updateSettings)(form, 'companyData', url, method);
+  (0, _updateSettings.updateSettings)(form, url, method);
 });
 
 // load companies for adding brand owner
@@ -5770,7 +5854,7 @@ if (brandDataForm) {
     console.log('Selected Supplier IDs:', selectedSupplierIds);
 
     // Perform your form submission logic (e.g., updateSettings)
-    (0, _updateSettings.updateSettings)(form, 'brandData', url, method);
+    (0, _updateSettings.updateSettings)(form, url, method);
   });
 }
 },{"./login":"login.js","./delete":"delete.js","./updateSettings":"updateSettings.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {

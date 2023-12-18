@@ -34,6 +34,12 @@ exports.pwdReset = (req, res) => {
   });
 };
 
+exports.resetPassword = (req, res) => {
+  res.status(200).render('resetPassword', {
+    title: 'choose new pwd',
+  });
+};
+
 exports.getCompany = catchAsync(async (req, res) => {
   let query = Company.findById(req.user.company.id);
   const doc = await query;
