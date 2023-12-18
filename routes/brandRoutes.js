@@ -7,12 +7,13 @@ const router = express.Router();
 
 router.use(authController.protect);
 
-router.route('/My').get(brandController.getAllMyBrands);
-router.route('/My/:id').get(brandController.getMyBrand);
+router.route('/My').get(brandController.getAllMyBrands); // dont need
+router.route('/My/:id').get(brandController.getMyBrand); // dont need
 
 router.route('/createMy').post(
-  // authController.restrictTo('admin', 'root'),
-  // authController.restrictToCompanyType('BrandOwner', 'System'),
+  //ok
+  authController.restrictTo('admin', 'root'),
+  authController.restrictToCompanyType('BrandOwner', 'System'),
   imageUploadController.uploadImageFile,
   imageUploadController.resizeBrandLogo,
   brandController.createMyBrand,
@@ -20,26 +21,26 @@ router.route('/createMy').post(
 
 router
   .route('/updateMy/:id')
-  .patch(authController.restrictTo('admin'), brandController.updateMyBrand);
+  .patch(authController.restrictTo('admin'), brandController.updateMyBrand); //TODO
 
 router
   .route('/delete/:id')
-  .patch(authController.restrictTo('admin'), brandController.softDeleteBrand);
+  .patch(authController.restrictTo('admin'), brandController.softDeleteBrand); //TODO
 
 router.use(authController.restrictTo('root'));
 
 router
-  .route('/')
+  .route('/') // only API
   .get(brandController.getAllBrands)
   .post(brandController.createBrand);
 
 router
-  .route('/:id')
+  .route('/:id') // only API
   .get(brandController.getBrand)
   .patch(brandController.updateBrand);
 
-router.route('/delete/:id').patch(brandController.softDeleteBrand);
+router.route('/delete/:id').patch(brandController.softDeleteBrand); // only API
 
-router.route('/:id').delete(brandController.deleteBrand);
+router.route('/:id').delete(brandController.deleteBrand); // only API
 
 module.exports = router;
