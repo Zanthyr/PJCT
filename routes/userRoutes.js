@@ -6,60 +6,60 @@ const imageUploadController = require('./../controllers/imageUploadController');
 const router = express.Router();
 
 // Authencication route for login - logout
-router.post('/login', authController.login);
-router.post('/logout', authController.logout);
+router.post('/login', authController.login); // ok
+router.post('/logout', authController.logout); // ok
 
 // pwd reset route for forget pwd  - reset pwd
-router.post('/forgotPassword', authController.forgotPassword);
-router.patch('/resetPassword/:token', authController.resetPassword);
+router.post('/forgotPassword', authController.forgotPassword); // TODO
+router.patch('/resetPassword/:token', authController.resetPassword); // TODO
 
 // Protect all routes from this point on
 router.use(authController.protect);
 // route for updating pwd
-router.patch('/updateMyPassword', authController.updatePassword);
+router.patch('/updateMyPassword', authController.updatePassword); // ok
 
 // route for updateMe
-router.get('/me', userController.getMe, userController.getUser);
+router.get('/me', userController.getMe, userController.getUser); // ok
 router.patch(
-  '/updateMe',
+  '/updateMe', // ok
   imageUploadController.uploadImageFile,
   imageUploadController.resizeUserPhoto,
   userController.updateMe,
 );
-router.delete('/deleteMe', userController.deleteMe);
+router.delete('/deleteMe', userController.deleteMe); // Partial, not allowing to actualy delete
 
 // admin only from this poit on
 router.use(authController.restrictTo('root', 'admin'));
 
-router.post('/signup', authController.signUp);
+router.post('/signup', authController.signUp); // TODO
 
 router
   .route('/')
-  .get(userController.getAllUsersOfCompany)
+  .get(userController.getAllUsersOfCompany) // only api
   .post(userController.createUser); // not available use signup
 
 router
   .route('/company/:id')
-  .get(userController.getUserOfComapny)
-  .patch(userController.updateUserOfCompany);
+  .get(userController.getUserOfComapny) // only api
+  .patch(userController.updateUserOfCompany); // only api
 
 router
-  .route('/deleteOfCompany/:id')
-  .patch(userController.softDeleteUserOfCompany);
+  .route('/deleteOfCompany/:id') // only api
+  .patch(userController.softDeleteUserOfCompany); // Partial, not allowing to actualy delete
 
 router.use(authController.restrictTo('root'));
 
 router
   .route('/:id')
-  .get(userController.getUser)
-  .patch(userController.updateUser)
-  .delete(userController.deleteUser);
+  .get(userController.getUser) // only api
+  .patch(userController.updateUser) // only api
+  .delete(userController.deleteUser); // only api
 
 router
   .route('/')
-  .get(userController.getAllUsers)
+  .get(userController.getAllUsers) // only api
   .post(userController.createUser); // not available use signup
 
-router.route('/delete/:id').patch(userController.softDeleteUser);
+router.route('/delete/:id').patch(userController.softDeleteUser); // only api
 
 module.exports = router;
