@@ -11,6 +11,7 @@ const showAddFormBtn = document.querySelector('.btn__showAddForm');
 const addContentForm = document.querySelector('.add__content');
 const companyDataForm = document.querySelector('.form-company-data');
 const brandDataForm = document.querySelector('.form-brand-data');
+const colorForm = document.querySelector('.form-color-data');
 const requestReset = document.querySelector('.form--requestReset');
 const resetPassword = document.querySelector('.form--resetPassword');
 
@@ -110,13 +111,52 @@ if (companyDataForm)
   });
 
 // load companies for adding brand owner
-function populateDropdown(elementId, companies) {
+function populateDropdown(elementId, list) {
   const element = document.getElementById(elementId);
-  companies.forEach((item) => {
+  list.forEach((item) => {
     const option = document.createElement('option');
     option.value = item.id;
     option.text = item.name;
     element.appendChild(option);
+  });
+}
+
+if (colorForm) {
+  const brands = JSON.parse(colorForm.getAttribute('brands'));
+  const noneOption = document.createElement('option');
+  noneOption.value = '';
+  noneOption.text = 'None';
+
+  // Append 'none' option before populating the dropdown
+  const selectBrand = document.getElementById('selectBrand');
+  selectBrand.appendChild(noneOption);
+  populateDropdown('selectBrand', brands);
+
+  // handle form submission
+  colorForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    // Create a FormData object
+    const form = new FormData();
+    const url = '/api/v1/colors/createMy';
+    const method = 'POST';
+
+    // Append other form fields
+    form.append('colorName', document.getElementById('name').value);
+    form.append('cie_l', document.getElementById('cie_l').value);
+    form.append('cie_a', document.getElementById('cie_a').value);
+    form.append('cie_b', document.getElementById('cie_b').value);
+    form.append('dens', document.getElementById('dens').value);
+    form.append('halftone', document.getElementById('halftone').value);
+
+    // Append selected brand managers
+    const selectedBrandDropdown = document.getElementById('selectBrand');
+    const selectedBrandsIds = Array.from(
+      selectedBrandDropdown.selectedOptions,
+    ).map((option) => option.value);
+    form.append('brand', selectedBrandsIds);
+
+    httpx.createRecord(form, url, method, 'Color');
   });
 }
 
@@ -155,10 +195,6 @@ if (brandDataForm) {
       selectedSupplierDropdown.selectedOptions,
     ).map((option) => option.value);
     form.append('brandSuppliers', selectedSupplierIds);
-
-    // Log the selected values (optional)
-    console.log('Selected Brand Manager IDs:', selectedBrandManagerIds);
-    console.log('Selected Supplier IDs:', selectedSupplierIds);
 
     // Perform your form submission logic (e.g., updateSettings)
     httpx.createRecord(form, url, method, 'Brand');

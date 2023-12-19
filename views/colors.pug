@@ -21,16 +21,29 @@ block content
 
             p= JSON.stringify(cleanBrandList)
 
-            form.form.form-color-data(companies=cleanBrandList)
+            form.form.form-color-data(brands=cleanBrandList)
               .form__group
                 label.form__label(for='name') ColorName
-                input#name.form__input(type='text', value=`${user.userName}`, required, name='name')
-              .form__group
-                label.form__label(for='name') Brand Name
-                input#name.form__input(type='text', value=`brand name`, required, name='name')
+                input#name.form__input(type='text', value=`name`, required, name='name')
+              .form__group.ma-bt-md
+                label.form__label(for='cie_l') Cie-L
+                input#cie_l.form__input(type='number', value=`10`, required, name='cie_l')
+              .form__group.ma-bt-md
+                label.form__label(for='cie_a') Cie-a
+                input#cie_a.form__input(type='number', value=`10`, required, name='cie_a')
+              .form__group.ma-bt-md
+                label.form__label(for='cie_b') Cie-b
+                input#cie_b.form__input(type='number', value=`10`, required, name='cie_b')
+              .form__group.ma-bt-md
+                label.form__label(for='dens') Dens
+                input#dens.form__input(type='number', value=`10`, required, name='dens')
+              .form__group.ma-bt-md
+                label.form__label(for='halftone') Halftone
+                input#halftone.form__input(type='number', value=`10`, required, name='halftone')
+
               .form__group.ma-bt-md
                 label(for='selectBrand') Select Brand
-                select(id='selectBrand' multiple)  
+                select(id='selectBrand')  
               .form__group.right
                 button.btn.btn--small.btn--green Save user
         .line &nbsp;

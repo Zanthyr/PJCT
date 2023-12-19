@@ -1,7 +1,7 @@
 const express = require('express');
 const brandController = require('../controllers/brandController.js');
 const authController = require('../controllers/authController.js');
-const imageUploadController = require('./../controllers/imageUploadController');
+const uploadController = require('./../controllers/uploadController');
 
 const router = express.Router();
 
@@ -14,8 +14,8 @@ router.route('/createMy').post(
   //ok
   authController.restrictTo('admin', 'root'),
   authController.restrictToCompanyType('BrandOwner', 'System'),
-  imageUploadController.uploadImageFile,
-  imageUploadController.resizeBrandLogo,
+  uploadController.uploadImageFile,
+  uploadController.resizeBrandLogo,
   brandController.createMyBrand,
 );
 

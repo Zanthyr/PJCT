@@ -1,6 +1,7 @@
 const express = require('express');
 const colorController = require('./../controllers/colorController');
 const authController = require('./../controllers/authController');
+const uploadController = require('../controllers/uploadController');
 
 const router = express.Router();
 
@@ -12,7 +13,9 @@ router.route('/:id').get(colorController.getColor);
 
 router.use(authController.restrictTo('root', 'admin'));
 
-router.route('/').post(colorController.createColor);
+router
+  .route('/createMy')
+  .post(uploadController.uploadFields, colorController.createMyColor);
 
 router.route('/:id').patch(colorController.updateColor);
 

@@ -117,9 +117,8 @@ export const createRecord = async (data, url, method, type) => {
       url,
       data,
     });
-    console.log(res.data);
     if (res.data.status === 'success') {
-      showAlert('success', `${type.toUpperCase()} updated Created!`);
+      showAlert('success', `${type.toUpperCase()} record created!`);
     }
   } catch (err) {
     showAlert('error', err.response.data.message);

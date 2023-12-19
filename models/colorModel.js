@@ -8,7 +8,7 @@ const colorSchema = new mongoose.Schema(
     },
     ColorVersion: {
       type: Number,
-      default: 1,
+      default: 0,
       select: false,
     },
     colorType: {
@@ -21,16 +21,22 @@ const colorSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: 'Brand',
     },
-    values: {
-      cie_L: Number,
-      cie_a: Number,
-      cie_b: Number,
-      Density: Number,
-      Halftone: Number,
-    },
-    createdBy: {
+    values: [
+      {
+        cie_L: Number,
+        cie_a: Number,
+        cie_b: Number,
+        Density: Number,
+        Halftone: Number,
+      },
+    ],
+    createdByUser: {
       type: mongoose.Schema.ObjectId,
       ref: 'User',
+    },
+    createdByCompany: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Company',
     },
     createdAt: {
       type: Date,
@@ -47,10 +53,18 @@ const colorSchema = new mongoose.Schema(
 
 colorSchema.pre(/^find/, function (next) {
   this.populate({
-    path: 'createdBy',
+    path: 'createduser',
     select: 'userName',
   }).populate({
     path: 'brandName',
+  });
+  next();
+});
+
+colorSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'createdByCompany',
+    select: 'companyName',
   });
   next();
 });

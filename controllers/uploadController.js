@@ -1,6 +1,6 @@
 const sharp = require('sharp');
 const multer = require('multer');
-const catchAsync = require('./../utils/catchAsync');
+const catchAsync = require('../utils/catchAsync');
 
 const multerStorage = multer.memoryStorage();
 
@@ -17,6 +17,7 @@ const upload = multer({
 });
 
 exports.uploadImageFile = upload.single('photo');
+exports.uploadFields = upload.single('fileFieldName');
 
 exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
   if (!req.file) return next();

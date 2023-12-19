@@ -58,10 +58,27 @@ exports.getColor = catchAsync(async (req, res, next, popOptions) => {
   });
 });
 
-exports.createColor = catchAsync(async (req, res, next) => {
-  req.body.createdBy = req.user.id;
+exports.createMyColor = catchAsync(async (req, res, next) => {
+  const filteredBody = {};
+  filteredBody.colorName = req.body.colorName;
+  filteredBody.createdByUser = req.user.id;
+  filteredBody.createdByCompany = req.user.company.id;
 
-  const doc = await Color.create(req.body);
+  if (req.body.brand.length === 0) {
+    filteredBody.colorType = 'SpotColor';
+  } else {
+    filteredBody.brandName = req.body.brand;
+  }
+
+  filteredBody.values = {
+    cie_L: req.body.cie_l,
+    cie_a: req.body.cie_a,
+    cie_b: req.body.cie_b,
+    Density: req.body.dens,
+    Halftone: req.body.halftone,
+  };
+  console.log(filteredBody);
+  const doc = await Color.create(filteredBody);
 
   res.status(201).json({
     status: 'success',

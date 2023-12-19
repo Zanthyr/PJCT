@@ -1,6 +1,6 @@
 const express = require('express');
 const companyController = require('./../controllers/companyController');
-const imageUploadController = require('./../controllers/imageUploadController');
+const uploadController = require('./../controllers/uploadController');
 const authController = require('./../controllers/authController');
 
 const router = express.Router();
@@ -15,8 +15,8 @@ router.use(authController.restrictTo('root', 'admin'));
 
 router.patch(
   '/updateMy', // OK
-  imageUploadController.uploadImageFile,
-  imageUploadController.resizeCompanyPhoto,
+  uploadController.uploadImageFile,
+  uploadController.resizeCompanyPhoto,
   companyController.updateMyCompany,
 );
 

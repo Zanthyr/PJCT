@@ -5674,21 +5674,20 @@ var createRecord = exports.createRecord = /*#__PURE__*/function () {
           });
         case 3:
           res = _context7.sent;
-          console.log(res.data);
           if (res.data.status === 'success') {
-            (0, _alerts.showAlert)('success', "".concat(type.toUpperCase(), " updated Created!"));
+            (0, _alerts.showAlert)('success', "".concat(type.toUpperCase(), " record created!"));
           }
-          _context7.next = 11;
+          _context7.next = 10;
           break;
-        case 8:
-          _context7.prev = 8;
+        case 7:
+          _context7.prev = 7;
           _context7.t0 = _context7["catch"](0);
           (0, _alerts.showAlert)('error', _context7.t0.response.data.message);
-        case 11:
+        case 10:
         case "end":
           return _context7.stop();
       }
-    }, _callee7, null, [[0, 8]]);
+    }, _callee7, null, [[0, 7]]);
   }));
   return function createRecord(_x12, _x13, _x14, _x15) {
     return _ref7.apply(this, arguments);
@@ -5714,6 +5713,7 @@ var showAddFormBtn = document.querySelector('.btn__showAddForm');
 var addContentForm = document.querySelector('.add__content');
 var companyDataForm = document.querySelector('.form-company-data');
 var brandDataForm = document.querySelector('.form-brand-data');
+var colorForm = document.querySelector('.form-color-data');
 var requestReset = document.querySelector('.form--requestReset');
 var resetPassword = document.querySelector('.form--resetPassword');
 if (resetPassword) resetPassword.addEventListener('submit', function (e) {
@@ -5816,13 +5816,50 @@ if (companyDataForm) companyDataForm.addEventListener('submit', function (e) {
 });
 
 // load companies for adding brand owner
-function populateDropdown(elementId, companies) {
+function populateDropdown(elementId, list) {
   var element = document.getElementById(elementId);
-  companies.forEach(function (item) {
+  list.forEach(function (item) {
     var option = document.createElement('option');
     option.value = item.id;
     option.text = item.name;
     element.appendChild(option);
+  });
+}
+if (colorForm) {
+  var brands = JSON.parse(colorForm.getAttribute('brands'));
+  var noneOption = document.createElement('option');
+  noneOption.value = '';
+  noneOption.text = 'None';
+
+  // Append 'none' option before populating the dropdown
+  var selectBrand = document.getElementById('selectBrand');
+  selectBrand.appendChild(noneOption);
+  populateDropdown('selectBrand', brands);
+
+  // handle form submission
+  colorForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    // Create a FormData object
+    var form = new FormData();
+    var url = '/api/v1/colors/createMy';
+    var method = 'POST';
+
+    // Append other form fields
+    form.append('colorName', document.getElementById('name').value);
+    form.append('cie_l', document.getElementById('cie_l').value);
+    form.append('cie_a', document.getElementById('cie_a').value);
+    form.append('cie_b', document.getElementById('cie_b').value);
+    form.append('dens', document.getElementById('dens').value);
+    form.append('halftone', document.getElementById('halftone').value);
+
+    // Append selected brand managers
+    var selectedBrandDropdown = document.getElementById('selectBrand');
+    var selectedBrandsIds = Array.from(selectedBrandDropdown.selectedOptions).map(function (option) {
+      return option.value;
+    });
+    form.append('brand', selectedBrandsIds);
+    httpx.createRecord(form, url, method, 'Color');
   });
 }
 
@@ -5860,10 +5897,6 @@ if (brandDataForm) {
     });
     form.append('brandSuppliers', selectedSupplierIds);
 
-    // Log the selected values (optional)
-    console.log('Selected Brand Manager IDs:', selectedBrandManagerIds);
-    console.log('Selected Supplier IDs:', selectedSupplierIds);
-
     // Perform your form submission logic (e.g., updateSettings)
     httpx.createRecord(form, url, method, 'Brand');
   });
@@ -5893,7 +5926,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63804" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56375" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

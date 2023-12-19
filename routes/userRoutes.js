@@ -1,7 +1,7 @@
 const express = require('express');
 const userController = require('./../controllers/userController');
 const authController = require('./../controllers/authController');
-const imageUploadController = require('./../controllers/imageUploadController');
+const uploadController = require('./../controllers/uploadController');
 
 const router = express.Router();
 
@@ -22,8 +22,8 @@ router.patch('/updateMyPassword', authController.updatePassword); // ok
 router.get('/me', userController.getMe, userController.getUser); // ok
 router.patch(
   '/updateMe', // ok
-  imageUploadController.uploadImageFile,
-  imageUploadController.resizeUserPhoto,
+  uploadController.uploadImageFile,
+  uploadController.resizeUserPhoto,
   userController.updateMe,
 );
 router.delete('/deleteMe', userController.deleteMe); // Partial, not allowing to actualy delete
