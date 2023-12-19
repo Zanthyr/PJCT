@@ -4,7 +4,7 @@ const authController = require('../controllers/authController');
 
 const router = express.Router();
 
-router.get('/pwsReset', viewsController.pwdReset);
+router.get('/requestReset', viewsController.requestReset);
 router.get('/resetPassword/:token', viewsController.resetPassword);
 router.get('/', authController.isLoggedIn, viewsController.getHome);
 router.get('/login', authController.isLoggedIn, viewsController.getLoginForm);

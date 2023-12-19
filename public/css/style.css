@@ -812,12 +812,7 @@ body {
   transition: all 0.2s;
 }
 
-.pwd-reset a {
-  color: #777;
-  text-decoration: none !important;
-  transition: all 0.2s;
-}
-.pwd-reset a:hover,
-.fpwd-reset a:active {
+.pwd-reset :hover,
+.pwd-reset :active {
   color: #55c57a;
 }

@@ -2,6 +2,19 @@
 import axios from 'axios';
 import { showAlert } from './alerts';
 
+export const softDelete = async (id) => {
+  try {
+    // console.log('test', id);
+    showAlert(
+      'success',
+      `User Deleted!, but not realy, this is a demo :p`,
+      //`${type.toUpperCase()} User Deleted!, but not realy, this is a demo :p`,
+    );
+  } catch (err) {
+    showAlert('error', 'error'); //err.response.data.message);
+  }
+};
+
 export const login = async (email, password) => {
   try {
     const res = await axios({
@@ -36,7 +49,7 @@ export const logout = async () => {
   }
 };
 
-export const reset = async (email) => {
+export const requestReset = async (email) => {
   try {
     const res = await axios({
       method: 'POST',
@@ -57,7 +70,7 @@ export const reset = async (email) => {
   }
 };
 
-export const resetNew = async (password, passwordConfirm, token) => {
+export const resetPassword = async (password, passwordConfirm, token) => {
   try {
     const res = await axios({
       method: 'PATCH',
@@ -73,6 +86,40 @@ export const resetNew = async (password, passwordConfirm, token) => {
       window.setTimeout(() => {
         location.assign('/');
       }, 1500);
+    }
+  } catch (err) {
+    showAlert('error', err.response.data.message);
+  }
+};
+
+// type is either 'password' or 'data'
+export const updateSettings = async (data, url, method, type) => {
+  try {
+    const res = await axios({
+      method,
+      url,
+      data,
+    });
+    console.log(res.data);
+    if (res.data.status === 'success') {
+      showAlert('success', `${type.toUpperCase()} updated successfully!`);
+    }
+  } catch (err) {
+    showAlert('error', err.response.data.message);
+  }
+};
+
+// type is either 'password' or 'data'
+export const createRecord = async (data, url, method, type) => {
+  try {
+    const res = await axios({
+      method,
+      url,
+      data,
+    });
+    console.log(res.data);
+    if (res.data.status === 'success') {
+      showAlert('success', `${type.toUpperCase()} updated Created!`);
     }
   } catch (err) {
     showAlert('error', err.response.data.message);

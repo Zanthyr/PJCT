@@ -1,7 +1,5 @@
 /* eslint-disable */
-import { login, logout, reset, resetNew } from './login';
-import { softDelete } from './delete';
-import { updateSettings } from './updateSettings';
+import * as httpx from './httpx';
 
 // DOM ELEMENTS
 const loginForm = document.querySelector('.form--login');
@@ -13,11 +11,11 @@ const showAddFormBtn = document.querySelector('.btn__showAddForm');
 const addContentForm = document.querySelector('.add__content');
 const companyDataForm = document.querySelector('.form-company-data');
 const brandDataForm = document.querySelector('.form-brand-data');
-const resetForm = document.querySelector('.form--reset');
-const resetFormNewPass = document.querySelector('.form--resetSetNew');
+const requestReset = document.querySelector('.form--requestReset');
+const resetPassword = document.querySelector('.form--resetPassword');
 
-if (resetFormNewPass)
-  resetFormNewPass.addEventListener('submit', (e) => {
+if (resetPassword)
+  resetPassword.addEventListener('submit', (e) => {
     e.preventDefault();
     const password = document.getElementById('password').value;
     const passwordConfirm = document.getElementById('password-confirm').value;
@@ -25,14 +23,14 @@ if (resetFormNewPass)
     const urlParts = currentUrl.split('/');
     const resetPasswordIndex = urlParts.indexOf('resetPassword');
     const token = urlParts[resetPasswordIndex + 1];
-    resetNew(password, passwordConfirm, token);
+    httpx.resetPassword(password, passwordConfirm, token);
   });
 
-if (resetForm)
-  resetForm.addEventListener('submit', (e) => {
+if (requestReset)
+  requestReset.addEventListener('submit', (e) => {
     e.preventDefault();
     const email = document.getElementById('email').value;
-    reset(email);
+    httpx.requestReset(email);
   });
 
 if (loginForm)
@@ -40,10 +38,10 @@ if (loginForm)
     e.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-    login(email, password);
+    httpx.login(email, password);
   });
 
-if (logOutBtn) logOutBtn.addEventListener('click', logout);
+if (logOutBtn) logOutBtn.addEventListener('click', httpx.logout);
 
 // remove or show add user/brand/color menu
 if (showAddFormBtn)
@@ -57,12 +55,12 @@ if (deleteUser) {
     const targetButton = event.target.closest('.btn__userDelete');
     if (targetButton) {
       const userID = targetButton.getAttribute('userID');
-      softDelete(userID);
+      httpx.softDelete(userID);
     }
   });
 }
 
-//submit user data
+// submit user data
 if (userDataForm)
   userDataForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -72,10 +70,10 @@ if (userDataForm)
     form.append('userName', document.getElementById('name').value);
     form.append('email', document.getElementById('email').value);
     form.append('photo', document.getElementById('photo').files[0]);
-    updateSettings(form, url, method);
+    httpx.updateSettings(form, url, method, 'User');
   });
 
-//submit pwd change
+// submit pwd change
 if (userPasswordForm)
   userPasswordForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -85,10 +83,11 @@ if (userPasswordForm)
     const passwordCurrent = document.getElementById('password-current').value;
     const password = document.getElementById('password').value;
     const passwordConfirm = document.getElementById('password-confirm').value;
-    await updateSettings(
+    await httpx.updateSettings(
       { passwordCurrent, password, passwordConfirm },
       url,
       method,
+      'Password',
     );
 
     document.querySelector('.btn--save-password').textContent = 'Save password';
@@ -107,7 +106,7 @@ if (companyDataForm)
     form.append('companyName', document.getElementById('name').value);
     form.append('adress', document.getElementById('adress').value);
     form.append('photo', document.getElementById('photo').files[0]);
-    updateSettings(form, url, method);
+    httpx.updateSettings(form, url, method, 'Company');
   });
 
 // load companies for adding brand owner
@@ -128,7 +127,6 @@ if (brandDataForm) {
   populateDropdown('selectSuppliers', companies);
 
   // handle form submission
-
   brandDataForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
@@ -136,6 +134,7 @@ if (brandDataForm) {
     const form = new FormData();
     const url = '/api/v1/brands/createMy';
     const method = 'POST';
+
     // Append other form fields
     form.append('brandName', document.getElementById('name').value);
     form.append('productGroup', document.getElementById('group').value);
@@ -162,6 +161,6 @@ if (brandDataForm) {
     console.log('Selected Supplier IDs:', selectedSupplierIds);
 
     // Perform your form submission logic (e.g., updateSettings)
-    updateSettings(form, url, method);
+    httpx.createRecord(form, url, method, 'Brand');
   });
 }

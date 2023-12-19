@@ -28,15 +28,15 @@ exports.getAccount = (req, res) => {
   });
 };
 
-exports.pwdReset = (req, res) => {
-  res.status(200).render('pwdreset', {
-    title: 'password Reset',
+exports.requestReset = (req, res) => {
+  res.status(200).render('requestReset', {
+    title: 'Request Password reset',
   });
 };
 
 exports.resetPassword = (req, res) => {
   res.status(200).render('resetPassword', {
-    title: 'choose new pwd',
+    title: 'Reset Password',
   });
 };
 
