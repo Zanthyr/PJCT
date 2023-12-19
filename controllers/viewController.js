@@ -102,19 +102,12 @@ exports.getUsers = catchAsync(async (req, res, next) => {
 });
 
 exports.getBrands = catchAsync(async (req, res, next) => {
-  const features = new APIFeatures(Brand.find(), req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
-  const doc = await features.query;
+  const doc = await Brand.find();
 
-  let newDoc = [];
-  if (req.user.role !== 'root')
-    newDoc = doc.filter((element) => {
-      if (element.allowList.includes(req.user.company.id)) return element;
-    });
-  else newDoc = doc;
+  const newDoc =
+    req.user.role !== 'root'
+      ? doc.filter((element) => element.allowList.includes(req.user.company.id))
+      : doc;
 
   let cleanCompanies = [];
   if (
@@ -132,14 +125,19 @@ exports.getBrands = catchAsync(async (req, res, next) => {
     name: item.brandName,
     groep: item.productGroup,
     Brandowner: item.brandOwner.companyName,
-    brandManagers: item.brandManagers.map((item) => [item.companyName]),
-    brandSuppliers: item.brandSuppliers.map((item) => [item.companyName]),
+    brandManagers: item.brandManagers.map((manager) => ({
+      companyName: manager.companyName,
+    })),
+    brandSuppliers: item.brandSuppliers.map((supplier) => ({
+      companyName: supplier.companyName,
+    })),
     date: item.createdAt.toLocaleDateString('en-us', {
       year: 'numeric',
       month: 'short',
     }),
     id: item.id,
   }));
+
   res.status(200).render('brands', {
     title: 'Manage Brands',
     cleanDoc,
@@ -149,23 +147,39 @@ exports.getBrands = catchAsync(async (req, res, next) => {
 });
 
 exports.getColors = catchAsync(async (req, res, next) => {
-  const features = new APIFeatures(Color.find(), req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
-  const doc = await features.query;
-  let newDoc = [];
-  if (req.user.role !== 'root')
-    newDoc = doc.filter((element) => {
-      if (element.brandName.allowList.includes(req.user.company.id))
-        return element;
-    });
-  else newDoc = doc;
-  console.log('test', newDoc);
+  const allColors = await Color.find();
+
+  let myColorsList = [];
+  if (req.user.role !== 'root') {
+    myColorsList = allColors.filter((element) =>
+      element.brandName.allowList.includes(req.user.company.id),
+    );
+  } else {
+    myColorsList = allColors;
+  }
+
+  const cleanColorList = myColorsList.map((item) => ({
+    name: item.colorName,
+    groep: item.colorType,
+    id: item.id,
+  }));
+
+  const allBrands = await Brand.find();
+
+  const myBrandList = allBrands.filter((element) =>
+    element.managerList.includes(req.user.company.id),
+  );
+
+  const cleanBrandList = myBrandList.map((item) => ({
+    name: item.brandName,
+    groep: item.productGroup,
+    id: item.id,
+  }));
+
   res.status(200).render('colors', {
     title: 'Manage Colors',
-    newDoc,
+    cleanColorList,
+    cleanBrandList,
     activeMenu: 'Manage Colors',
   });
 });

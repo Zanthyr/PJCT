@@ -76,23 +76,19 @@ brandSchema.pre(/^find/, function (next) {
 });
 
 brandSchema.post(/^find/, function (docs, next) {
-  if (docs.length === undefined) newDoc = [docs];
-  else newDoc = docs;
-  //console.log('here', docs[0].brandSuppliers);
-  newDoc.forEach((element) => {
-    const newBrandManagers = element.brandManagers.map((item) => item.id);
-    const newBrandSuppliers = element.brandSuppliers.map((item) => item.id);
-    let array = newBrandManagers.concat(newBrandSuppliers);
-    newArr = array.map((element) => {
-      str = JSON.stringify(element);
-      newStr = str.substring(1, str.length - 1);
-      return newStr;
-    });
-    const allowList = [element.brandOwner.id].concat(newArr);
+  if (!Array.isArray(docs)) {
+    docs = [docs];
+  }
+  docs.forEach((element) => {
+    const extractIds = (items) =>
+      items.map((item) => JSON.stringify(item.id).slice(1, -1));
+    const brandManagers = extractIds(element.brandManagers);
+    const managerList = [element.brandOwner.id, ...brandManagers];
+    element.managerList = managerList;
+    const brandSuppliers = extractIds(element.brandSuppliers);
+    const allowList = [...managerList, ...brandSuppliers];
     element.allowList = allowList;
-    return element;
   });
-  docs = newDoc;
   next();
 });
 

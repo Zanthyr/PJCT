@@ -13,12 +13,20 @@ const colorSchema = new mongoose.Schema(
     },
     colorType: {
       type: String,
-      enum: ['BrandColor', 'SpotColor', 'SystemColor'],
+      enum: ['BrandColor', 'SpotColor'],
       default: 'BrandColor',
+      required: [true, 'A color must have a type'],
     },
     brandName: {
       type: mongoose.Schema.ObjectId,
       ref: 'Brand',
+    },
+    values: {
+      cie_L: Number,
+      cie_a: Number,
+      cie_b: Number,
+      Density: Number,
+      Halftone: Number,
     },
     createdBy: {
       type: mongoose.Schema.ObjectId,

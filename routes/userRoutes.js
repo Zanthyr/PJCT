@@ -11,7 +11,7 @@ router.post('/logout', authController.logout); // ok
 
 // pwd reset route for forget pwd  - reset pwd
 router.post('/forgotPassword', authController.forgotPassword); // ok
-router.patch('/resetPassword/:token', authController.resetPassword); // ok -> enkel mail template nog aanpassen
+router.patch('/resetPassword/:token', authController.resetPassword); // ok
 
 // Protect all routes from this point on
 router.use(authController.protect);

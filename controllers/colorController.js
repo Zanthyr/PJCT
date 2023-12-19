@@ -60,6 +60,7 @@ exports.getColor = catchAsync(async (req, res, next, popOptions) => {
 
 exports.createColor = catchAsync(async (req, res, next) => {
   req.body.createdBy = req.user.id;
+
   const doc = await Color.create(req.body);
 
   res.status(201).json({

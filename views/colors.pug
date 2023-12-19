@@ -18,16 +18,22 @@ block content
         .add__content.hidden
           .user-view__form-container
             h2.heading-secondary.ma-bt-md Add A Color
-            form.form.form-user-data
+
+            p= JSON.stringify(cleanBrandList)
+
+            form.form.form-color-data(companies=cleanBrandList)
               .form__group
-                label.form__label(for='name') Name
+                label.form__label(for='name') ColorName
                 input#name.form__input(type='text', value=`${user.userName}`, required, name='name')
+              .form__group
+                label.form__label(for='name') Brand Name
+                input#name.form__input(type='text', value=`brand name`, required, name='name')
               .form__group.ma-bt-md
-                label.form__label(for='email') Email address
-                input#email.form__input(type='email', value=`${user.email}`, required, name='email')
+                label(for='selectBrand') Select Brand
+                select(id='selectBrand' multiple)  
               .form__group.right
                 button.btn.btn--small.btn--green Save user
         .line &nbsp;
               
         
-        p= newDoc
+        p= JSON.stringify(cleanColorList)
