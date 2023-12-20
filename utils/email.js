@@ -3,34 +3,34 @@ const pug = require('pug');
 const htmlToText = require('html-to-text');
 
 module.exports = class Email {
-  constructor(user, url, content = '') {
+  constructor(user, url, data) {
     this.to = user.email;
     this.firstName = user.userName.split(' ')[0];
     this.url = url;
-    this.content = content;
+    this.data = data;
     this.from = `David geyskens <${process.env.EMAIL_FROM}>`;
   }
 
   newTransport() {
-    if (process.env.NODE_ENV === 'production') {
-      // Sendgrid;
-      return nodemailer.createTransport({
-        service: 'SendGrid',
-        auth: {
-          user: process.env.SENDGRID_USERNAME,
-          pass: process.env.SENDGRID_PASSWORD,
-        },
-      });
-    }
-
+    // if (process.env.NODE_ENV === 'production') {
+    // Sendgrid;
     return nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
-      port: process.env.EMAIL_PORT,
+      service: 'SendGrid',
       auth: {
-        user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD,
+        user: process.env.SENDGRID_USERNAME,
+        pass: process.env.SENDGRID_PASSWORD,
       },
     });
+    // }
+
+    // return nodemailer.createTransport({
+    //   host: process.env.EMAIL_HOST,
+    //   port: process.env.EMAIL_PORT,
+    //   auth: {
+    //     user: process.env.EMAIL_USERNAME,
+    //     pass: process.env.EMAIL_PASSWORD,
+    //   },
+    // });
   }
 
   // Send the actual email
@@ -39,6 +39,7 @@ module.exports = class Email {
     const html = pug.renderFile(`${__dirname}/../views/email/${template}.pug`, {
       firstName: this.firstName,
       url: this.url,
+      data: this.data,
       subject,
     });
 
@@ -59,7 +60,7 @@ module.exports = class Email {
     await this.send('welcome', 'Welcome to the printConnect Family!');
   }
 
-  async sendInvite(tempPwd) {
+  async sendInvite() {
     await this.send(
       'invitation',
       `Welcome to the printConnect Family! Use the password in the mail to login`,

@@ -77,13 +77,13 @@ exports.invite = catchAsync(async (req, res, next) => {
   filteredBody.password = tempPwd;
   filteredBody.passwordConfirm = tempPwd;
 
-  console.log(tempPwd, filteredBody);
   const newUser = await User.create(filteredBody);
 
   //send invitation mail
   const url = `${req.protocol}://${req.get('host')}/login`;
   await new Email(newUser, url, tempPwd).sendInvite();
 
+  console.log(tempPwd, filteredBody);
   res.status(200).json({ status: 'success' });
 });
 

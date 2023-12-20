@@ -47,7 +47,20 @@ block content
               //-   p= `${company.name} / ${company.id}`
 
         .line &nbsp;
-        
-        each brand in cleanDoc
-          p= `${brand.name} / ${brand.groep} / ${brand.Brandowner} / ${brand.brandManagers} / ${brand.brandSuppliers} / ${brand.date} `
+
+        .row-container
+          .row-header
+            div nr.
+            div Beand Name
+            div Product Group
+            div BrandOwner
+            div added
+          each brand, index in cleanDoc
+            .row
+              div= `${index + 1}`
+              div= `${brand.name}`
+              div= `${brand.groep}`
+              div= `${brand.Brandowner}`
+              div= `${brand.date}`
+              //- ${brand.brandManagers.length} | ${brand.brandSuppliers.length} | 
 
