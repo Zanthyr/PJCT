@@ -94,9 +94,19 @@ exports.getUsers = catchAsync(async (req, res, next) => {
     id: item.id,
   }));
 
+  let allCompanies = [];
+  if (req.user.role === 'root') {
+    const companies = await Company.find();
+    allCompanies = companies.map((item) => ({
+      name: item.companyName,
+      id: item.id,
+    }));
+  }
+
   res.status(200).render('users', {
     title: 'Manage users',
     newDoc,
+    allCompanies,
     activeMenu: 'Manage users',
   });
 });
@@ -116,6 +126,15 @@ exports.getBrands = catchAsync(async (req, res, next) => {
   ) {
     const companies = await Company.find();
     cleanCompanies = companies.map((item) => ({
+      name: item.companyName,
+      id: item.id,
+    }));
+  }
+
+  let allCompanies = [];
+  if (req.user.role === 'root') {
+    const companies = await Company.find(); // find now all companys, not only BOs
+    allCompanies = companies.map((item) => ({
       name: item.companyName,
       id: item.id,
     }));
@@ -142,20 +161,28 @@ exports.getBrands = catchAsync(async (req, res, next) => {
     title: 'Manage Brands',
     cleanDoc,
     cleanCompanies,
+    allCompanies,
     activeMenu: 'Manage Brands',
   });
 });
 
 exports.getColors = catchAsync(async (req, res, next) => {
   const allColors = await Color.find();
+  const allBrands = await Brand.find();
 
   let myColorsList = [];
+  let myBrandList = [];
+
   if (req.user.role !== 'root') {
     myColorsList = allColors.filter((element) =>
       element.brandName.allowList.includes(req.user.company.id),
     );
+    myBrandList = allBrands.filter((element) =>
+      element.managerList.includes(req.user.company.id),
+    );
   } else {
     myColorsList = allColors;
+    myBrandList = allBrands;
   }
 
   const cleanColorList = myColorsList.map((item) => ({
@@ -163,12 +190,6 @@ exports.getColors = catchAsync(async (req, res, next) => {
     groep: item.colorType,
     id: item.id,
   }));
-
-  const allBrands = await Brand.find();
-
-  const myBrandList = allBrands.filter((element) =>
-    element.managerList.includes(req.user.company.id),
-  );
 
   const cleanBrandList = myBrandList.map((item) => ({
     name: item.brandName,

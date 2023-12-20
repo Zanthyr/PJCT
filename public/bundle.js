@@ -5707,6 +5707,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 var loginForm = document.querySelector('.form--login');
 var logOutBtn = document.querySelector('.nav__el--logout');
 var userDataForm = document.querySelector('.form-user-data');
+var userInviteForm = document.querySelector('.form-user-invite');
 var userPasswordForm = document.querySelector('.form-user-password');
 var deleteUser = document.querySelector('.card-container');
 var showAddFormBtn = document.querySelector('.btn__showAddForm');
@@ -5716,6 +5717,17 @@ var brandDataForm = document.querySelector('.form-brand-data');
 var colorForm = document.querySelector('.form-color-data');
 var requestReset = document.querySelector('.form--requestReset');
 var resetPassword = document.querySelector('.form--resetPassword');
+
+// load companies for adding brand owner
+function populateDropdown(elementId, list) {
+  var element = document.getElementById(elementId);
+  list.forEach(function (item) {
+    var option = document.createElement('option');
+    option.value = item.id;
+    option.text = item.name;
+    element.appendChild(option);
+  });
+}
 if (resetPassword) resetPassword.addEventListener('submit', function (e) {
   e.preventDefault();
   var password = document.getElementById('password').value;
@@ -5815,14 +5827,26 @@ if (companyDataForm) companyDataForm.addEventListener('submit', function (e) {
   httpx.updateSettings(form, url, method, 'Company');
 });
 
-// load companies for adding brand owner
-function populateDropdown(elementId, list) {
-  var element = document.getElementById(elementId);
-  list.forEach(function (item) {
-    var option = document.createElement('option');
-    option.value = item.id;
-    option.text = item.name;
-    element.appendChild(option);
+// submit user data
+if (userInviteForm) {
+  var companies = JSON.parse(userInviteForm.getAttribute('companies'));
+  populateDropdown('company', companies);
+  userInviteForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var url = '/api/v1/users/invite';
+    var method = 'POST';
+    var form = new FormData();
+    form.append('userName', document.getElementById('name').value);
+    form.append('email', document.getElementById('email').value);
+    form.append('role', document.getElementById('role').value);
+    form.append('artowrkCreator', document.getElementById('artowrkCreator').checked);
+    form.append('jobCreator', document.getElementById('jobCreator').checked);
+    var selectedCompanyDropdown = document.getElementById('company');
+    var selectedCompanyIds = Array.from(selectedCompanyDropdown.selectedOptions).map(function (option) {
+      return option.value;
+    });
+    form.append('company', selectedCompanyIds);
+    httpx.createRecord(form, url, method, 'User');
   });
 }
 if (colorForm) {
@@ -5852,6 +5876,7 @@ if (colorForm) {
     form.append('cie_b', document.getElementById('cie_b').value);
     form.append('dens', document.getElementById('dens').value);
     form.append('halftone', document.getElementById('halftone').value);
+    form.append('filter', document.getElementById('filter').value);
 
     // Append selected brand managers
     var selectedBrandDropdown = document.getElementById('selectBrand');
@@ -5865,9 +5890,11 @@ if (colorForm) {
 
 // add brand owner company lists
 if (brandDataForm) {
-  var companies = JSON.parse(brandDataForm.getAttribute('companies'));
-  populateDropdown('selectBrandManagers', companies);
-  populateDropdown('selectSuppliers', companies);
+  var _companies = JSON.parse(brandDataForm.getAttribute('companies'));
+  var allCompanies = JSON.parse(brandDataForm.getAttribute('allCompanies'));
+  populateDropdown('selectBrandManagers', _companies);
+  populateDropdown('selectSuppliers', _companies);
+  populateDropdown('brandOwner', allCompanies);
 
   // handle form submission
   brandDataForm.addEventListener('submit', function (e) {
@@ -5896,6 +5923,11 @@ if (brandDataForm) {
       return option.value;
     });
     form.append('brandSuppliers', selectedSupplierIds);
+    var selectedBrandOwnerDropdown = document.getElementById('brandOwner');
+    var selectedBrandOwnerIds = Array.from(selectedBrandOwnerDropdown.selectedOptions).map(function (option) {
+      return option.value;
+    });
+    form.append('brandOwner', selectedBrandOwnerIds);
 
     // Perform your form submission logic (e.g., updateSettings)
     httpx.createRecord(form, url, method, 'Brand');
@@ -5926,7 +5958,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56375" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50499" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

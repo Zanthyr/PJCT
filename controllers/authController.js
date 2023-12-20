@@ -1,16 +1,24 @@
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+const randomstring = require('randomstring');
 const { promisify } = require('util');
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const Email = require('../utils/email');
-const { userInfo } = require('os');
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
+};
+
+const filterObj = (obj, ...allowedFields) => {
+  const newObj = {};
+  Object.keys(obj).forEach((el) => {
+    if (allowedFields.includes(el)) newObj[el] = obj[el];
+  });
+  return newObj;
 };
 
 const createAndSendToken = (user, statusCode, req, res) => {
@@ -34,15 +42,8 @@ const createAndSendToken = (user, statusCode, req, res) => {
   });
 };
 
+// not used as we dont want user to be able to signup themselves
 exports.signUp = catchAsync(async (req, res, next) => {
-  if (
-    req.user.company.id !== req.body.company &&
-    req.user.role !== 'systemAdmin'
-  )
-    return next(
-      new AppError('You can only create users for your own company!', 401),
-    );
-
   const newUser = await User.create(req.body);
 
   // send welcome mail
@@ -50,6 +51,40 @@ exports.signUp = catchAsync(async (req, res, next) => {
   await new Email(newUser, url).sendWelcome();
 
   createAndSendToken(newUser, 201, req, res);
+});
+
+exports.invite = catchAsync(async (req, res, next) => {
+  const filteredBody = filterObj(
+    req.body,
+    'userName',
+    'email',
+    'role',
+    'artowrkCreator',
+    'jobCreator',
+  );
+
+  if (req.user.role === 'root') {
+    filteredBody.company = req.body.company;
+  } else {
+    filteredBody.company = req.user.company.id;
+  }
+
+  const tempPwd = randomstring.generate({
+    length: 12,
+    charset: 'alphabetic',
+  });
+
+  filteredBody.password = tempPwd;
+  filteredBody.passwordConfirm = tempPwd;
+
+  console.log(tempPwd, filteredBody);
+  const newUser = await User.create(filteredBody);
+
+  //send invitation mail
+  const url = `${req.protocol}://${req.get('host')}/login`;
+  await new Email(newUser, url).sendInvite(tempPwd);
+
+  res.status(200).json({ status: 'success' });
 });
 
 exports.login = catchAsync(async (req, res, next) => {

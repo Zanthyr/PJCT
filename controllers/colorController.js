@@ -76,6 +76,7 @@ exports.createMyColor = catchAsync(async (req, res, next) => {
     cie_b: req.body.cie_b,
     Density: req.body.dens,
     Halftone: req.body.halftone,
+    Filter: req.body.filter,
   };
   console.log(filteredBody);
   const doc = await Color.create(filteredBody);

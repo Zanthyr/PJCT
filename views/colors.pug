@@ -19,33 +19,36 @@ block content
           .user-view__form-container
             h2.heading-secondary.ma-bt-md Add A Color
 
-            p= JSON.stringify(cleanBrandList)
-
             form.form.form-color-data(brands=cleanBrandList)
-              .form__group
+              .form__group.ma-bt-md
                 label.form__label(for='name') ColorName
                 input#name.form__input(type='text', value=`name`, required, name='name')
               .form__group.ma-bt-md
-                label.form__label(for='cie_l') Cie-L
-                input#cie_l.form__input(type='number', value=`10`, required, name='cie_l')
-              .form__group.ma-bt-md
-                label.form__label(for='cie_a') Cie-a
-                input#cie_a.form__input(type='number', value=`10`, required, name='cie_a')
-              .form__group.ma-bt-md
-                label.form__label(for='cie_b') Cie-b
-                input#cie_b.form__input(type='number', value=`10`, required, name='cie_b')
-              .form__group.ma-bt-md
-                label.form__label(for='dens') Dens
-                input#dens.form__input(type='number', value=`10`, required, name='dens')
-              .form__group.ma-bt-md
-                label.form__label(for='halftone') Halftone
-                input#halftone.form__input(type='number', value=`10`, required, name='halftone')
-
-              .form__group.ma-bt-md
-                label(for='selectBrand') Select Brand
-                select(id='selectBrand')  
+                label.form__label(for='selectBrand') Select Brand
+                select.form__input(id='selectBrand')  
+              div.form__horizontal.ma-bt-md
+                .form__groupHori
+                  label.form__label(for='cie_l') Cie-L
+                  input#cie_l.form__input(type='number', value=`10`, required, name='cie_l')
+                .form__groupHori
+                  label.form__label(for='cie_a') Cie-a
+                  input#cie_a.form__input(type='number', value=`10`, required, name='cie_a')
+                .form__groupHori
+                  label.form__label(for='cie_b') Cie-b
+                  input#cie_b.form__input(type='number', value=`10`, required, name='cie_b')
+              div.form__horizontal.ma-bt-md
+                .form__groupHori
+                  label.form__label(for='dens') Dens
+                  input#dens.form__input(type='number', value=`10`, required, name='dens')
+                .form__groupHori
+                  label.form__label(for='halftone') Halftone
+                  input#halftone.form__input(type='number', value=`10`, required, name='halftone')
+                .form__groupHori
+                  label.form__label(for='filter') Filter
+                  input#filter.form__input(type='text', value=`cyan`, required, name='filter')
               .form__group.right
-                button.btn.btn--small.btn--green Save user
+                button.btn.btn--small.btn--green Save Color
+
         .line &nbsp;
               
         

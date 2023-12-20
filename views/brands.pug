@@ -20,11 +20,11 @@ block content
         .add__content.hidden
           .user-view__form-container
             h2.heading-secondary.ma-bt-md ADD A Brand
-            form.form.form-brand-data(companies=cleanCompanies)
+            form.form.form-brand-data(companies=cleanCompanies)(allCompanies=allCompanies)
               - if (user.role === 'root')
                 .form__group
                   label.form__label(for='brandOwner') Brand Owner Name
-                  input#brandOwner.form__input(type='text', value=`brand Owner name`, required, name='brandOwner')
+                  select.form__input(id='brandOwner') 
               .form__group
                 label.form__label(for='name') Brand Name
                 input#name.form__input(type='text', value=`brand name`, required, name='name')
@@ -32,11 +32,11 @@ block content
                 label.form__label(for='group') Product group
                 input#group.form__input(type='text', value=`product group`, required, name='group')
               .form__group.ma-bt-md
-                label(for='selectBrandManagers') Select Brand Managers
-                select(id='selectBrandManagers' multiple)  
+                label.form__label(for='selectBrandManagers') Select Brand Managers
+                select.form__input(id='selectBrandManagers' multiple)  
               .form__group.ma-bt-md
-                label(for='selectSuppliers') Select Brand Suppliers
-                select(id='selectSuppliers' multiple)  
+                label.form__label(for='selectSuppliers') Select Brand Suppliers
+                select.form__input(id='selectSuppliers' multiple)  
               .form__group.form__photo-upload
                 input.form__upload(type='file', accept='image/*',id='photo', name='photo')
                 label(for='photo') Choose a logo

@@ -28,11 +28,12 @@ const colorSchema = new mongoose.Schema(
         cie_b: Number,
         Density: Number,
         Halftone: Number,
+        Filter: String,
       },
     ],
     createdByUser: {
       type: mongoose.Schema.ObjectId,
-      ref: 'User',
+      ref: 'userName',
     },
     createdByCompany: {
       type: mongoose.Schema.ObjectId,
@@ -53,7 +54,7 @@ const colorSchema = new mongoose.Schema(
 
 colorSchema.pre(/^find/, function (next) {
   this.populate({
-    path: 'createduser',
+    path: 'createdByUser',
     select: 'userName',
   }).populate({
     path: 'brandName',

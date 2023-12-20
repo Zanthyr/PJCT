@@ -5,6 +5,7 @@ import * as httpx from './httpx';
 const loginForm = document.querySelector('.form--login');
 const logOutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
+const userInviteForm = document.querySelector('.form-user-invite');
 const userPasswordForm = document.querySelector('.form-user-password');
 const deleteUser = document.querySelector('.card-container');
 const showAddFormBtn = document.querySelector('.btn__showAddForm');
@@ -14,6 +15,17 @@ const brandDataForm = document.querySelector('.form-brand-data');
 const colorForm = document.querySelector('.form-color-data');
 const requestReset = document.querySelector('.form--requestReset');
 const resetPassword = document.querySelector('.form--resetPassword');
+
+// load companies for adding brand owner
+function populateDropdown(elementId, list) {
+  const element = document.getElementById(elementId);
+  list.forEach((item) => {
+    const option = document.createElement('option');
+    option.value = item.id;
+    option.text = item.name;
+    element.appendChild(option);
+  });
+}
 
 if (resetPassword)
   resetPassword.addEventListener('submit', (e) => {
@@ -110,14 +122,33 @@ if (companyDataForm)
     httpx.updateSettings(form, url, method, 'Company');
   });
 
-// load companies for adding brand owner
-function populateDropdown(elementId, list) {
-  const element = document.getElementById(elementId);
-  list.forEach((item) => {
-    const option = document.createElement('option');
-    option.value = item.id;
-    option.text = item.name;
-    element.appendChild(option);
+// submit user data
+if (userInviteForm) {
+  const companies = JSON.parse(userInviteForm.getAttribute('companies'));
+  populateDropdown('company', companies);
+
+  userInviteForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const url = '/api/v1/users/invite';
+    const method = 'POST';
+    const form = new FormData();
+
+    form.append('userName', document.getElementById('name').value);
+    form.append('email', document.getElementById('email').value);
+    form.append('role', document.getElementById('role').value);
+    form.append(
+      'artowrkCreator',
+      document.getElementById('artowrkCreator').checked,
+    );
+    form.append('jobCreator', document.getElementById('jobCreator').checked);
+
+    const selectedCompanyDropdown = document.getElementById('company');
+    const selectedCompanyIds = Array.from(
+      selectedCompanyDropdown.selectedOptions,
+    ).map((option) => option.value);
+    form.append('company', selectedCompanyIds);
+
+    httpx.createRecord(form, url, method, 'User');
   });
 }
 
@@ -148,6 +179,7 @@ if (colorForm) {
     form.append('cie_b', document.getElementById('cie_b').value);
     form.append('dens', document.getElementById('dens').value);
     form.append('halftone', document.getElementById('halftone').value);
+    form.append('filter', document.getElementById('filter').value);
 
     // Append selected brand managers
     const selectedBrandDropdown = document.getElementById('selectBrand');
@@ -163,8 +195,10 @@ if (colorForm) {
 // add brand owner company lists
 if (brandDataForm) {
   const companies = JSON.parse(brandDataForm.getAttribute('companies'));
+  const allCompanies = JSON.parse(brandDataForm.getAttribute('allCompanies'));
   populateDropdown('selectBrandManagers', companies);
   populateDropdown('selectSuppliers', companies);
+  populateDropdown('brandOwner', allCompanies);
 
   // handle form submission
   brandDataForm.addEventListener('submit', (e) => {
@@ -195,6 +229,12 @@ if (brandDataForm) {
       selectedSupplierDropdown.selectedOptions,
     ).map((option) => option.value);
     form.append('brandSuppliers', selectedSupplierIds);
+
+    const selectedBrandOwnerDropdown = document.getElementById('brandOwner');
+    const selectedBrandOwnerIds = Array.from(
+      selectedBrandOwnerDropdown.selectedOptions,
+    ).map((option) => option.value);
+    form.append('brandOwner', selectedBrandOwnerIds);
 
     // Perform your form submission logic (e.g., updateSettings)
     httpx.createRecord(form, url, method, 'Brand');

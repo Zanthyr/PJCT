@@ -58,6 +58,13 @@ module.exports = class Email {
     await this.send('welcome', 'Welcome to the printConnect Family!');
   }
 
+  async sendInvite(tempPwd) {
+    await this.send(
+      'invitation',
+      `Welcome to the printConnect Family! Use ${tempPwd} as password to login`,
+    );
+  }
+
   async sendPasswordReset() {
     await this.send(
       'passwordReset',

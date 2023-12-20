@@ -1,7 +1,7 @@
 const express = require('express');
 const userController = require('./../controllers/userController');
 const authController = require('./../controllers/authController');
-const uploadController = require('./../controllers/uploadController');
+const multiParser = require('./../utils/multiParser');
 
 const router = express.Router();
 
@@ -22,8 +22,8 @@ router.patch('/updateMyPassword', authController.updatePassword); // ok
 router.get('/me', userController.getMe, userController.getUser); // ok
 router.patch(
   '/updateMe', // ok
-  uploadController.uploadImageFile,
-  uploadController.resizeUserPhoto,
+  multiParser.uploadImageFile,
+  multiParser.resizeUserPhoto,
   userController.updateMe,
 );
 router.delete('/deleteMe', userController.deleteMe); // Partial, not allowing to actualy delete
@@ -31,7 +31,8 @@ router.delete('/deleteMe', userController.deleteMe); // Partial, not allowing to
 // admin only from this poit on
 router.use(authController.restrictTo('root', 'admin'));
 
-router.post('/signup', authController.signUp); // TODO
+// router.post('/signup', authController.signUp); // users must be send an invitation by there admin
+router.post('/invite', multiParser.uploadFields, authController.invite); // TODO
 
 router
   .route('/')

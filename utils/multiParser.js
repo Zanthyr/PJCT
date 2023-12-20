@@ -1,6 +1,6 @@
 const sharp = require('sharp');
 const multer = require('multer');
-const catchAsync = require('../utils/catchAsync');
+const catchAsync = require('./catchAsync');
 
 const multerStorage = multer.memoryStorage();
 

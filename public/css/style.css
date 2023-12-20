@@ -816,3 +816,11 @@ body {
 .pwd-reset :active {
   color: #55c57a;
 }
+
+.form__horizontal {
+  display: flex;
+}
+
+.form__groupHori:not(:last-child) {
+  margin-right: 1rem;
+}
