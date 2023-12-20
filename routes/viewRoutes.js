@@ -13,5 +13,6 @@ router.get('/my', authController.protect, viewsController.getCompany);
 router.get('/users', authController.protect, viewsController.getUsers);
 router.get('/brands', authController.protect, viewsController.getBrands);
 router.get('/colors', authController.protect, viewsController.getColors);
+router.get('/companies', authController.protect, viewsController.getCompanies);
 
 module.exports = router;

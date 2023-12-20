@@ -5717,6 +5717,7 @@ var brandDataForm = document.querySelector('.form-brand-data');
 var colorForm = document.querySelector('.form-color-data');
 var requestReset = document.querySelector('.form--requestReset');
 var resetPassword = document.querySelector('.form--resetPassword');
+var addCompany = document.querySelector('.form-add-company');
 
 // load companies for adding brand owner
 function populateDropdown(elementId, list) {
@@ -5842,9 +5843,14 @@ if (userInviteForm) {
     form.append('artowrkCreator', document.getElementById('artowrkCreator').checked);
     form.append('jobCreator', document.getElementById('jobCreator').checked);
     var selectedCompanyDropdown = document.getElementById('company');
-    var selectedCompanyIds = Array.from(selectedCompanyDropdown.selectedOptions).map(function (option) {
-      return option.value;
-    });
+    var selectedCompanyIds;
+    if (selectedCompanyDropdown !== null) {
+      selectedCompanyIds = Array.from(selectedCompanyDropdown.selectedOptions).map(function (option) {
+        return option.value;
+      });
+    } else {
+      selectedCompanyIds = '';
+    }
     form.append('company', selectedCompanyIds);
     httpx.createRecord(form, url, method, 'User');
   });
@@ -5933,6 +5939,17 @@ if (brandDataForm) {
     httpx.createRecord(form, url, method, 'Brand');
   });
 }
+if (addCompany) addCompany.addEventListener('submit', function (e) {
+  e.preventDefault();
+  var url = '/api/v1/companies/';
+  var method = 'POST';
+  var form = new FormData();
+  form.append('companyName', document.getElementById('name').value);
+  form.append('adress', document.getElementById('adress').value);
+  form.append('companyType', document.getElementById('companyType').value);
+  form.append('photo', document.getElementById('photo').files[0]);
+  httpx.createRecord(form, url, method, 'Company');
+});
 },{"./httpx":"httpx.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';

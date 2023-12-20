@@ -82,7 +82,7 @@ exports.invite = catchAsync(async (req, res, next) => {
 
   //send invitation mail
   const url = `${req.protocol}://${req.get('host')}/login`;
-  await new Email(newUser, url).sendInvite(tempPwd);
+  await new Email(newUser, url, tempPwd).sendInvite();
 
   res.status(200).json({ status: 'success' });
 });

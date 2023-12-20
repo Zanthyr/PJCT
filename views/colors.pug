@@ -29,23 +29,27 @@ block content
               div.form__horizontal.ma-bt-md
                 .form__groupHori
                   label.form__label(for='cie_l') Cie-L
-                  input#cie_l.form__input(type='number', value=`10`, required, name='cie_l')
+                  input#cie_l.form__input(type='number', value=`10`,step='0.1', required, name='cie_l')
                 .form__groupHori
                   label.form__label(for='cie_a') Cie-a
-                  input#cie_a.form__input(type='number', value=`10`, required, name='cie_a')
+                  input#cie_a.form__input(type='number', value=`10`,step='0.1', required, name='cie_a')
                 .form__groupHori
                   label.form__label(for='cie_b') Cie-b
-                  input#cie_b.form__input(type='number', value=`10`, required, name='cie_b')
+                  input#cie_b.form__input(type='number', value=`10`,step='0.1', required, name='cie_b')
               div.form__horizontal.ma-bt-md
                 .form__groupHori
                   label.form__label(for='dens') Dens
-                  input#dens.form__input(type='number', value=`10`, required, name='dens')
+                  input#dens.form__input(type='number', value=`10`,step='0.1', required, name='dens')
                 .form__groupHori
                   label.form__label(for='halftone') Halftone
-                  input#halftone.form__input(type='number', value=`10`, required, name='halftone')
+                  input#halftone.form__input(type='number', value=`10`,step='0.1', required, name='halftone')
                 .form__groupHori
                   label.form__label(for='filter') Filter
-                  input#filter.form__input(type='text', value=`cyan`, required, name='filter')
+                  select#filter.form__input(name='filter' required)
+                    option(value='Cyan') Cyan
+                    option(value='Magenta') Magenta
+                    option(value='Yellow') Yellow
+                    option(value='Vlack') Black
               .form__group.right
                 button.btn.btn--small.btn--green Save Color
 

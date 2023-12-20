@@ -33,7 +33,7 @@ const colorSchema = new mongoose.Schema(
     ],
     createdByUser: {
       type: mongoose.Schema.ObjectId,
-      ref: 'userName',
+      ref: 'User',
     },
     createdByCompany: {
       type: mongoose.Schema.ObjectId,

@@ -5,6 +5,7 @@ const Color = require('./../models/colorModel');
 const Brand = require('./../models/brandModel');
 const Company = require('./../models/companyModel');
 const APIFeatures = require('../utils/apiFeatures');
+const factory = require('./handlerFactory');
 
 exports.getHome = catchAsync(async (req, res, next) => {
   // 1) Get tour data from collection
@@ -47,6 +48,22 @@ exports.getCompany = catchAsync(async (req, res) => {
     title: 'Your company account',
     activeMenu: 'My Company',
     company: doc,
+  });
+});
+
+exports.getCompanies = catchAsync(async (req, res) => {
+  const features = new APIFeatures(Company.find(), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+  const doc = await features.query;
+
+  res.status(200).render('companies', {
+    title: 'manage Companies',
+    activeMenu: 'Manage companies',
+
+    companies: doc,
   });
 });
 

@@ -15,6 +15,7 @@ const brandDataForm = document.querySelector('.form-brand-data');
 const colorForm = document.querySelector('.form-color-data');
 const requestReset = document.querySelector('.form--requestReset');
 const resetPassword = document.querySelector('.form--resetPassword');
+const addCompany = document.querySelector('.form-add-company');
 
 // load companies for adding brand owner
 function populateDropdown(elementId, list) {
@@ -143,9 +144,15 @@ if (userInviteForm) {
     form.append('jobCreator', document.getElementById('jobCreator').checked);
 
     const selectedCompanyDropdown = document.getElementById('company');
-    const selectedCompanyIds = Array.from(
-      selectedCompanyDropdown.selectedOptions,
-    ).map((option) => option.value);
+    let selectedCompanyIds;
+    if (selectedCompanyDropdown !== null) {
+      selectedCompanyIds = Array.from(
+        selectedCompanyDropdown.selectedOptions,
+      ).map((option) => option.value);
+    } else {
+      selectedCompanyIds = '';
+    }
+
     form.append('company', selectedCompanyIds);
 
     httpx.createRecord(form, url, method, 'User');
@@ -240,3 +247,16 @@ if (brandDataForm) {
     httpx.createRecord(form, url, method, 'Brand');
   });
 }
+
+if (addCompany)
+  addCompany.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const url = '/api/v1/companies/';
+    const method = 'POST';
+    const form = new FormData();
+    form.append('companyName', document.getElementById('name').value);
+    form.append('adress', document.getElementById('adress').value);
+    form.append('companyType', document.getElementById('companyType').value);
+    form.append('photo', document.getElementById('photo').files[0]);
+    httpx.createRecord(form, url, method, 'Company');
+  });

@@ -3,10 +3,11 @@ const pug = require('pug');
 const htmlToText = require('html-to-text');
 
 module.exports = class Email {
-  constructor(user, url) {
+  constructor(user, url, content = '') {
     this.to = user.email;
     this.firstName = user.userName.split(' ')[0];
     this.url = url;
+    this.content = content;
     this.from = `David geyskens <${process.env.EMAIL_FROM}>`;
   }
 
@@ -61,7 +62,7 @@ module.exports = class Email {
   async sendInvite(tempPwd) {
     await this.send(
       'invitation',
-      `Welcome to the printConnect Family! Use ${tempPwd} as password to login`,
+      `Welcome to the printConnect Family! Use the password in the mail to login`,
     );
   }
 

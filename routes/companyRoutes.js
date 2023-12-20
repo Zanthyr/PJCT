@@ -25,7 +25,11 @@ router.use(authController.restrictTo('root'));
 router
   .route('/') // only api
   .get(companyController.getAllCompanies)
-  .post(companyController.createCompany);
+  .post(
+    multiParser.uploadImageFile,
+    multiParser.resizeCompanyPhoto,
+    companyController.createCompany,
+  );
 
 router.route('/:id').patch(companyController.updateCompany); // only api
 router.route('/delete/:id').patch(companyController.softDeleteCompany); // only api

@@ -20,8 +20,6 @@ const companySchema = new mongoose.Schema(
         enum: ['Point'],
       },
       coordinates: [Number],
-      address: String,
-      description: String,
     },
     companyPhoto: {
       type: String,

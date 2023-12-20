@@ -21,3 +21,9 @@ nav.user-view__menu
         +navItem('/users', 'Manage users', 'users')
         +navItem('/brands', 'Manage Brands', 'flag')
         +navItem('/colors', 'Manage Colors', 'database')
+  
+  - if (user.role === 'root')
+    .admin-nav
+      h5.admin-nav__heading Root Admin
+      ul.side-nav
+        +navItem('/companies', 'Manage companies', 'globe')
