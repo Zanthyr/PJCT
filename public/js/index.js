@@ -16,6 +16,7 @@ const colorForm = document.querySelector('.form-color-data');
 const requestReset = document.querySelector('.form--requestReset');
 const resetPassword = document.querySelector('.form--resetPassword');
 const addCompany = document.querySelector('.form-add-company');
+const artworkDataForm = document.querySelector('.form-artwork-data');
 
 // load companies for adding brand owner
 function populateDropdown(elementId, list) {
@@ -138,8 +139,8 @@ if (userInviteForm) {
     form.append('email', document.getElementById('email').value);
     form.append('role', document.getElementById('role').value);
     form.append(
-      'artowrkCreator',
-      document.getElementById('artowrkCreator').checked,
+      'artworkCreator',
+      document.getElementById('artworkCreator').checked,
     );
     form.append('jobCreator', document.getElementById('jobCreator').checked);
 
@@ -184,6 +185,9 @@ if (colorForm) {
     form.append('cie_l', document.getElementById('cie_l').value);
     form.append('cie_a', document.getElementById('cie_a').value);
     form.append('cie_b', document.getElementById('cie_b').value);
+    form.append('deltae00', document.getElementById('deltae00').value);
+    form.append('delta_c', document.getElementById('delta_c').value);
+    form.append('delta_h', document.getElementById('delta_h').value);
     form.append('dens', document.getElementById('dens').value);
     form.append('halftone', document.getElementById('halftone').value);
     form.append('filter', document.getElementById('filter').value);
@@ -225,22 +229,39 @@ if (brandDataForm) {
     const selectedBrandManagerDropdown = document.getElementById(
       'selectBrandManagers',
     );
-    const selectedBrandManagerIds = Array.from(
-      selectedBrandManagerDropdown.selectedOptions,
-    ).map((option) => option.value);
+    // const selectedBrandManagerIds = Array.from(
+    //   selectedBrandManagerDropdown.selectedOptions,
+    // ).map((option) => option.value);
+    const selectedBrandManagerIds = selectedBrandManagerDropdown
+      ? Array.from(selectedBrandManagerDropdown.selectedOptions).map(
+          (option) => option.value,
+        )
+      : [];
     form.append('brandManagers', selectedBrandManagerIds);
 
     // Append selected brand suppliers
     const selectedSupplierDropdown = document.getElementById('selectSuppliers');
-    const selectedSupplierIds = Array.from(
-      selectedSupplierDropdown.selectedOptions,
-    ).map((option) => option.value);
+    // const selectedSupplierIds = Array.from(
+    //   selectedSupplierDropdown.selectedOptions,
+    // ).map((option) => option.value);
+    const selectedSupplierIds = selectedSupplierDropdown
+      ? Array.from(selectedSupplierDropdown.selectedOptions).map(
+          (option) => option.value,
+        )
+      : [];
     form.append('brandSuppliers', selectedSupplierIds);
 
     const selectedBrandOwnerDropdown = document.getElementById('brandOwner');
-    const selectedBrandOwnerIds = Array.from(
-      selectedBrandOwnerDropdown.selectedOptions,
-    ).map((option) => option.value);
+    // const selectedBrandOwnerIds = Array.from(
+    //   selectedBrandOwnerDropdown.selectedOptions,
+    // ).map((option) => option.value);
+    // form.append('brandOwner', selectedBrandOwnerIds);
+    const selectedBrandOwnerIds = selectedBrandOwnerDropdown
+      ? Array.from(selectedBrandOwnerDropdown.selectedOptions).map(
+          (option) => option.value,
+        )
+      : [];
+
     form.append('brandOwner', selectedBrandOwnerIds);
 
     // Perform your form submission logic (e.g., updateSettings)
@@ -257,6 +278,57 @@ if (addCompany)
     form.append('companyName', document.getElementById('name').value);
     form.append('adress', document.getElementById('adress').value);
     form.append('companyType', document.getElementById('companyType').value);
-    form.append('photo', document.getElementById('photo').files[0]);
+    //form.append('photo', document.getElementById('photo').files[0]);
     httpx.createRecord(form, url, method, 'Company');
   });
+
+if (artworkDataForm) {
+  const companies = JSON.parse(artworkDataForm.getAttribute('companies'));
+  populateDropdown('company', companies);
+
+  const brands = JSON.parse(artworkDataForm.getAttribute('brands'));
+  const noneOption = document.createElement('option');
+  noneOption.value = '';
+  noneOption.text = 'None';
+
+  // Append 'none' option before populating the dropdown
+  const selectBrand = document.getElementById('selectBrand');
+  selectBrand.appendChild(noneOption);
+  populateDropdown('selectBrand', brands);
+
+  // handle form submission
+  artworkDataForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    // Create a FormData object
+    const form = new FormData();
+    //const url = '/api/v1/colors/createMy';
+    const method = 'POST';
+
+    // Append other form fields
+    form.append('colorName', document.getElementById('name').value);
+
+    // Append selected brand managers
+    const selectedBrandDropdown = document.getElementById('selectBrand');
+    const selectedBrandsIds = selectedBrandDropdown
+      ? Array.from(selectedBrandDropdown.selectedOptions).map(
+          (option) => option.value,
+        )
+      : [];
+    form.append('brand', selectedBrandsIds);
+
+    const selectedCompanyDropdown = document.getElementById('company');
+    let selectedCompanyIds;
+    if (selectedCompanyDropdown !== null) {
+      selectedCompanyIds = Array.from(
+        selectedCompanyDropdown.selectedOptions,
+      ).map((option) => option.value);
+    } else {
+      selectedCompanyIds = '';
+    }
+
+    form.append('company', selectedCompanyIds);
+
+    httpx.createRecord(form, url, method, 'Color');
+  });
+}

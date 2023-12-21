@@ -68,8 +68,17 @@ exports.createMyBrand = catchAsync(async (req, res, next) => {
 
   const filteredBody = filterObj(req.body, 'brandName', 'productGroup');
   filteredBody.brandOwner = req.user.company.id;
-  filteredBody.brandManagers = req.body.brandManagers.split(',');
-  filteredBody.brandSuppliers = req.body.brandSuppliers.split(',');
+  // filteredBody.brandManagers = req.body.brandManagers.split(',');
+  filteredBody.brandManagers =
+    req.body.brandSuppliers.length !== 0
+      ? req.body.brandManagers.split(',')
+      : [];
+
+  // filteredBody.brandSuppliers = req.body.brandSuppliers.split(',');
+  filteredBody.brandSuppliers =
+    req.body.brandSuppliers.length !== 0
+      ? req.body.brandSuppliers.split(',')
+      : [];
 
   if (req.file) filteredBody.brandLogo = req.file.filename;
   const doc = await Brand.create(filteredBody);

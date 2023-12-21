@@ -1,0 +1,61 @@
+extends base
+
+block content
+  main.main
+    .user-view
+      include _sidebar
+      
+
+      .user-view__content.txt-cntr
+        .user-view__form-container
+          h2.heading-secondary.ma-bt-md Your Company's Artworks
+          
+        //- - if (user.company.companyType === 'BrandOwner' || user.role === 'root')
+        a.btn__showAddForm.btn.btn--green.btn--small
+          div.btn-add
+            svg.card__icon-white.mr
+              use(xlink:href='/img/icons.svg#icon-file-plus')
+            | Add Artwork
+
+        .add__content.hidden
+          .user-view__form-container
+            h2.heading-secondary.ma-bt-md ADD A Brand
+            form.form.form-artwork-data(brands = brandList)(companies=companies)
+              - if (user.role === 'root')
+                .form__group
+                  label.form__label(for='company') Company
+                  select.form__input(id='company') 
+              .form__group
+                label.form__label(for='name') Artwork ID
+                input#name.form__input(type='text', value=`brand name`, required, name='name')
+              .form__group.ma-bt-md
+                label.form__label(for='group') Artwork Name
+                input#group.form__input(type='text', value=`product group`, required, name='group')
+              .form__group.ma-bt-md
+                label.form__label(for='group') Artwork Description
+                input#group.form__input(type='text', value=`product group`, required, name='group')
+              .form__group.ma-bt-md
+                label.form__label(for='selectBrand') Select Brand
+                select.form__input(id='selectBrand')  
+              .form__group.form__photo-upload
+                input.form__upload(type='file', accept='image/*',id='photo', name='photo')
+                label(for='photo') Uoload Artwork Image
+
+              .form__group.right
+                button.btn.btn--small.btn--green Save Artwork
+
+              .form__group.right
+                button.btn.btn--small.btn--green next (add colors)
+
+        .line &nbsp;
+
+        .row-container
+          .row-header
+            div nr.
+            div Id
+          each artwork, index in myArtworks
+            .row
+              div= `${index + 1}`
+              div= `${artwork.artworkId}`
+
+

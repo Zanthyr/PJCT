@@ -38,7 +38,7 @@ exports.getColor = catchAsync(async (req, res, next, popOptions) => {
   if (!doc) {
     return next(new AppError('No document found with that ID', 404));
   }
-  console.log(doc.brandName.allowList);
+
   if (
     !doc.brandName.allowList.includes(req.user.company.id) &&
     req.user.role !== 'root'
@@ -74,11 +74,14 @@ exports.createMyColor = catchAsync(async (req, res, next) => {
     cie_L: req.body.cie_l,
     cie_a: req.body.cie_a,
     cie_b: req.body.cie_b,
+    deltae00: req.body.deltae00,
+    delta_c: req.body.delta_c,
+    delta_h: req.body.delta_h,
     Density: req.body.dens,
     Halftone: req.body.halftone,
     Filter: req.body.filter,
   };
-  console.log(filteredBody);
+
   const doc = await Color.create(filteredBody);
 
   res.status(201).json({

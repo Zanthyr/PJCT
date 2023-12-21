@@ -5718,6 +5718,7 @@ var colorForm = document.querySelector('.form-color-data');
 var requestReset = document.querySelector('.form--requestReset');
 var resetPassword = document.querySelector('.form--resetPassword');
 var addCompany = document.querySelector('.form-add-company');
+var artworkDataForm = document.querySelector('.form-artwork-data');
 
 // load companies for adding brand owner
 function populateDropdown(elementId, list) {
@@ -5840,7 +5841,7 @@ if (userInviteForm) {
     form.append('userName', document.getElementById('name').value);
     form.append('email', document.getElementById('email').value);
     form.append('role', document.getElementById('role').value);
-    form.append('artowrkCreator', document.getElementById('artowrkCreator').checked);
+    form.append('artworkCreator', document.getElementById('artworkCreator').checked);
     form.append('jobCreator', document.getElementById('jobCreator').checked);
     var selectedCompanyDropdown = document.getElementById('company');
     var selectedCompanyIds;
@@ -5880,6 +5881,9 @@ if (colorForm) {
     form.append('cie_l', document.getElementById('cie_l').value);
     form.append('cie_a', document.getElementById('cie_a').value);
     form.append('cie_b', document.getElementById('cie_b').value);
+    form.append('deltae00', document.getElementById('deltae00').value);
+    form.append('delta_c', document.getElementById('delta_c').value);
+    form.append('delta_h', document.getElementById('delta_h').value);
     form.append('dens', document.getElementById('dens').value);
     form.append('halftone', document.getElementById('halftone').value);
     form.append('filter', document.getElementById('filter').value);
@@ -5918,21 +5922,31 @@ if (brandDataForm) {
 
     // Append selected brand managers
     var selectedBrandManagerDropdown = document.getElementById('selectBrandManagers');
-    var selectedBrandManagerIds = Array.from(selectedBrandManagerDropdown.selectedOptions).map(function (option) {
+    // const selectedBrandManagerIds = Array.from(
+    //   selectedBrandManagerDropdown.selectedOptions,
+    // ).map((option) => option.value);
+    var selectedBrandManagerIds = selectedBrandManagerDropdown ? Array.from(selectedBrandManagerDropdown.selectedOptions).map(function (option) {
       return option.value;
-    });
+    }) : [];
     form.append('brandManagers', selectedBrandManagerIds);
 
     // Append selected brand suppliers
     var selectedSupplierDropdown = document.getElementById('selectSuppliers');
-    var selectedSupplierIds = Array.from(selectedSupplierDropdown.selectedOptions).map(function (option) {
+    // const selectedSupplierIds = Array.from(
+    //   selectedSupplierDropdown.selectedOptions,
+    // ).map((option) => option.value);
+    var selectedSupplierIds = selectedSupplierDropdown ? Array.from(selectedSupplierDropdown.selectedOptions).map(function (option) {
       return option.value;
-    });
+    }) : [];
     form.append('brandSuppliers', selectedSupplierIds);
     var selectedBrandOwnerDropdown = document.getElementById('brandOwner');
-    var selectedBrandOwnerIds = Array.from(selectedBrandOwnerDropdown.selectedOptions).map(function (option) {
+    // const selectedBrandOwnerIds = Array.from(
+    //   selectedBrandOwnerDropdown.selectedOptions,
+    // ).map((option) => option.value);
+    // form.append('brandOwner', selectedBrandOwnerIds);
+    var selectedBrandOwnerIds = selectedBrandOwnerDropdown ? Array.from(selectedBrandOwnerDropdown.selectedOptions).map(function (option) {
       return option.value;
-    });
+    }) : [];
     form.append('brandOwner', selectedBrandOwnerIds);
 
     // Perform your form submission logic (e.g., updateSettings)
@@ -5947,9 +5961,53 @@ if (addCompany) addCompany.addEventListener('submit', function (e) {
   form.append('companyName', document.getElementById('name').value);
   form.append('adress', document.getElementById('adress').value);
   form.append('companyType', document.getElementById('companyType').value);
-  form.append('photo', document.getElementById('photo').files[0]);
+  //form.append('photo', document.getElementById('photo').files[0]);
   httpx.createRecord(form, url, method, 'Company');
 });
+if (artworkDataForm) {
+  var _companies2 = JSON.parse(artworkDataForm.getAttribute('companies'));
+  populateDropdown('company', _companies2);
+  var _brands = JSON.parse(artworkDataForm.getAttribute('brands'));
+  var _noneOption = document.createElement('option');
+  _noneOption.value = '';
+  _noneOption.text = 'None';
+
+  // Append 'none' option before populating the dropdown
+  var _selectBrand = document.getElementById('selectBrand');
+  _selectBrand.appendChild(_noneOption);
+  populateDropdown('selectBrand', _brands);
+
+  // handle form submission
+  artworkDataForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    // Create a FormData object
+    var form = new FormData();
+    //const url = '/api/v1/colors/createMy';
+    var method = 'POST';
+
+    // Append other form fields
+    form.append('colorName', document.getElementById('name').value);
+
+    // Append selected brand managers
+    var selectedBrandDropdown = document.getElementById('selectBrand');
+    var selectedBrandsIds = selectedBrandDropdown ? Array.from(selectedBrandDropdown.selectedOptions).map(function (option) {
+      return option.value;
+    }) : [];
+    form.append('brand', selectedBrandsIds);
+    var selectedCompanyDropdown = document.getElementById('company');
+    var selectedCompanyIds;
+    if (selectedCompanyDropdown !== null) {
+      selectedCompanyIds = Array.from(selectedCompanyDropdown.selectedOptions).map(function (option) {
+        return option.value;
+      });
+    } else {
+      selectedCompanyIds = '';
+    }
+    form.append('company', selectedCompanyIds);
+    httpx.createRecord(form, url, method, 'Color');
+  });
+}
 },{"./httpx":"httpx.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -5975,7 +6033,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55859" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57521" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

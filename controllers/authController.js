@@ -30,7 +30,7 @@ const createAndSendToken = (user, statusCode, req, res) => {
     httpOnly: true,
     secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
   };
-  console.log('test');
+
   if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
   res.cookie('jwt', token, cookieOptions);
   user.password = undefined;
@@ -59,7 +59,7 @@ exports.invite = catchAsync(async (req, res, next) => {
     'userName',
     'email',
     'role',
-    'artowrkCreator',
+    'artworkCreator',
     'jobCreator',
   );
 
@@ -83,7 +83,6 @@ exports.invite = catchAsync(async (req, res, next) => {
   const url = `${req.protocol}://${req.get('host')}/login`;
   await new Email(newUser, url, tempPwd).sendInvite();
 
-  console.log(tempPwd, filteredBody);
   res.status(200).json({ status: 'success' });
 });
 
@@ -170,7 +169,6 @@ exports.restrictTo = (...roles) => {
 // companyType;
 exports.restrictToCompanyType = (...types) => {
   return (req, res, next) => {
-    console.log(req.user.company.companyType);
     if (!types.includes(req.user.company.companyType)) {
       return next(
         new AppError('You do not have permission to perform this action', 403),
@@ -249,7 +247,6 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     )}/resetPassword/${resetToken}`;
     // send email with token
     await new Email(user, resetURL).sendPasswordReset();
-    console.log(resetToken);
 
     res.status(200).json({
       status: 'success',

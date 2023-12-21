@@ -1,11 +1,10 @@
 const catchAsync = require('../utils/catchAsync');
-const AppError = require('../utils/appError');
 const User = require('./../models/userModel');
 const Color = require('./../models/colorModel');
 const Brand = require('./../models/brandModel');
+const Artworks = require('./../models/artworkModel');
 const Company = require('./../models/companyModel');
 const APIFeatures = require('../utils/apiFeatures');
-const factory = require('./handlerFactory');
 
 exports.getHome = catchAsync(async (req, res, next) => {
   // 1) Get tour data from collection
@@ -219,5 +218,43 @@ exports.getColors = catchAsync(async (req, res, next) => {
     cleanColorList,
     cleanBrandList,
     activeMenu: 'Manage Colors',
+  });
+});
+
+exports.getArtworks = catchAsync(async (req, res, next) => {
+  if (req.user.role !== 'root') req.query.company = req.user.company.id;
+  const features = new APIFeatures(Artworks.find(), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+  const myArtworks = await features.query;
+
+  const allBrands = await Brand.find();
+  const myBrands =
+    req.user.role !== 'root'
+      ? allBrands.filter((element) =>
+          element.allowList.includes(req.user.company.id),
+        )
+      : allBrands;
+  const brandList = myBrands.map((item) => ({
+    name: item.brandName,
+    groep: item.productGroup,
+    id: item.id,
+  }));
+  const companies =
+    req.user.role === 'root'
+      ? (await Company.find()).map((item) => ({
+          name: item.companyName,
+          id: item.id,
+        }))
+      : [];
+
+  res.status(200).render('artworks', {
+    title: 'My Artworks',
+    myArtworks,
+    brandList,
+    companies,
+    activeMenu: 'My Artworks',
   });
 });

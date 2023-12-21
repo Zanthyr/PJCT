@@ -19,9 +19,12 @@ const artworkSchema = new mongoose.Schema(
     artworkDescription: {
       type: String,
     },
+    artworkForBrand: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Brand',
+    },
     artworkImage: {
       type: String,
-      required: [true, 'The artwork must have a design image'],
     },
     artworkCreator: {
       type: mongoose.Schema.ObjectId,
@@ -40,6 +43,11 @@ const artworkSchema = new mongoose.Schema(
         ref: 'Color',
       },
     ],
+    artworkState: {
+      type: Number,
+      default: 1,
+      select: false,
+    },
     createdAt: {
       type: Date,
       default: Date.now(),
@@ -57,10 +65,15 @@ artworkSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'artworkCreator',
     select: 'companyName',
-  }).populate({
-    path: 'artworkColors',
-    select: 'colorName',
-  });
+  })
+    .populate({
+      path: 'artworkColors',
+      select: 'colorName',
+    })
+    .populate({
+      path: 'artworkForBrand',
+      select: 'brandName',
+    });
   next();
 });
 

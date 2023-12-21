@@ -291,7 +291,7 @@ body {
 .header__logo {
   height: 4rem;
   margin-right: 1rem;
-  border-radius: 20%;
+  border-radius: 3%;
 }
 
 @media only screen and (max-width: 62.5em) {
