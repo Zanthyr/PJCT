@@ -26,14 +26,18 @@ block content
                   label.form__label(for='company') Company
                   select.form__input(id='company') 
               .form__group
-                label.form__label(for='name') Artwork ID
-                input#name.form__input(type='text', value=`brand name`, required, name='name')
+                label.form__label(for='artworkId') Artwork ID
+                input#artworkId.form__input(type='text', value=`id`, required, name='artworkId')
               .form__group.ma-bt-md
-                label.form__label(for='group') Artwork Name
-                input#group.form__input(type='text', value=`product group`, required, name='group')
+                label.form__label(for='artworkName') Artwork Name
+                input#artworkName.form__input(type='text', value=`name`, required, name='artworkName')
               .form__group.ma-bt-md
-                label.form__label(for='group') Artwork Description
-                input#group.form__input(type='text', value=`product group`, required, name='group')
+                label.form__label(for='artworkDescription') Artwork Description
+                input#artworkDescription.form__input(type='text', value=`description`, required, name='artworkDescription')
+
+
+
+
               .form__group.ma-bt-md
                 label.form__label(for='selectBrand') Select Brand
                 select.form__input(id='selectBrand')  
@@ -45,7 +49,7 @@ block content
                 button.btn.btn--small.btn--green Save Artwork
 
               .form__group.right
-                button.btn.btn--small.btn--green next (add colors)
+                button.btn-artwork-next.btn.btn--small.btn--green.hidden next (add colors)
 
         .line &nbsp;
 

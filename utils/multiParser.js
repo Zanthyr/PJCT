@@ -45,12 +45,24 @@ exports.resizeCompanyPhoto = catchAsync(async (req, res, next) => {
 
 exports.resizeBrandLogo = catchAsync(async (req, res, next) => {
   if (!req.file) return next();
-  req.file.filename = `brand-${req.user.company.id}-${Date.now()}.jpg`;
+  req.file.filename = `brand-${req.user.company.id}-${Date.now()}.jpg`; //// company id lijkt mij n iet het correcte om te gebruiken hier
   await sharp(req.file.buffer)
     .resize(500, 500)
     .toFormat('jpeg')
     .jpeg({ quality: 90 })
     .toFile(`public/img/brands/${req.file.filename}`);
+
+  next();
+});
+
+exports.resizeArtworkImage = catchAsync(async (req, res, next) => {
+  if (!req.file) return next();
+  req.file.filename = `artwork-${req.user.company.id}-${Date.now()}.jpg`; //// company id lijkt mij n iet het correcte om te gebruiken hier
+  await sharp(req.file.buffer)
+    .resize(500, 500)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/artworks/${req.file.filename}`);
 
   next();
 });

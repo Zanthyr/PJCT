@@ -5677,17 +5677,16 @@ var createRecord = exports.createRecord = /*#__PURE__*/function () {
           if (res.data.status === 'success') {
             (0, _alerts.showAlert)('success', "".concat(type.toUpperCase(), " record created!"));
           }
-          _context7.next = 10;
-          break;
-        case 7:
-          _context7.prev = 7;
+          return _context7.abrupt("return", 'succes');
+        case 8:
+          _context7.prev = 8;
           _context7.t0 = _context7["catch"](0);
           (0, _alerts.showAlert)('error', _context7.t0.response.data.message);
-        case 10:
+        case 11:
         case "end":
           return _context7.stop();
       }
-    }, _callee7, null, [[0, 7]]);
+    }, _callee7, null, [[0, 8]]);
   }));
   return function createRecord(_x12, _x13, _x14, _x15) {
     return _ref7.apply(this, arguments);
@@ -5978,35 +5977,61 @@ if (artworkDataForm) {
   populateDropdown('selectBrand', _brands);
 
   // handle form submission
-  artworkDataForm.addEventListener('submit', function (e) {
-    e.preventDefault();
+  artworkDataForm.addEventListener('submit', /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e) {
+      var form, url, method, selectedBrandDropdown, selectedBrandsIds, selectedCompanyDropdown, selectedCompanyIds, succes, id, artworkButton;
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+        while (1) switch (_context2.prev = _context2.next) {
+          case 0:
+            e.preventDefault();
 
-    // Create a FormData object
-    var form = new FormData();
-    //const url = '/api/v1/colors/createMy';
-    var method = 'POST';
+            // Create a FormData object
+            form = new FormData();
+            url = '/api/v1/artworks/createArtworkOne';
+            method = 'POST'; // Append selected brand managers
+            selectedBrandDropdown = document.getElementById('selectBrand');
+            selectedBrandsIds = selectedBrandDropdown ? Array.from(selectedBrandDropdown.selectedOptions).map(function (option) {
+              return option.value;
+            }) : [];
+            selectedCompanyDropdown = document.getElementById('company');
+            if (selectedCompanyDropdown !== null) {
+              selectedCompanyIds = Array.from(selectedCompanyDropdown.selectedOptions).map(function (option) {
+                return option.value;
+              });
+            } else {
+              selectedCompanyIds = '';
+            }
+            // Append other form fields
+            form.append('brand', selectedBrandsIds);
+            form.append('company', selectedCompanyIds);
+            form.append('artworkId', document.getElementById('artworkId').value);
+            form.append('artworkName', document.getElementById('artworkName').value);
+            form.append('artworkDescription', document.getElementById('artworkDescription').value);
+            _context2.next = 15;
+            return httpx.createRecord(form, url, method, 'Arwork');
+          case 15:
+            succes = _context2.sent;
+            if (succes === 'succes') {
+              id = document.getElementById('artworkId').value;
+              artworkButton = document.querySelector('.btn-artwork-next');
+              console.log(artworkButton);
+              artworkButton.classList.remove('hidden'); // Use remove instead of toggle if you want to make sure it becomes visible
 
-    // Append other form fields
-    form.append('colorName', document.getElementById('name').value);
-
-    // Append selected brand managers
-    var selectedBrandDropdown = document.getElementById('selectBrand');
-    var selectedBrandsIds = selectedBrandDropdown ? Array.from(selectedBrandDropdown.selectedOptions).map(function (option) {
-      return option.value;
-    }) : [];
-    form.append('brand', selectedBrandsIds);
-    var selectedCompanyDropdown = document.getElementById('company');
-    var selectedCompanyIds;
-    if (selectedCompanyDropdown !== null) {
-      selectedCompanyIds = Array.from(selectedCompanyDropdown.selectedOptions).map(function (option) {
-        return option.value;
-      });
-    } else {
-      selectedCompanyIds = '';
-    }
-    form.append('company', selectedCompanyIds);
-    httpx.createRecord(form, url, method, 'Color');
-  });
+              artworkButton.addEventListener('click', function () {
+                // Navigate to the next page with the 'id' as a query parameter
+                window.location.href = '/addArtworkColors/' + id; // Adjust the URL as needed
+              });
+            }
+          case 17:
+          case "end":
+            return _context2.stop();
+        }
+      }, _callee2);
+    }));
+    return function (_x2) {
+      return _ref2.apply(this, arguments);
+    };
+  }());
 }
 },{"./httpx":"httpx.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -6033,7 +6058,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57521" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55859" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

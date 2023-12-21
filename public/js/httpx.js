@@ -120,6 +120,7 @@ export const createRecord = async (data, url, method, type) => {
     if (res.data.status === 'success') {
       showAlert('success', `${type.toUpperCase()} record created!`);
     }
+    return 'succes';
   } catch (err) {
     showAlert('error', err.response.data.message);
   }

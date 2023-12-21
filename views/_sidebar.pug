@@ -1,8 +1,8 @@
-mixin navItem(link, menuName, icon, active)
+mixin navItem(link, menuName, icon)
   li(class=`${menuName === activeMenu ? 'side-nav--active' : ''}`)
     a(href=`${link}`)
       svg
-        use(xlink:href=`img/icons.svg#icon-${icon}`)
+        use(xlink:href=`/img/icons.svg#icon-${icon}`)
       | #{menuName}
 
 nav.user-view__menu

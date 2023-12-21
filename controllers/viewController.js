@@ -258,3 +258,11 @@ exports.getArtworks = catchAsync(async (req, res, next) => {
     activeMenu: 'My Artworks',
   });
 });
+
+exports.addArtworkColors = catchAsync(async (req, res, next) => {
+  console.log(req.params.id);
+  res.status(200).render('artworkColors', {
+    title: 'Add Colors',
+    activeMenu: 'My Artworks',
+  });
+});

@@ -297,16 +297,13 @@ if (artworkDataForm) {
   populateDropdown('selectBrand', brands);
 
   // handle form submission
-  artworkDataForm.addEventListener('submit', (e) => {
+  artworkDataForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     // Create a FormData object
     const form = new FormData();
-    //const url = '/api/v1/colors/createMy';
+    const url = '/api/v1/artworks/createArtworkOne';
     const method = 'POST';
-
-    // Append other form fields
-    form.append('colorName', document.getElementById('name').value);
 
     // Append selected brand managers
     const selectedBrandDropdown = document.getElementById('selectBrand');
@@ -315,7 +312,6 @@ if (artworkDataForm) {
           (option) => option.value,
         )
       : [];
-    form.append('brand', selectedBrandsIds);
 
     const selectedCompanyDropdown = document.getElementById('company');
     let selectedCompanyIds;
@@ -326,9 +322,27 @@ if (artworkDataForm) {
     } else {
       selectedCompanyIds = '';
     }
-
+    // Append other form fields
+    form.append('brand', selectedBrandsIds);
     form.append('company', selectedCompanyIds);
+    form.append('artworkId', document.getElementById('artworkId').value);
+    form.append('artworkName', document.getElementById('artworkName').value);
+    form.append(
+      'artworkDescription',
+      document.getElementById('artworkDescription').value,
+    );
 
-    httpx.createRecord(form, url, method, 'Color');
+    const succes = await httpx.createRecord(form, url, method, 'Arwork');
+    if (succes === 'succes') {
+      const id = document.getElementById('artworkId').value;
+      const artworkButton = document.querySelector('.btn-artwork-next');
+      console.log(artworkButton);
+      artworkButton.classList.remove('hidden'); // Use remove instead of toggle if you want to make sure it becomes visible
+
+      artworkButton.addEventListener('click', function () {
+        // Navigate to the next page with the 'id' as a query parameter
+        window.location.href = '/addArtworkColors/' + id; // Adjust the URL as needed
+      });
+    }
   });
 }
