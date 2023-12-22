@@ -3,9 +3,9 @@ const mongoose = require('mongoose');
 const artworkSchema = new mongoose.Schema(
   {
     artworkId: {
-      type: Number,
+      type: String,
       unique: true,
-      required: [true, 'The artwork must have a identification number'],
+      required: [true, 'The artwork must have clear identification'],
     },
     artworkVersion: {
       type: Number,

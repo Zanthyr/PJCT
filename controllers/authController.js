@@ -6,19 +6,12 @@ const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const Email = require('../utils/email');
+const utils = require('../utils/utils');
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
-};
-
-const filterObj = (obj, ...allowedFields) => {
-  const newObj = {};
-  Object.keys(obj).forEach((el) => {
-    if (allowedFields.includes(el)) newObj[el] = obj[el];
-  });
-  return newObj;
 };
 
 const createAndSendToken = (user, statusCode, req, res) => {
@@ -54,7 +47,7 @@ exports.signUp = catchAsync(async (req, res, next) => {
 });
 
 exports.invite = catchAsync(async (req, res, next) => {
-  const filteredBody = filterObj(
+  const filteredBody = utils.filterObj(
     req.body,
     'userName',
     'email',

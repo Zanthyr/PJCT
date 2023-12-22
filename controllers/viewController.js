@@ -5,11 +5,9 @@ const Brand = require('./../models/brandModel');
 const Artworks = require('./../models/artworkModel');
 const Company = require('./../models/companyModel');
 const APIFeatures = require('../utils/apiFeatures');
+const Artwork = require('./../models/artworkModel');
 
 exports.getHome = catchAsync(async (req, res, next) => {
-  // 1) Get tour data from collection
-  // 2) Build template
-  // 3) Render that template using tour data from 1)
   res.status(200).render('home', {
     title: 'Home',
   });
@@ -259,10 +257,20 @@ exports.getArtworks = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.addArtworkColors = catchAsync(async (req, res, next) => {
+exports.addImage = catchAsync(async (req, res, next) => {
   console.log(req.params.id);
-  res.status(200).render('artworkColors', {
+  res.status(200).render('artImage', {
+    title: 'Add Image',
+    activeMenu: 'My Artworks',
+    id: req.params.id,
+  });
+});
+
+exports.addColors = catchAsync(async (req, res, next) => {
+  const artwork = await Artwork.findById(req.params.id);
+  res.status(200).render('artColors', {
     title: 'Add Colors',
     activeMenu: 'My Artworks',
+    artwork,
   });
 });

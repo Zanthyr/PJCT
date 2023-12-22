@@ -10,7 +10,7 @@ router.use(authController.protect);
 router
   .route('/')
   .get(artworkController.getAllArtworks)
-  .post(authController.isArtworkCreator(), artworkController.createArtwork);
+  .post(authController.isArtworkCreator(), artworkController.apiCreateArtwork);
 
 router
   .route('/:id')
@@ -18,17 +18,30 @@ router
   .patch(artworkController.updateArtwork);
 
 router
-  .route('/createArtworkOne')
+  .route('/createArtwork')
+  .post(
+    authController.isArtworkCreator(),
+    multiparser.uploadFields,
+    artworkController.createArtwork,
+  );
+
+router
+  .route('/addImage')
   .post(
     authController.isArtworkCreator(),
     multiparser.uploadImageFile,
     multiparser.resizeArtworkImage,
-    artworkController.createArtworkOne,
+    artworkController.addImage,
   );
 
 router
-  .route('/addArtworkColors/:id')
-  .post(authController.isArtworkCreator(), artworkController.addArtworkColors);
+  .route('/addColors')
+  .post(
+    authController.isArtworkCreator(),
+    multiparser.uploadImageFile,
+    multiparser.resizeArtworkImage,
+    artworkController.addColors,
+  );
 
 router.use(authController.restrictTo('root'));
 

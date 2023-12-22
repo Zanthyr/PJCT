@@ -11,12 +11,15 @@ const colorRouter = require('./routes/colorRoutes');
 const viewRouter = require('./routes/viewRoutes');
 const globalErrorHandeler = require('./controllers/errorController');
 const AppError = require('./utils/appError');
+const cors = require('cors');
 
 const app = express();
 
 // load view engine to render pages
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
+
+app.use(cors());
 
 // log current eviroment to console - enable morgan when in dev
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));

@@ -1,0 +1,158 @@
+let imageContainer = document.getElementById('imagePreview');
+let cropArea = document.getElementById('cropsCanvas');
+let imageInput = document.getElementById('photo');
+let ctx = cropArea.getContext('2d');
+let img;
+let offsetX = 0;
+let offsetY = 0;
+imageInput.addEventListener('change', handleImage);
+function handleImage(e) {
+  let reader = new FileReader();
+  reader.onload = function (event) {
+    img = new Image();
+    img.onload = function () {
+      drawImage();
+    };
+    img.src = event.target.result;
+  };
+  reader.readAsDataURL(e.target.files[0]);
+}
+function drawImage() {
+  let aspectRatio = img.width / img.height;
+  let targetWidth = 200;
+  let targetHeight = 200 / aspectRatio;
+  cropArea.width = targetWidth;
+  cropArea.height = targetHeight;
+  let drawX =
+    (targetWidth - img.width * (img.width / (img.width + offsetX))) / 2;
+  let drawY =
+    (targetHeight - img.height * (img.height / (img.height + offsetY))) / 2;
+  ctx.clearRect(0, 0, targetWidth, targetHeight);
+  ctx.drawImage(img, drawX, drawY, img.width, img.height);
+}
+document.querySelector('.btn-move-up').addEventListener('click', (e) => {
+  e.preventDefault();
+  offsetY = offsetY - 10;
+  drawImage();
+});
+document.querySelector('.btn-move-down').addEventListener('click', (e) => {
+  e.preventDefault();
+  offsetY = offsetY + 10;
+  drawImage();
+});
+document.querySelector('.btn-move-left').addEventListener('click', (e) => {
+  e.preventDefault();
+  offsetX = offsetX - 10;
+  drawImage();
+});
+document.querySelector('.btn-move-right').addEventListener('click', (e) => {
+  e.preventDefault();
+  offsetX = offsetX + 10;
+  drawImage();
+});
+document
+  .querySelector('.btn-save-artwork')
+  .addEventListener('click', async (e) => {
+    e.preventDefault();
+    let x = parseInt(cropArea.style.left);
+    let y = parseInt(cropArea.style.top);
+    let width = cropArea.offsetWidth;
+    let height = cropArea.offsetHeight;
+    let croppedCanvas = document.createElement('canvas');
+    let croppedCtx = croppedCanvas.getContext('2d');
+    croppedCanvas.width = width;
+    croppedCanvas.height = height;
+    console.log(croppedCanvas.width, croppedCanvas.height);
+    croppedCtx.drawImage(img, x, y, width, height, 0, 0, width, height);
+    console.log(croppedCtx);
+    // Now you can save or use the cropped image data as needed
+    let croppedBlob = await new Promise((resolve) =>
+      croppedCanvas.toBlob(resolve, 'image/jpeg'),
+    );
+    // Append the cropped image data to FormData
+    const form = new FormData();
+    const url = '/api/v1/artworks/addImage';
+    const method = 'POST';
+    form.append('photo', croppedBlob, 'cropped.jpg');
+    const succes = await httpx.createRecord(form, url, method, 'add Image');
+    if (succes === 'succes') {
+      const id = addArtwImg.getAttribute('artworkID');
+      //window.location.href = '/addColors/' + id;
+    }
+  });
+document.querySelector('.btn-enlarge').addEventListener('click', (e) => {
+  e.preventDefault();
+  img.width *= 1.2;
+  img.height *= 1.2;
+  drawImage();
+});
+document.querySelector('.btn-shrink').addEventListener('click', (e) => {
+  e.preventDefault();
+  img.width *= 0.8;
+  img.height *= 0.8;
+  drawImage();
+});
+
+
+
+///pug 
+
+extends base
+
+block content
+  main.main
+    .user-view
+      include _sidebar
+      
+      .user-view__content.txt-cntr
+        .user-view__form-container
+          h2.heading-secondary.ma-bt-md Your Company's Artworks
+          
+        p= id
+
+        .add__content
+          .user-view__form-container
+            h2.heading-secondary.ma-bt-md ADD Image and colors
+            form.form.form-artImg-data(artworkID=id)
+              .form__group.form__photo-upload
+                input.form__upload(type='file', accept='image/*', id='photo', name='photo', onchange='displayImage()')
+                label(for='photo') Upload Artwork Image
+              
+              .image-box-preview#imagePreview
+                canvas#cropsCanvas
+              .form__group.right
+                button.btn-save-artwork.btn.btn--small.btn--green Save image
+                button.btn-enlarge.btn.btn--small.btn--green Enlarge
+                button.btn-shrink.btn.btn--small.btn--green Shrink
+
+                button.btn-move-up.btn.btn--small.btn--green Move Up
+                button.btn-move-down.btn.btn--small.btn--green Move Down
+                button.btn-move-left.btn.btn--small.btn--green Move Left
+                button.btn-move-right.btn.btn--small.btn--green Move Right
+
+  style.
+    /* Add your existing styles here */
+
+    .image-box-preview {
+      position: relative;
+      width: 100%;
+      height: 300px; /* Adjust as needed */
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    #cropsCanvas {
+      border: 2px dashed #333;
+      box-sizing: border-box;
+      position: absolute;
+    }
+
+    .btn-save-artwork,
+    .btn-enlarge,
+    .btn-shrink,
+    .btn-move-up,
+    .btn-move-down,
+    .btn-move-left,
+    .btn-move-right {
+      margin-top: 10px;
+    }

@@ -15,10 +15,7 @@ router.get('/brands', authController.protect, viewsController.getBrands);
 router.get('/colors', authController.protect, viewsController.getColors);
 router.get('/companies', authController.protect, viewsController.getCompanies);
 router.get('/artworks', authController.protect, viewsController.getArtworks);
-router.get(
-  '/addArtworkColors/:id',
-  authController.protect,
-  viewsController.addArtworkColors,
-);
+router.get('/addImage/:id', authController.protect, viewsController.addImage);
+router.get('/addColors/:id', authController.protect, viewsController.addColors);
 
 module.exports = router;

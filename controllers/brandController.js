@@ -3,14 +3,7 @@ const Brand = require('./../models/brandModel');
 const factory = require('./handlerFactory');
 const APIFeatures = require('../utils/apiFeatures');
 const AppError = require('../utils/appError');
-
-const filterObj = (obj, ...allowedFields) => {
-  const newObj = {};
-  Object.keys(obj).forEach((el) => {
-    if (allowedFields.includes(el)) newObj[el] = obj[el];
-  });
-  return newObj;
-};
+const utils = require('../utils/utils');
 
 // gets a brand for a user by checking if the users copany is allowlisted
 exports.getMyBrand = catchAsync(async (req, res, next, popOptions) => {
@@ -66,7 +59,7 @@ exports.getAllMyBrands = catchAsync(async (req, res, next) => {
 exports.createMyBrand = catchAsync(async (req, res, next) => {
   // add so taht when root we take the BO name -> covert it to id and then add the record
 
-  const filteredBody = filterObj(req.body, 'brandName', 'productGroup');
+  const filteredBody = utils.filterObj(req.body, 'brandName', 'productGroup');
   filteredBody.brandOwner = req.user.company.id;
   // filteredBody.brandManagers = req.body.brandManagers.split(',');
   filteredBody.brandManagers =

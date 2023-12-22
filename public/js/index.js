@@ -17,6 +17,8 @@ const requestReset = document.querySelector('.form--requestReset');
 const resetPassword = document.querySelector('.form--resetPassword');
 const addCompany = document.querySelector('.form-add-company');
 const artworkDataForm = document.querySelector('.form-artwork-data');
+const addArtwImg = document.querySelector('.form-artImg-data');
+const addArtwColor = document.querySelector('.form-artColors-data');
 
 // load companies for adding brand owner
 function populateDropdown(elementId, list) {
@@ -302,7 +304,7 @@ if (artworkDataForm) {
 
     // Create a FormData object
     const form = new FormData();
-    const url = '/api/v1/artworks/createArtworkOne';
+    const url = '/api/v1/artworks/createArtwork';
     const method = 'POST';
 
     // Append selected brand managers
@@ -322,7 +324,7 @@ if (artworkDataForm) {
     } else {
       selectedCompanyIds = '';
     }
-    // Append other form fields
+
     form.append('brand', selectedBrandsIds);
     form.append('company', selectedCompanyIds);
     form.append('artworkId', document.getElementById('artworkId').value);
@@ -332,17 +334,26 @@ if (artworkDataForm) {
       document.getElementById('artworkDescription').value,
     );
 
-    const succes = await httpx.createRecord(form, url, method, 'Arwork');
-    if (succes === 'succes') {
-      const id = document.getElementById('artworkId').value;
-      const artworkButton = document.querySelector('.btn-artwork-next');
-      console.log(artworkButton);
-      artworkButton.classList.remove('hidden'); // Use remove instead of toggle if you want to make sure it becomes visible
+    const id = await httpx.createArtwork(form, url, method, 'Arwork');
+    if (id) {
+      window.location.href = '/addImage/' + id;
+    }
+  });
+}
 
-      artworkButton.addEventListener('click', function () {
-        // Navigate to the next page with the 'id' as a query parameter
-        window.location.href = '/addArtworkColors/' + id; // Adjust the URL as needed
-      });
+if (addArtwImg) {
+  addArtwImg.addEventListener('submit', async (e) => {
+    const id = addArtwImg.getAttribute('artworkID');
+    e.preventDefault();
+    // Create a FormData object
+    const form = new FormData();
+    const url = '/api/v1/artworks/addImage';
+    const method = 'POST';
+    form.append('artworkId', id);
+    form.append('photo', document.getElementById('photo').files[0]);
+    const succes = await httpx.createRecord(form, url, method, 'add Image');
+    if (succes) {
+      window.location.href = '/addColors/' + id;
     }
   });
 }

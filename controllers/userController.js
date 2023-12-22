@@ -3,14 +3,7 @@ const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
 const AppError = require('../utils/appError');
 const APIFeatures = require('../utils/apiFeatures');
-
-const filterObj = (obj, ...allowedFields) => {
-  const newObj = {};
-  Object.keys(obj).forEach((el) => {
-    if (allowedFields.includes(el)) newObj[el] = obj[el];
-  });
-  return newObj;
-};
+const utils = require('../utils/utils');
 
 exports.createUser = (req, res) => {
   res.status(500).json({
@@ -122,7 +115,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     );
   }
 
-  const filteredBody = filterObj(req.body, 'userName', 'email');
+  const filteredBody = utils.filterObj(req.body, 'userName', 'email');
   if (req.file) filteredBody.userPhoto = req.file.filename;
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,

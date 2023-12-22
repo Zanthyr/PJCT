@@ -125,3 +125,19 @@ export const createRecord = async (data, url, method, type) => {
     showAlert('error', err.response.data.message);
   }
 };
+
+export const createArtwork = async (data, url, method, type) => {
+  try {
+    const res = await axios({
+      method,
+      url,
+      data,
+    });
+    if (res.data.status === 'success') {
+      showAlert('success', `${type.toUpperCase()} record created!`);
+    }
+    return res.data.data.data.id;
+  } catch (err) {
+    showAlert('error', err.response.data.message);
+  }
+};

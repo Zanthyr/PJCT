@@ -19,7 +19,7 @@ block content
 
         .add__content.hidden
           .user-view__form-container
-            h2.heading-secondary.ma-bt-md ADD A Brand
+            h2.heading-secondary.ma-bt-md ADD Artwork
             form.form.form-artwork-data(brands = brandList)(companies=companies)
               - if (user.role === 'root')
                 .form__group
@@ -34,22 +34,12 @@ block content
               .form__group.ma-bt-md
                 label.form__label(for='artworkDescription') Artwork Description
                 input#artworkDescription.form__input(type='text', value=`description`, required, name='artworkDescription')
-
-
-
-
               .form__group.ma-bt-md
                 label.form__label(for='selectBrand') Select Brand
-                select.form__input(id='selectBrand')  
-              .form__group.form__photo-upload
-                input.form__upload(type='file', accept='image/*',id='photo', name='photo')
-                label(for='photo') Uoload Artwork Image
+                select.form__input(id='selectBrand')
 
               .form__group.right
-                button.btn.btn--small.btn--green Save Artwork
-
-              .form__group.right
-                button.btn-artwork-next.btn.btn--small.btn--green.hidden next (add colors)
+                button.btn-save-artwork.btn.btn--small.btn--green Next / add image
 
         .line &nbsp;
 

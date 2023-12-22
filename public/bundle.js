@@ -5440,7 +5440,7 @@ var showAlert = exports.showAlert = function showAlert(type, msg) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.updateSettings = exports.softDelete = exports.resetPassword = exports.requestReset = exports.logout = exports.login = exports.createRecord = void 0;
+exports.updateSettings = exports.softDelete = exports.resetPassword = exports.requestReset = exports.logout = exports.login = exports.createRecord = exports.createArtwork = void 0;
 var _axios = _interopRequireDefault(require("axios"));
 var _alerts = require("./alerts");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -5692,6 +5692,39 @@ var createRecord = exports.createRecord = /*#__PURE__*/function () {
     return _ref7.apply(this, arguments);
   };
 }();
+var createArtwork = exports.createArtwork = /*#__PURE__*/function () {
+  var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(data, url, method, type) {
+    var res;
+    return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+      while (1) switch (_context8.prev = _context8.next) {
+        case 0:
+          _context8.prev = 0;
+          _context8.next = 3;
+          return (0, _axios.default)({
+            method: method,
+            url: url,
+            data: data
+          });
+        case 3:
+          res = _context8.sent;
+          if (res.data.status === 'success') {
+            (0, _alerts.showAlert)('success', "".concat(type.toUpperCase(), " record created!"));
+          }
+          return _context8.abrupt("return", res.data.data.data.id);
+        case 8:
+          _context8.prev = 8;
+          _context8.t0 = _context8["catch"](0);
+          (0, _alerts.showAlert)('error', _context8.t0.response.data.message);
+        case 11:
+        case "end":
+          return _context8.stop();
+      }
+    }, _callee8, null, [[0, 8]]);
+  }));
+  return function createArtwork(_x16, _x17, _x18, _x19) {
+    return _ref8.apply(this, arguments);
+  };
+}();
 },{"axios":"../../node_modules/axios/index.js","./alerts":"alerts.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
@@ -5718,6 +5751,8 @@ var requestReset = document.querySelector('.form--requestReset');
 var resetPassword = document.querySelector('.form--resetPassword');
 var addCompany = document.querySelector('.form-add-company');
 var artworkDataForm = document.querySelector('.form-artwork-data');
+var addArtwImg = document.querySelector('.form-artImg-data');
+var addArtwColor = document.querySelector('.form-artColors-data');
 
 // load companies for adding brand owner
 function populateDropdown(elementId, list) {
@@ -5979,7 +6014,7 @@ if (artworkDataForm) {
   // handle form submission
   artworkDataForm.addEventListener('submit', /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e) {
-      var form, url, method, selectedBrandDropdown, selectedBrandsIds, selectedCompanyDropdown, selectedCompanyIds, succes, id, artworkButton;
+      var form, url, method, selectedBrandDropdown, selectedBrandsIds, selectedCompanyDropdown, selectedCompanyIds, id;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -5987,7 +6022,7 @@ if (artworkDataForm) {
 
             // Create a FormData object
             form = new FormData();
-            url = '/api/v1/artworks/createArtworkOne';
+            url = '/api/v1/artworks/createArtwork';
             method = 'POST'; // Append selected brand managers
             selectedBrandDropdown = document.getElementById('selectBrand');
             selectedBrandsIds = selectedBrandDropdown ? Array.from(selectedBrandDropdown.selectedOptions).map(function (option) {
@@ -6001,26 +6036,17 @@ if (artworkDataForm) {
             } else {
               selectedCompanyIds = '';
             }
-            // Append other form fields
             form.append('brand', selectedBrandsIds);
             form.append('company', selectedCompanyIds);
             form.append('artworkId', document.getElementById('artworkId').value);
             form.append('artworkName', document.getElementById('artworkName').value);
             form.append('artworkDescription', document.getElementById('artworkDescription').value);
             _context2.next = 15;
-            return httpx.createRecord(form, url, method, 'Arwork');
+            return httpx.createArtwork(form, url, method, 'Arwork');
           case 15:
-            succes = _context2.sent;
-            if (succes === 'succes') {
-              id = document.getElementById('artworkId').value;
-              artworkButton = document.querySelector('.btn-artwork-next');
-              console.log(artworkButton);
-              artworkButton.classList.remove('hidden'); // Use remove instead of toggle if you want to make sure it becomes visible
-
-              artworkButton.addEventListener('click', function () {
-                // Navigate to the next page with the 'id' as a query parameter
-                window.location.href = '/addArtworkColors/' + id; // Adjust the URL as needed
-              });
+            id = _context2.sent;
+            if (id) {
+              window.location.href = '/addImage/' + id;
             }
           case 17:
           case "end":
@@ -6030,6 +6056,39 @@ if (artworkDataForm) {
     }));
     return function (_x2) {
       return _ref2.apply(this, arguments);
+    };
+  }());
+}
+if (addArtwImg) {
+  addArtwImg.addEventListener('submit', /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(e) {
+      var id, form, url, method, succes;
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+        while (1) switch (_context3.prev = _context3.next) {
+          case 0:
+            id = addArtwImg.getAttribute('artworkID');
+            e.preventDefault();
+            // Create a FormData object
+            form = new FormData();
+            url = '/api/v1/artworks/addImage';
+            method = 'POST';
+            form.append('artworkId', id);
+            form.append('photo', document.getElementById('photo').files[0]);
+            _context3.next = 9;
+            return httpx.createRecord(form, url, method, 'add Image');
+          case 9:
+            succes = _context3.sent;
+            if (succes) {
+              window.location.href = '/addColors/' + id;
+            }
+          case 11:
+          case "end":
+            return _context3.stop();
+        }
+      }, _callee3);
+    }));
+    return function (_x3) {
+      return _ref3.apply(this, arguments);
     };
   }());
 }
@@ -6058,7 +6117,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55859" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64602" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

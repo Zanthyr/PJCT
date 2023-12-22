@@ -1,14 +1,7 @@
 const catchAsync = require('../utils/catchAsync');
 const Company = require('./../models/companyModel');
 const factory = require('./handlerFactory');
-
-const filterObj = (obj, ...allowedFields) => {
-  const newObj = {};
-  Object.keys(obj).forEach((el) => {
-    if (allowedFields.includes(el)) newObj[el] = obj[el];
-  });
-  return newObj;
-};
+const utils = require('../utils/utils');
 
 exports.getCompany = factory.getOne(Company);
 exports.getAllCompanies = factory.getAll(Company);
@@ -23,7 +16,7 @@ exports.getMyCompany = (req, res, next) => {
 };
 
 exports.updateMyCompany = catchAsync(async (req, res, next) => {
-  const filteredBody = filterObj(req.body, 'companyName', 'adress');
+  const filteredBody = utils.filterObj(req.body, 'companyName', 'adress');
   if (req.file) filteredBody.companyPhoto = req.file.filename;
 
   const doc = await Company.findByIdAndUpdate(
