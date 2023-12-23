@@ -5752,7 +5752,7 @@ var resetPassword = document.querySelector('.form--resetPassword');
 var addCompany = document.querySelector('.form-add-company');
 var artworkDataForm = document.querySelector('.form-artwork-data');
 var addArtwImg = document.querySelector('.form-artImg-data');
-var addArtwColor = document.querySelector('.form-artColors-data');
+var addArtwColor = document.querySelector('.form-artColor-data');
 
 // load companies for adding brand owner
 function populateDropdown(elementId, list) {
@@ -6036,7 +6036,7 @@ if (artworkDataForm) {
             } else {
               selectedCompanyIds = '';
             }
-            form.append('brand', selectedBrandsIds);
+            form.append('artworkForBrand', selectedBrandsIds);
             form.append('company', selectedCompanyIds);
             form.append('artworkId', document.getElementById('artworkId').value);
             form.append('artworkName', document.getElementById('artworkName').value);
@@ -6060,6 +6060,26 @@ if (artworkDataForm) {
   }());
 }
 if (addArtwImg) {
+  addArtwImg.addEventListener('change', function () {
+    displayImage();
+  });
+  function displayImage() {
+    var input = document.getElementById('photo');
+    var preview = document.getElementById('imagePreview');
+    while (preview.firstChild) {
+      preview.removeChild(preview.firstChild);
+    }
+    var file = input.files[0];
+    if (file) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var img = document.createElement('img');
+        img.src = e.target.result;
+        preview.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
   addArtwImg.addEventListener('submit', /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(e) {
       var id, form, url, method, succes;
@@ -6092,6 +6112,89 @@ if (addArtwImg) {
     };
   }());
 }
+if (addArtwColor) {
+  var dropdownCounter = 0;
+  var colorArray = [];
+  document.getElementById('addDropdown').onclick = addDropdown;
+  document.getElementById('removeDropdown').onclick = removeDropdown;
+  document.getElementById('saveColors').onclick = saveColors;
+  function addDropdown(event) {
+    event.preventDefault();
+    var colors = JSON.parse(addArtwColor.getAttribute('colors'));
+    var dropdownContainer = document.getElementById('dropdownContainer');
+    var newDropdown = document.createElement('div');
+    newDropdown.className = 'dropdown';
+    newDropdown.id = 'dropdown' + dropdownCounter;
+    var colorSelect = document.createElement('select');
+    colorSelect.name = colors.name;
+    colorSelect.dataset.id = dropdownCounter;
+
+    // Populate options with color names
+    for (var i = 0; i < colors.length; i++) {
+      var option = document.createElement('option');
+      option.value = colors[i].id;
+      option.text = colors[i].name;
+      colorSelect.appendChild(option);
+    }
+    // Add event listener to capture dropdown changes
+    colorSelect.addEventListener('change', function () {
+      updateColorArray(this);
+    });
+
+    // Initialize colorArray with the default selected value
+    colorArray.push(colorSelect.value);
+    newDropdown.appendChild(colorSelect);
+    dropdownContainer.appendChild(newDropdown);
+    dropdownCounter++;
+  }
+  function updateColorArray(selectElement) {
+    var index = parseInt(selectElement.dataset.id);
+    colorArray[index] = selectElement.value;
+  }
+  function removeDropdown(event) {
+    event.preventDefault();
+    if (dropdownCounter > 0) {
+      var dropdownContainer = document.getElementById('dropdownContainer');
+      var lastDropdown = document.getElementById('dropdown' + (dropdownCounter - 1));
+      var lastDropdownSelect = lastDropdown.querySelector('select');
+      var lastDropdownIndex = parseInt(lastDropdownSelect.dataset.id);
+      colorArray.splice(lastDropdownIndex, 1);
+      dropdownContainer.removeChild(lastDropdown);
+      dropdownCounter--;
+    }
+  }
+  function saveColors(_x4) {
+    return _saveColors.apply(this, arguments);
+  }
+  function _saveColors() {
+    _saveColors = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(event) {
+      var id, form, url, method, succes;
+      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+        while (1) switch (_context4.prev = _context4.next) {
+          case 0:
+            event.preventDefault();
+            id = addArtwColor.getAttribute('artworkID');
+            form = new FormData();
+            url = '/api/v1/artworks/addColors';
+            method = 'POST';
+            form.append('artworkId', id);
+            form.append('colors', colorArray);
+            _context4.next = 9;
+            return httpx.createRecord(form, url, method, 'added colors');
+          case 9:
+            succes = _context4.sent;
+            if (succes) {
+              window.location.href = '/';
+            }
+          case 11:
+          case "end":
+            return _context4.stop();
+        }
+      }, _callee4);
+    }));
+    return _saveColors.apply(this, arguments);
+  }
+}
 },{"./httpx":"httpx.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -6117,7 +6220,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64602" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57082" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

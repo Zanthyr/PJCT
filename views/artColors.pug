@@ -9,6 +9,22 @@ block content
         .user-view__form-container
           h2.heading-secondary.ma-bt-md Your Company's Artworks
           
-          img.form__user-photo(src=`/img/artworks/${artwork.artworkImage}`, alt='User photo')
-          
-        p= brrrrr
+        p= artwork.id
+        p= id
+        p= JSON.stringify(colors)
+        .add__content
+          .user-view__form-container
+            h2.heading-secondary.ma-bt-md ADD Image and colors
+            form.form.form-artColor-data(artworkID=artwork.id, colors=colors)
+              .form__group
+              img.form__user-photo(src=`/img/artworks/${artwork.artworkImage}`, alt='User photo')
+
+              .form__group.right
+                button.btn.btn--small.btn--green#addDropdown Add Dropdown
+                button.btn.btn--small.btn--green#removeDropdown Remove Dropdown
+
+              //- Container for dynamically added dropdowns
+              #dropdownContainer
+ 
+              .form__group.right
+                button.btn.btn--small.btn--green#saveColors  save colors

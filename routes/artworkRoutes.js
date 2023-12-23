@@ -38,8 +38,7 @@ router
   .route('/addColors')
   .post(
     authController.isArtworkCreator(),
-    multiparser.uploadImageFile,
-    multiparser.resizeArtworkImage,
+    multiparser.uploadFields,
     artworkController.addColors,
   );
 

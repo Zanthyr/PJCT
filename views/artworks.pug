@@ -20,7 +20,7 @@ block content
         .add__content.hidden
           .user-view__form-container
             h2.heading-secondary.ma-bt-md ADD Artwork
-            form.form.form-artwork-data(brands = brandList)(companies=companies)
+            form.form.form-artwork-data(brands = brandList, companies=companies)
               - if (user.role === 'root')
                 .form__group
                   label.form__label(for='company') Company

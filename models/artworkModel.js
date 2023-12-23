@@ -23,6 +23,14 @@ const artworkSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: 'Brand',
     },
+    brandOwner: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Company',
+    },
+    createdByCompany: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Company',
+    },
     artworkImage: {
       type: String,
     },

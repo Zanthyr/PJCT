@@ -16,34 +16,10 @@ block content
             h2.heading-secondary.ma-bt-md ADD Image and colors
             form.form.form-artImg-data(artworkID=id)
               .form__group.form__photo-upload
-                input.form__upload(type='file', accept='image/*', id='photo', name='photo', onchange='displayImage()')
+                input.form__upload(type='file', accept='image/*', id='photo', name='photo')
                 label(for='photo') Upload Artwork Image
               
               .image-box-preview#imagePreview
 
               .form__group.right
                 button.btn-save-artwork.btn.btn--small.btn--green Save image
-
-              script.
-                function displayImage() {
-                    var input = document.getElementById('photo');
-                    var preview = document.getElementById('imagePreview');
-
-                    while (preview.firstChild) {
-                        preview.removeChild(preview.firstChild);
-                    }
-
-                    var file = input.files[0];
-
-                    if (file) {
-                        var reader = new FileReader();
-
-                        reader.onload = function (e) {
-                            var img = document.createElement('img');
-                            img.src = e.target.result;
-                            preview.appendChild(img);
-                        };
-
-                        reader.readAsDataURL(file);
-                    }
-                }

@@ -49,17 +49,12 @@ exports.getCompany = catchAsync(async (req, res) => {
 });
 
 exports.getCompanies = catchAsync(async (req, res) => {
-  const features = new APIFeatures(Company.find(), req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
+  const features = new APIFeatures(Company.find(), req.query).filter();
   const doc = await features.query;
 
   res.status(200).render('companies', {
-    title: 'manage Companies',
     activeMenu: 'Manage companies',
-
+    title: 'manage Companies',
     companies: doc,
   });
 });
@@ -85,12 +80,7 @@ exports.updateUserData = catchAsync(async (req, res, next) => {
 
 exports.getUsers = catchAsync(async (req, res, next) => {
   if (req.user.role !== 'root') req.query.company = req.user.company.id;
-
-  const features = new APIFeatures(User.find(), req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
+  const features = new APIFeatures(User.find(), req.query).filter();
   const doc = await features.query;
 
   const newDoc = doc.map((item) => ({
@@ -118,10 +108,10 @@ exports.getUsers = catchAsync(async (req, res, next) => {
   }
 
   res.status(200).render('users', {
+    activeMenu: 'Manage users',
     title: 'Manage users',
     newDoc,
     allCompanies,
-    activeMenu: 'Manage users',
   });
 });
 
@@ -172,30 +162,35 @@ exports.getBrands = catchAsync(async (req, res, next) => {
   }));
 
   res.status(200).render('brands', {
+    activeMenu: 'Manage Brands',
     title: 'Manage Brands',
     cleanDoc,
     cleanCompanies,
     allCompanies,
-    activeMenu: 'Manage Brands',
   });
 });
 
 exports.getColors = catchAsync(async (req, res, next) => {
-  const allColors = await Color.find();
+  const allSpotColors = await Color.find({
+    createdByCompany: req.user.company.id,
+    colorType: 'SpotColor',
+  });
+  const allBrandColors = await Color.find({ colorType: 'BrandColor' });
   const allBrands = await Brand.find();
 
-  let myColorsList = [];
+  let myBrandColorsList = [];
   let myBrandList = [];
-
+  let myColorsList = [];
   if (req.user.role !== 'root') {
-    myColorsList = allColors.filter((element) =>
+    myBrandColorsList = allBrandColors.filter((element) =>
       element.brandName.allowList.includes(req.user.company.id),
     );
     myBrandList = allBrands.filter((element) =>
       element.managerList.includes(req.user.company.id),
     );
+    myColorsList = [...allSpotColors, ...myBrandColorsList];
   } else {
-    myColorsList = allColors;
+    myColorsList = await Color.find();
     myBrandList = allBrands;
   }
 
@@ -212,34 +207,36 @@ exports.getColors = catchAsync(async (req, res, next) => {
   }));
 
   res.status(200).render('colors', {
+    activeMenu: 'Manage Colwors',
     title: 'Manage Colors',
     cleanColorList,
     cleanBrandList,
-    activeMenu: 'Manage Colors',
   });
 });
 
 exports.getArtworks = catchAsync(async (req, res, next) => {
-  if (req.user.role !== 'root') req.query.company = req.user.company.id;
-  const features = new APIFeatures(Artworks.find(), req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
-  const myArtworks = await features.query;
+  if (req.user.role !== 'root' && req.user.company.companyType !== 'BrandOwner')
+    req.query.createdByCompany = req.user.company.id;
+  if (req.user.role !== 'root' && req.user.company.companyType === 'BrandOwner')
+    req.query.brandOwner = req.user.company.id;
 
+  const features = new APIFeatures(Artworks.find(), req.query).filter();
+  const myArtworks = await features.query;
   const allBrands = await Brand.find();
+
   const myBrands =
     req.user.role !== 'root'
       ? allBrands.filter((element) =>
           element.allowList.includes(req.user.company.id),
         )
       : allBrands;
+
   const brandList = myBrands.map((item) => ({
     name: item.brandName,
     groep: item.productGroup,
     id: item.id,
   }));
+
   const companies =
     req.user.role === 'root'
       ? (await Company.find()).map((item) => ({
@@ -249,28 +246,64 @@ exports.getArtworks = catchAsync(async (req, res, next) => {
       : [];
 
   res.status(200).render('artworks', {
+    activeMenu: 'My Artworks',
     title: 'My Artworks',
     myArtworks,
     brandList,
     companies,
-    activeMenu: 'My Artworks',
   });
 });
 
 exports.addImage = catchAsync(async (req, res, next) => {
-  console.log(req.params.id);
   res.status(200).render('artImage', {
-    title: 'Add Image',
     activeMenu: 'My Artworks',
+    title: 'Add Image',
     id: req.params.id,
   });
 });
 
 exports.addColors = catchAsync(async (req, res, next) => {
   const artwork = await Artwork.findById(req.params.id);
+  let spotColors;
+  let brandColors = [];
+
+  if (artwork.artworkForBrand) {
+    brandColors = artwork.artworkForBrand.id
+      ? (
+          await Color.find({
+            brandName: artwork.artworkForBrand.id,
+          })
+        ).map((item) => ({
+          name: item.colorName,
+          brand: item.brandName.brandName,
+          id: item.id,
+        }))
+      : [];
+  }
+
+  if (req.user.role === 'root') {
+    spotColors = await Color.find({
+      colorType: 'SpotColor',
+    });
+  } else {
+    spotColors = await Color.find({
+      colorType: 'SpotColor',
+      createdByCompany: req.user.company.id,
+    });
+  }
+
+  const myColors = [
+    ...brandColors,
+    ...spotColors.map((item) => ({
+      name: item.colorName,
+      id: item.id,
+    })),
+  ];
+
   res.status(200).render('artColors', {
     title: 'Add Colors',
     activeMenu: 'My Artworks',
+    colors: myColors,
     artwork,
   });
 });

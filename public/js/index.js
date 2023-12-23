@@ -18,7 +18,7 @@ const resetPassword = document.querySelector('.form--resetPassword');
 const addCompany = document.querySelector('.form-add-company');
 const artworkDataForm = document.querySelector('.form-artwork-data');
 const addArtwImg = document.querySelector('.form-artImg-data');
-const addArtwColor = document.querySelector('.form-artColors-data');
+const addArtwColor = document.querySelector('.form-artColor-data');
 
 // load companies for adding brand owner
 function populateDropdown(elementId, list) {
@@ -325,7 +325,7 @@ if (artworkDataForm) {
       selectedCompanyIds = '';
     }
 
-    form.append('brand', selectedBrandsIds);
+    form.append('artworkForBrand', selectedBrandsIds);
     form.append('company', selectedCompanyIds);
     form.append('artworkId', document.getElementById('artworkId').value);
     form.append('artworkName', document.getElementById('artworkName').value);
@@ -342,6 +342,33 @@ if (artworkDataForm) {
 }
 
 if (addArtwImg) {
+  addArtwImg.addEventListener('change', function () {
+    displayImage();
+  });
+
+  function displayImage() {
+    let input = document.getElementById('photo');
+    let preview = document.getElementById('imagePreview');
+
+    while (preview.firstChild) {
+      preview.removeChild(preview.firstChild);
+    }
+
+    let file = input.files[0];
+
+    if (file) {
+      let reader = new FileReader();
+
+      reader.onload = function (e) {
+        let img = document.createElement('img');
+        img.src = e.target.result;
+        preview.appendChild(img);
+      };
+
+      reader.readAsDataURL(file);
+    }
+  }
+
   addArtwImg.addEventListener('submit', async (e) => {
     const id = addArtwImg.getAttribute('artworkID');
     e.preventDefault();
@@ -356,4 +383,85 @@ if (addArtwImg) {
       window.location.href = '/addColors/' + id;
     }
   });
+}
+
+if (addArtwColor) {
+  let dropdownCounter = 0;
+  let colorArray = [];
+
+  document.getElementById('addDropdown').onclick = addDropdown;
+  document.getElementById('removeDropdown').onclick = removeDropdown;
+  document.getElementById('saveColors').onclick = saveColors;
+
+  function addDropdown(event) {
+    event.preventDefault();
+    const colors = JSON.parse(addArtwColor.getAttribute('colors'));
+    let dropdownContainer = document.getElementById('dropdownContainer');
+    let newDropdown = document.createElement('div');
+    newDropdown.className = 'dropdown';
+    newDropdown.id = 'dropdown' + dropdownCounter;
+
+    let colorSelect = document.createElement('select');
+    colorSelect.name = colors.name;
+    colorSelect.dataset.id = dropdownCounter;
+
+    // Populate options with color names
+    for (let i = 0; i < colors.length; i++) {
+      let option = document.createElement('option');
+      option.value = colors[i].id;
+      option.text = colors[i].name;
+      colorSelect.appendChild(option);
+    }
+    // Add event listener to capture dropdown changes
+    colorSelect.addEventListener('change', function () {
+      updateColorArray(this);
+    });
+
+    // Initialize colorArray with the default selected value
+    colorArray.push(colorSelect.value);
+
+    newDropdown.appendChild(colorSelect);
+    dropdownContainer.appendChild(newDropdown);
+    dropdownCounter++;
+  }
+
+  function updateColorArray(selectElement) {
+    let index = parseInt(selectElement.dataset.id);
+    colorArray[index] = selectElement.value;
+  }
+
+  function removeDropdown(event) {
+    event.preventDefault();
+    if (dropdownCounter > 0) {
+      let dropdownContainer = document.getElementById('dropdownContainer');
+      let lastDropdown = document.getElementById(
+        'dropdown' + (dropdownCounter - 1),
+      );
+
+      let lastDropdownSelect = lastDropdown.querySelector('select');
+      let lastDropdownIndex = parseInt(lastDropdownSelect.dataset.id);
+      colorArray.splice(lastDropdownIndex, 1);
+
+      dropdownContainer.removeChild(lastDropdown);
+      dropdownCounter--;
+    }
+  }
+
+  async function saveColors(event) {
+    event.preventDefault();
+
+    const id = addArtwColor.getAttribute('artworkID');
+    const form = new FormData();
+    const url = '/api/v1/artworks/addColors';
+    const method = 'POST';
+
+    form.append('artworkId', id);
+    form.append('colors', colorArray);
+
+    const succes = await httpx.createRecord(form, url, method, 'added colors');
+
+    if (succes) {
+      window.location.href = '/';
+    }
+  }
 }

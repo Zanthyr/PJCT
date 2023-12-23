@@ -2,6 +2,8 @@ const catchAsync = require('../utils/catchAsync');
 const Artwork = require('./../models/artworkModel');
 const factory = require('./handlerFactory');
 const utils = require('../utils/utils');
+const Company = require('./../models/companyModel');
+const Brand = require('./../models/brandModel');
 
 exports.getAllArtworks = factory.getAll(Artwork);
 exports.getArtwork = factory.getOne(Artwork);
@@ -13,16 +15,21 @@ exports.deleteArtwork = factory.deleteOne(Artwork);
 exports.createArtwork = catchAsync(async (req, res, next) => {
   const filteredBody = utils.filterObj(
     req.body,
-    'brand',
     'artworkId',
     'artworkName',
     'artworkDescription',
   );
 
+  if (req.body.artworkForBrand.length !== 0) {
+    filteredBody.artworkForBrand = req.body.artworkForBrand;
+    const brand = await Brand.findById(req.body.artworkForBrand);
+    filteredBody.brandOwner = brand.brandOwner.id;
+  }
+
   filteredBody.artworkCreator = req.user.id;
   filteredBody.createdByCompany =
     req.user.role === 'root' ? req.body.company : req.user.company.id;
-  console.log('here');
+
   const artwork = await Artwork.create(filteredBody);
 
   res.status(201).json({
@@ -37,6 +44,7 @@ exports.addImage = catchAsync(async (req, res, next) => {
   await Artwork.findByIdAndUpdate(req.body.artworkId, {
     artworkImage: req.file.filename,
   });
+
   res.status(201).json({
     status: 'success',
     data: {
@@ -46,6 +54,10 @@ exports.addImage = catchAsync(async (req, res, next) => {
 });
 
 exports.addColors = catchAsync(async (req, res, next) => {
+  await Artwork.findByIdAndUpdate(req.body.artworkId, {
+    artworkColors: req.body.colors.split(','),
+  });
+
   res.status(201).json({
     status: 'success',
     data: {
