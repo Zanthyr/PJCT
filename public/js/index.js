@@ -345,47 +345,6 @@ if (artworkDataForm) {
 
 if (addArtwImg) {
   cropImage(addArtwImg);
-  // addArtwImg.addEventListener('change', function () {
-  //   displayImage();
-  // });
-
-  // function displayImage() {
-  //   let input = document.getElementById('photo');
-  //   let preview = document.getElementById('imagePreview');
-
-  //   while (preview.firstChild) {
-  //     preview.removeChild(preview.firstChild);
-  //   }
-
-  //   let file = input.files[0];
-
-  //   if (file) {
-  //     let reader = new FileReader();
-
-  //     reader.onload = function (e) {
-  //       let img = document.createElement('img');
-  //       img.src = e.target.result;
-  //       preview.appendChild(img);
-  //     };
-
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
-
-  // addArtwImg.addEventListener('submit', async (e) => {
-  //   const id = addArtwImg.getAttribute('artworkID');
-  //   e.preventDefault();
-  //   // Create a FormData object
-  //   const form = new FormData();
-  //   const url = '/api/v1/artworks/addImage';
-  //   const method = 'POST';
-  //   form.append('artworkId', id);
-  //   form.append('photo', document.getElementById('photo').files[0]);
-  //   const succes = await httpx.createRecord(form, url, method, 'add Image');
-  //   if (succes) {
-  //     window.location.href = '/addColors/' + id;
-  //   }
-  // });
 }
 
 if (addArtwColor) {

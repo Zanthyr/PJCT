@@ -29,7 +29,7 @@ router
   .route('/addImage')
   .post(
     authController.isArtworkCreator(),
-    multiparser.uploadImageFile,
+    multiparser.uploadFile,
     multiparser.resizeArtworkImage,
     artworkController.addImage,
   );

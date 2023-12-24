@@ -1,7 +1,6 @@
 const sharp = require('sharp');
 const multer = require('multer');
 const catchAsync = require('./catchAsync');
-
 const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req, file, cb) => {
@@ -16,12 +15,28 @@ const upload = multer({
   fileFilter: multerFilter,
 });
 
+exports.uploadFile = upload.single('file');
 exports.uploadImageFile = upload.single('photo');
 exports.uploadFields = upload.single('fileFieldName');
+
+exports.resizeArtworkImage = catchAsync(async (req, res, next) => {
+  if (!req.body.photo) return next();
+  const imageBuffer = Buffer.from(req.body.photo.split(',')[1], 'base64');
+  req.body.filename = `artwork-${req.body.artworkId}-${Date.now()}.jpg`;
+
+  await sharp(imageBuffer)
+    .resize({ width: 2000, height: 2000, fit: 'inside' })
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/artworks/${req.body.filename}`);
+
+  next();
+});
 
 exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
   if (!req.file) return next();
   req.file.filename = `user-${req.user.id}-${Date.now()}.jpg`;
+
   await sharp(req.file.buffer)
     .resize(500, 500)
     .toFormat('jpeg')
@@ -34,6 +49,7 @@ exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
 exports.resizeCompanyPhoto = catchAsync(async (req, res, next) => {
   if (!req.file) return next();
   req.file.filename = `company-${req.user.company.id}-${Date.now()}.jpg`;
+
   await sharp(req.file.buffer)
     //.resize(800, 300)
     .toFormat('jpeg')
@@ -46,48 +62,12 @@ exports.resizeCompanyPhoto = catchAsync(async (req, res, next) => {
 exports.resizeBrandLogo = catchAsync(async (req, res, next) => {
   if (!req.file) return next();
   req.file.filename = `brand-${req.user.company.id}-${Date.now()}.jpg`; //// company id lijkt mij n iet het correcte om te gebruiken hier
+
   await sharp(req.file.buffer)
     .resize(500, 500)
     .toFormat('jpeg')
     .jpeg({ quality: 90 })
     .toFile(`public/img/brands/${req.file.filename}`);
-
-  next();
-});
-
-exports.resizeArtworkImage = catchAsync(async (req, res, next) => {
-  if (!req.file) return next();
-  req.file.filename = `artwork-${req.body.artworkId}-${Date.now()}.jpg`; //// company id lijkt mij n iet het correcte om te gebruiken hier
-  await sharp(req.file.buffer)
-    .resize({ width: 2000, height: 2000, fit: 'inside' })
-    .toFormat('jpeg')
-    .jpeg({ quality: 90 })
-    .toFile(`public/img/artworks/${req.file.filename}`);
-
-  next();
-});
-
-exports.resizeArtworkImageNew = catchAsync(async (req, res, next) => {
-  if (!req.file) return next();
-
-  req.file.filename = `artwork-${req.body.artworkId}-${Date.now()}.jpg`;
-
-  // Extract crop coordinates from the request body
-  const crop = req.body.crop || {};
-  const x1 = crop.x1 || 0;
-  const y1 = crop.y1 || 0;
-  const x2 = crop.x2 || 2000;
-  const y2 = crop.y2 || 2000;
-
-  // Extract scale factor from the request body
-  const scaleFactor = req.body.scaleFactor || 1.1;
-
-  await sharp(req.file.buffer)
-    .resize(scaleFactor)
-    .extract({ left: x1, top: y1, width: x2 - x1, height: y2 - y1 })
-    .toFormat('jpeg')
-    .jpeg({ quality: 90 })
-    .toFile(`public/img/artworks/${req.file.filename}`);
 
   next();
 });

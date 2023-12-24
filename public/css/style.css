@@ -901,6 +901,7 @@ body {
   border: 1px solid #777;
   position: relative;
   cursor: crosshair;
+  background-color: white;
 }
 
 .marker {
@@ -949,6 +950,7 @@ body {
   height: 500px;
   box-sizing: border-box;
   position: absolute;
+  background-color: white;
 }
 
 .btn-save-artwork,
