@@ -66,3 +66,28 @@ exports.resizeArtworkImage = catchAsync(async (req, res, next) => {
 
   next();
 });
+
+exports.resizeArtworkImageNew = catchAsync(async (req, res, next) => {
+  if (!req.file) return next();
+
+  req.file.filename = `artwork-${req.body.artworkId}-${Date.now()}.jpg`;
+
+  // Extract crop coordinates from the request body
+  const crop = req.body.crop || {};
+  const x1 = crop.x1 || 0;
+  const y1 = crop.y1 || 0;
+  const x2 = crop.x2 || 2000;
+  const y2 = crop.y2 || 2000;
+
+  // Extract scale factor from the request body
+  const scaleFactor = req.body.scaleFactor || 1.1;
+
+  await sharp(req.file.buffer)
+    .resize(scaleFactor)
+    .extract({ left: x1, top: y1, width: x2 - x1, height: y2 - y1 })
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/artworks/${req.file.filename}`);
+
+  next();
+});

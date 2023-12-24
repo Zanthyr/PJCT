@@ -8,23 +8,18 @@ block content
       .user-view__content.txt-cntr
         .user-view__form-container
           h2.heading-secondary.ma-bt-md Your Company's Artworks
-          
-        p= artwork.id
-        p= id
-        p= JSON.stringify(colors)
+
         .add__content
           .user-view__form-container
             h2.heading-secondary.ma-bt-md ADD Image and colors
             form.form.form-artColor-data(artworkID=artwork.id, colors=colors)
               .form__group
-              img.form__user-photo(src=`/img/artworks/${artwork.artworkImage}`, alt='User photo')
-
-              .form__group.right
-                button.btn.btn--small.btn--green#addDropdown Add Dropdown
-                button.btn.btn--small.btn--green#removeDropdown Remove Dropdown
+                div#markerImage(width='400rem', height='400rem')
+                  img(src=`/img/artworks/${artwork.artworkImage}`, width='400rem', height='400rem')
 
               //- Container for dynamically added dropdowns
-              #dropdownContainer
+              div#dropdownContainer
+              
  
               .form__group.right
                 button.btn.btn--small.btn--green#saveColors  save colors

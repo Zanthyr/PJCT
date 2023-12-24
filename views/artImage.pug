@@ -19,7 +19,22 @@ block content
                 input.form__upload(type='file', accept='image/*', id='photo', name='photo')
                 label(for='photo') Upload Artwork Image
               
-              .image-box-preview#imagePreview
+              div.master-crop-container
+                div.cop-div
+                  .image-box-preview#imagePreview
+                    canvas#cropsCanvas
 
-              .form__group.right
-                button.btn-save-artwork.btn.btn--small.btn--green Save image
+                div.buttons-crop-container
+                  button.btn-enlarge.btn.btn--small.btn--green Enlarge
+                  p
+                  button.btn-shrink.btn.btn--small.btn--green Shrink
+                  p
+                  button.btn-move-up.btn.btn--small.btn--green Move Up
+                  p
+                  button.btn-move-down.btn.btn--small.btn--green Move Down
+                  p
+                  button.btn-move-left.btn.btn--small.btn--green Move Left
+                  p
+                  button.btn-move-right.btn.btn--small.btn--green Move Right
+
+              button.btn-save-artwork.btn.btn--small.btn--green Save image

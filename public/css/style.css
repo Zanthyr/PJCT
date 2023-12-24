@@ -896,3 +896,67 @@ body {
   display: block;
   margin: 0 auto;
 }
+
+#markerImage {
+  border: 1px solid #777;
+  position: relative;
+  cursor: crosshair;
+}
+
+.marker {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: red; /* You can customize the color */
+  border-radius: 50%; /* Make it a circle */
+  transform: translate(-50%, -50%); /* Center the circle on the clicked point */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+}
+
+.flag {
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.7
+  ); /* You can customize the background color */
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.master-crop-container {
+  display: flex;
+}
+
+.cop-div {
+  width: 500px;
+  height: 550px;
+}
+.image-box-preview {
+  position: relative;
+  height: 800px; /* Adjust as needed */
+  /* overflow: hidden; */
+  margin-bottom: 20px;
+}
+
+#cropsCanvas {
+  border: 2px dashed #333;
+  width: 350px;
+  height: 500px;
+  box-sizing: border-box;
+  position: absolute;
+}
+
+.btn-save-artwork,
+.btn-enlarge,
+.btn-shrink,
+.btn-move-up,
+.btn-move-down,
+.btn-move-left,
+.btn-move-right {
+  margin-top: 10px;
+}
