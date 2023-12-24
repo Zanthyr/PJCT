@@ -41,8 +41,9 @@ exports.createArtwork = catchAsync(async (req, res, next) => {
 });
 
 exports.addImage = catchAsync(async (req, res, next) => {
+  console.log(req.body.filename, req.body.artworkId);
   await Artwork.findByIdAndUpdate(req.body.artworkId, {
-    artworkImage: req.file.filename,
+    artworkImage: req.body.filename,
   });
 
   res.status(201).json({
