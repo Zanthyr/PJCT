@@ -1,0 +1,43 @@
+extends base
+
+block content
+  main.main
+    .user-view
+      include _sidebar
+      .user-view__content.txt-cntr
+        .user-view__form-container
+          h2.heading-secondary.ma-bt-md All Companies
+
+        a.btn__showAddForm.btn.btn--green.btn--small
+          div.btn-add
+            svg.card__icon-white.mr
+              use(xlink:href='/img/icons.svg#icon-file-plus')
+            | Add Company
+
+        .add__content.hidden
+          .user-view__form-container
+            h2.heading-secondary.ma-bt-md Add new company
+            form.form.form-add-company
+              .form__group
+                label.form__label(for='name') Company Name
+                input#name.form__input(type='text', value=`name`, required, name='name')
+              .form__group.ma-bt-md
+                label.form__label(for='adress') Comapny Adress
+                input#adress.form__input(type='text', value=`adress`, required, name='adress')
+              .form__group.ma-bt-md
+                label.form__label(for='companyType') Company Type
+                select#companyType.form__input(name='companyType' required)
+                  option(value='BrandOwner') BrandOwner
+                  option(value='PrePress') PrePress
+                  option(value='Printer') Printer
+              //- .form__group.form__photo-upload
+              //-   input.form__upload(type='file', accept='image/*',id='photo', name='photo')
+              //-   label(for='photo') Choose new photo
+              .form__group.right
+                button.btn.btn--small.btn--green Create Company
+
+        .line &nbsp;
+
+        each company in companies
+
+          p= company.companyName
