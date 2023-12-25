@@ -14,8 +14,8 @@ block content
             h2.heading-secondary.ma-bt-md ADD Image and colors
             form.form.form-artColor-data(artworkID=artwork.id, colors=colors)
               .form__group
-                div#markerImage(width='400rem', height='400rem')
-                  img(src=`/img/artworks/${artwork.artworkImage}`, width='400rem', height='400rem')
+                div#markerImage
+                  img(src=`/img/artworks/${artwork.artworkImage}`)
 
               //- Container for dynamically added dropdowns
               div#dropdownContainer
