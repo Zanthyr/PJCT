@@ -5810,30 +5810,33 @@ var artworkMarker = exports.artworkMarker = function artworkMarker(domElement) {
   });
   document.getElementById('saveColors').addEventListener('click', /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
-      var selectedValues, id, form, url, method;
+      var selectedValues, id, form, url, method, succes;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
             e.preventDefault(); // Prevent default behavior
             selectedValues = markers.map(function (marker) {
               return {
-                x: marker.x,
-                y: marker.y,
-                color: marker.dropdown.value,
-                number: marker.number
+                coords: [marker.x, marker.y],
+                color: marker.dropdown.value
+                //number: marker.number,
               };
             }); // Perform further actions with selectedValues (e.g., send to server)
             id = domElement.getAttribute('artworkID');
             form = new FormData();
             url = '/api/v1/artworks/addColors';
-            method = 'POST'; // form.append('artworkId', id);
-            // form.append('colors', colorArray);
+            method = 'POST';
+            form.append('artworkId', id);
+            form.append('colors', JSON.stringify(selectedValues));
             console.log(selectedValues, id);
-            // const succes = await httpx.createRecord(form, url, method, 'added colors');
-            // if (succes) {
-            //   window.location.href = '/';
-            // }
-          case 7:
+            _context.next = 11;
+            return httpx.createRecord(form, url, method, 'added colors');
+          case 11:
+            succes = _context.sent;
+            if (succes) {
+              window.location.href = '/';
+            }
+          case 13:
           case "end":
             return _context.stop();
         }
@@ -6365,7 +6368,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60937" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61474" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

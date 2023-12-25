@@ -47,8 +47,8 @@ const artworkSchema = new mongoose.Schema(
     ],
     artworkColors: [
       {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Color',
+        coords: [Number],
+        color: { type: mongoose.Schema.ObjectId, ref: 'Color' },
       },
     ],
     artworkState: {

@@ -71,10 +71,9 @@ export const artworkMarker = (domElement) => {
     .addEventListener('click', async function (e) {
       e.preventDefault(); // Prevent default behavior
       const selectedValues = markers.map((marker) => ({
-        x: marker.x,
-        y: marker.y,
+        coords: [marker.x, marker.y],
         color: marker.dropdown.value,
-        number: marker.number,
+        //number: marker.number,
       }));
 
       // Perform further actions with selectedValues (e.g., send to server)
@@ -84,13 +83,18 @@ export const artworkMarker = (domElement) => {
       const url = '/api/v1/artworks/addColors';
       const method = 'POST';
 
-      // form.append('artworkId', id);
-      // form.append('colors', colorArray);
+      form.append('artworkId', id);
+      form.append('colors', JSON.stringify(selectedValues));
 
       console.log(selectedValues, id);
-      // const succes = await httpx.createRecord(form, url, method, 'added colors');
-      // if (succes) {
-      //   window.location.href = '/';
-      // }
+      const succes = await httpx.createRecord(
+        form,
+        url,
+        method,
+        'added colors',
+      );
+      if (succes) {
+        window.location.href = '/';
+      }
     });
 };
