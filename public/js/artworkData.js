@@ -1,6 +1,5 @@
 import * as httpx from './httpx';
 
-// load companies for adding brand owner
 function populateDropdown(elementId, list) {
   const element = document.getElementById(elementId);
   list.forEach((item) => {
@@ -20,7 +19,7 @@ export const artworkData = (domElement) => {
   noneOption.value = '';
   noneOption.text = 'None';
 
-  // Append 'none' option before populating the dropdown
+  // Append 'none'
   const selectBrand = document.getElementById('selectBrand');
   selectBrand.appendChild(noneOption);
   populateDropdown('selectBrand', brands);
@@ -29,12 +28,10 @@ export const artworkData = (domElement) => {
   domElement.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // Create a FormData object
     const form = new FormData();
     const url = '/api/v1/artworks/createArtwork';
     const method = 'POST';
 
-    // Append selected brand managers
     const selectedBrandDropdown = document.getElementById('selectBrand');
     const selectedBrandsIds = selectedBrandDropdown
       ? Array.from(selectedBrandDropdown.selectedOptions).map(

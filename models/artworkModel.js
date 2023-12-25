@@ -85,7 +85,7 @@ artworkSchema.pre(/^find/, function (next) {
   next();
 });
 
-// dont return deactivated accounds when 'find' query
+// dont return deactivated accounts when 'find' query
 artworkSchema.pre(/^find/, function (next) {
   this.find({ active: { $ne: false } });
   next();

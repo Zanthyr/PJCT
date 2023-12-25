@@ -171,21 +171,17 @@ if (colorForm) {
   noneOption.value = '';
   noneOption.text = 'None';
 
-  // Append 'none' option before populating the dropdown
   const selectBrand = document.getElementById('selectBrand');
   selectBrand.appendChild(noneOption);
   populateDropdown('selectBrand', brands);
 
-  // handle form submission
   colorForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    // Create a FormData object
     const form = new FormData();
     const url = '/api/v1/colors/createMy';
     const method = 'POST';
 
-    // Append other form fields
     form.append('colorName', document.getElementById('name').value);
     form.append('cie_l', document.getElementById('cie_l').value);
     form.append('cie_a', document.getElementById('cie_a').value);
@@ -197,7 +193,6 @@ if (colorForm) {
     form.append('halftone', document.getElementById('halftone').value);
     form.append('filter', document.getElementById('filter').value);
 
-    // Append selected brand managers
     const selectedBrandDropdown = document.getElementById('selectBrand');
     const selectedBrandsIds = Array.from(
       selectedBrandDropdown.selectedOptions,
@@ -208,7 +203,6 @@ if (colorForm) {
   });
 }
 
-// add brand owner company lists
 if (brandDataForm) {
   const companies = JSON.parse(brandDataForm.getAttribute('companies'));
   const allCompanies = JSON.parse(brandDataForm.getAttribute('allCompanies'));
@@ -216,21 +210,17 @@ if (brandDataForm) {
   populateDropdown('selectSuppliers', companies);
   populateDropdown('brandOwner', allCompanies);
 
-  // handle form submission
   brandDataForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    // Create a FormData object
     const form = new FormData();
     const url = '/api/v1/brands/createMy';
     const method = 'POST';
 
-    // Append other form fields
     form.append('brandName', document.getElementById('name').value);
     form.append('productGroup', document.getElementById('group').value);
     form.append('photo', document.getElementById('photo').files[0]);
 
-    // Append selected brand managers
     const selectedBrandManagerDropdown = document.getElementById(
       'selectBrandManagers',
     );
@@ -244,7 +234,6 @@ if (brandDataForm) {
       : [];
     form.append('brandManagers', selectedBrandManagerIds);
 
-    // Append selected brand suppliers
     const selectedSupplierDropdown = document.getElementById('selectSuppliers');
     // const selectedSupplierIds = Array.from(
     //   selectedSupplierDropdown.selectedOptions,

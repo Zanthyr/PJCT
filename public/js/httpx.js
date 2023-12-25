@@ -1,4 +1,3 @@
-/* eslint-disable */
 import axios from 'axios';
 import { showAlert } from './alerts';
 
@@ -92,7 +91,6 @@ export const resetPassword = async (password, passwordConfirm, token) => {
   }
 };
 
-// type is either 'password' or 'data'
 export const updateSettings = async (data, url, method, type) => {
   try {
     const res = await axios({
@@ -109,7 +107,6 @@ export const updateSettings = async (data, url, method, type) => {
   }
 };
 
-// type is either 'password' or 'data'
 export const createRecord = async (data, url, method, type) => {
   try {
     const res = await axios({

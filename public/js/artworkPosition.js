@@ -32,13 +32,14 @@ export const artworkPosition = (domElement) => {
     cropArea.width = targetWidth;
     cropArea.height = targetHeight;
 
-    // Calculate drawX and drawY based on offsets
+    // Calculate x and Y
     let drawX = (targetWidth - img.width) / 2 + offsetX;
     let drawY = (targetHeight - img.height) / 2 + offsetY;
 
     ctx.clearRect(0, 0, targetWidth, targetHeight);
-    ctx.fillStyle = 'white'; // Set the fill color to white
-    ctx.fillRect(0, 0, targetWidth, targetHeight); // Fill the entire canvas with white
+    // Fill the entire canvas with white
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, targetWidth, targetHeight);
 
     ctx.drawImage(img, drawX, drawY, img.width, img.height);
 
@@ -46,7 +47,7 @@ export const artworkPosition = (domElement) => {
     let imageData = ctx.getImageData(0, 0, targetWidth, targetHeight);
     let data = imageData.data;
 
-    // Loop through each pixel and replace black with white
+    // replace black pixel with white pixel
     for (let i = 0; i < data.length; i += 4) {
       if (
         data[i] === 0 &&
@@ -61,7 +62,7 @@ export const artworkPosition = (domElement) => {
       }
     }
 
-    // Put the modified image data back onto the canvas
+    // Put modified image onto the canvas
     ctx.putImageData(imageData, 0, 0);
   }
 
