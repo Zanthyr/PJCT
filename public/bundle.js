@@ -6326,7 +6326,7 @@ if (addJobDataForm) addJobDataForm.addEventListener('submit', /*#__PURE__*/funct
           form.append('printerEmail', document.getElementById('printerEmail').value);
           succes = httpx.createRecord(form, url, method, 'Job');
           if (succes) {
-            window.location.href = '/';
+            window.location.href = '/artworks';
           }
         case 11:
         case "end":
@@ -6363,7 +6363,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53657" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62136" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
