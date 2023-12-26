@@ -6076,6 +6076,7 @@ var addCompany = document.querySelector('.form-add-company');
 var artworkDataForm = document.querySelector('.form-artwork-data');
 var addArtwImg = document.querySelector('.form-artImg-data');
 var addArtwColor = document.querySelector('.form-artColor-data');
+var addJobDataForm = document.querySelector('.form-addJob-data');
 
 // load companies for adding brand owner
 function populateDropdown(elementId, list) {
@@ -6306,6 +6307,37 @@ if (addArtwImg) {
 if (addArtwColor) {
   (0, _artworkMarker.artworkMarker)(addArtwColor);
 }
+
+// job
+if (addJobDataForm) addJobDataForm.addEventListener('submit', /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e) {
+    var artworkId, url, method, form, succes;
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          e.preventDefault();
+          artworkId = addJobDataForm.getAttribute('artowrkId');
+          url = '/api/v1/jobs/addJob/';
+          method = 'POST';
+          form = new FormData();
+          form.append('artworkId', artworkId);
+          form.append('jobId', document.getElementById('jobId').value);
+          form.append('printerName', document.getElementById('printerName').value);
+          form.append('printerEmail', document.getElementById('printerEmail').value);
+          succes = httpx.createRecord(form, url, method, 'Job');
+          if (succes) {
+            window.location.href = '/';
+          }
+        case 11:
+        case "end":
+          return _context2.stop();
+      }
+    }, _callee2);
+  }));
+  return function (_x2) {
+    return _ref2.apply(this, arguments);
+  };
+}());
 },{"./httpx":"httpx.js","./artworkMarker":"artworkMarker.js","./artworkPosition":"artworkPosition.js","./artworkData":"artworkData.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';

@@ -4,7 +4,7 @@ const validator = require('validator');
 const jobSchema = new mongoose.Schema(
   {
     jobId: {
-      type: Number,
+      type: String,
       unique: true,
       required: [true, 'Job must have an number'],
     },

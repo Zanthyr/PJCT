@@ -2,7 +2,6 @@ const catchAsync = require('../utils/catchAsync');
 const Artwork = require('./../models/artworkModel');
 const factory = require('./handlerFactory');
 const utils = require('../utils/utils');
-const Company = require('./../models/companyModel');
 const Brand = require('./../models/brandModel');
 
 exports.getAllArtworks = factory.getAll(Artwork);

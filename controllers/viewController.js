@@ -312,7 +312,8 @@ exports.addJob = catchAsync(async (req, res, next) => {
   const artworkId = req.params.id;
 
   res.status(200).render('addJob', {
-    title: 'My Artworks',
+    title: 'Add Job',
+    activeMenu: 'My Artworks',
     artworkId: artworkId,
   });
 });

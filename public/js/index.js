@@ -22,6 +22,7 @@ const addCompany = document.querySelector('.form-add-company');
 const artworkDataForm = document.querySelector('.form-artwork-data');
 const addArtwImg = document.querySelector('.form-artImg-data');
 const addArtwColor = document.querySelector('.form-artColor-data');
+const addJobDataForm = document.querySelector('.form-addJob-data');
 
 // load companies for adding brand owner
 function populateDropdown(elementId, list) {
@@ -285,3 +286,21 @@ if (addArtwImg) {
 if (addArtwColor) {
   artworkMarker(addArtwColor);
 }
+
+// job
+if (addJobDataForm)
+  addJobDataForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const artworkId = addJobDataForm.getAttribute('artowrkId');
+    const url = '/api/v1/jobs/addJob/';
+    const method = 'POST';
+    const form = new FormData();
+    form.append('artworkId', artworkId);
+    form.append('jobId', document.getElementById('jobId').value);
+    form.append('printerName', document.getElementById('printerName').value);
+    form.append('printerEmail', document.getElementById('printerEmail').value);
+    const succes = httpx.createRecord(form, url, method, 'Job');
+    if (succes) {
+      window.location.href = '/artworks'; //doesnt work Fix!
+    }
+  });
