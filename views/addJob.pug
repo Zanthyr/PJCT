@@ -1,0 +1,28 @@
+extends base
+
+block content
+  main.main
+    .user-view
+      include _sidebar
+      
+
+      .user-view__content.txt-cntr
+        .user-view__form-container
+          h2.heading-secondary.ma-bt-md Add Print Job
+          
+        .add__content
+          .user-view__form-container
+            h2.heading-secondary.ma-bt-md ADD Job
+            form.form.form-add-Jobb(artowrkId=artworkId)
+              .form__group
+                label.form__label(for='jobId') Job ID
+                input#jobId.form__input(type='text', value=`jobId`, required, name='jobId')
+              .form__group.ma-bt-md
+                label.form__label(for='printerName') Printer Name
+                input#printerName.form__input(type='text', value=`printerName`, required, name='printerName')
+              .form__group.ma-bt-md
+                label.form__label(for='printerEmail') Printer Email
+                input#printerEmail.form__input(type='email', value=`printerEmail`, required, name='printerEmail')
+
+              .form__group.right
+                button.btn.btn--small.btn--green Save

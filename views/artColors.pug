@@ -1,0 +1,23 @@
+extends base
+
+block content
+  main.main
+    .user-view
+      include _sidebar
+      
+      .user-view__content.txt-cntr
+        .user-view__form-container
+          h2.heading-secondary.ma-bt-md Your Company's Artworks
+
+        .add__content
+          .user-view__form-container
+            h2.heading-secondary.ma-bt-md ADD Image and colors
+            form.form.form-artColor-data(artworkID=artwork.id, colors=colors)
+              .form__group.add-colors-form
+                div#markerImage
+                  img(src=`/img/artworks/${artwork.artworkImage}`)
+
+                div#dropdownContainer
+              
+              .form__group.right
+                button.btn.btn--small.btn--green#saveColors  save colors
