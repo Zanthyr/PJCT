@@ -73,4 +73,11 @@ module.exports = class Email {
       'Your password reset token (valid for only 10 minutes)',
     );
   }
+
+  async sendJobSubmit() {
+    await this.send(
+      'submitJob',
+      'Your job Submit token (valid for only 30 Days)',
+    );
+  }
 };

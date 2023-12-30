@@ -6,6 +6,8 @@ const Artworks = require('./../models/artworkModel');
 const Company = require('./../models/companyModel');
 const APIFeatures = require('../utils/apiFeatures');
 const Artwork = require('./../models/artworkModel');
+const crypto = require('crypto');
+const Job = require('./../models/jobModel');
 
 exports.getHome = catchAsync(async (req, res, next) => {
   res.status(200).render('home', {
@@ -315,5 +317,30 @@ exports.addJob = catchAsync(async (req, res, next) => {
     title: 'Add Job',
     activeMenu: 'My Artworks',
     artworkId: artworkId,
+  });
+});
+
+exports.submitJob = catchAsync(async (req, res, next) => {
+  const submitJobToken = req.params.token;
+  console.log(submitJobToken);
+
+  const hashedToken = crypto
+    .createHash('sha256')
+    .update(req.params.token)
+    .digest('hex');
+  const job = await Job.findOne({
+    submitJobToken: hashedToken,
+    submitJobExpires: { $gt: Date.now() },
+  });
+
+  // 2) If token has not expired, and there is user, set the new password
+  if (!job) {
+    return next(new AppError('Token is invalid or has expired', 400));
+  }
+
+  console.log(job);
+  res.status(200).render('submitJob', {
+    title: 'submit A Job',
+    job,
   });
 });

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const crypto = require('crypto');
 
 const jobSchema = new mongoose.Schema(
   {
@@ -32,6 +33,8 @@ const jobSchema = new mongoose.Schema(
       type: Date,
       default: Date.now(),
     },
+    submitJobToken: String,
+    submitJobExpires: Date,
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } },
 );
@@ -43,6 +46,18 @@ jobSchema.pre(/^find/, function (next) {
   });
   next();
 });
+
+jobSchema.methods.createJobSubmitToken = function (numDays = 30) {
+  const submitToken = crypto.randomBytes(8).toString('hex');
+
+  this.submitJobToken = crypto
+    .createHash('sha256')
+    .update(submitToken)
+    .digest('hex');
+
+  this.submitJobExpires = Date.now() + numDays * 24 * 60 * 60 * 1000;
+  return submitToken;
+};
 
 const Job = mongoose.model('Job', jobSchema);
 

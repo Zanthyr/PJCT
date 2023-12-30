@@ -18,5 +18,6 @@ router.get('/artworks', authController.protect, viewsController.getArtworks);
 router.get('/addImage/:id', authController.protect, viewsController.addImage);
 router.get('/addColors/:id', authController.protect, viewsController.addColors);
 router.get('/addJob/:id', authController.protect, viewsController.addJob);
+router.get('/submitJob/:token', viewsController.submitJob);
 
 module.exports = router;

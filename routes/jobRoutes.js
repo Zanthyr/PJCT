@@ -5,6 +5,10 @@ const multiparser = require('./../utils/multiParser.js');
 
 const router = express.Router();
 
+router
+  .route('/submitJob')
+  .post(multiparser.uploadFields, jobController.submitJob);
+
 router.use(authController.protect);
 
 router
