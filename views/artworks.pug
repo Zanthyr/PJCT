@@ -55,8 +55,17 @@ block content
               div= `${index + 1}`
               div= `${artwork.artworkId}`
               div= `${artwork.artworkName}`
-              div= `${artwork.artworkDescription}`
+              div= `${artwork.printJobs.length}`
               div 
                 a.nav__el.nav__el--cta(href=`/addJob/${artwork.id}`) +
-
+            .subRow-header
+              div nr.
+              div Id
+              div Name
+              div Description
+              div add Job
+            each job, index2 in artwork.printJobs
+              div= `${index2 + 1}`
+                // Add more details as needed
+              
 
