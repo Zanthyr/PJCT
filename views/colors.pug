@@ -66,4 +66,17 @@ block content
         .line &nbsp;
               
         
-        p= JSON.stringify(cleanColorList)
+        .row-container
+          .row-header
+            div nr.
+            div Name
+            div Type
+            div Brand Name
+            div Date
+          each color, index in cleanColorList
+            .row
+              div= `${index + 1}`
+              div= color.name
+              div= color.groep
+              div= color.brand
+              div= color.date.toLocaleDateString('en-us', {year: 'numeric',month: 'short'})

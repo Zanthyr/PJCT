@@ -200,6 +200,8 @@ exports.getColors = catchAsync(async (req, res, next) => {
     name: item.colorName,
     groep: item.colorType,
     id: item.id,
+    brand: item.brandName.brandName,
+    date: item.createdAt,
   }));
 
   const cleanBrandList = myBrandList.map((item) => ({
