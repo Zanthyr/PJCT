@@ -11,6 +11,7 @@ const colorRouter = require('./routes/colorRoutes');
 const viewRouter = require('./routes/viewRoutes');
 const globalErrorHandeler = require('./controllers/errorController');
 const AppError = require('./utils/appError');
+const authController = require('./controllers/authController');
 const cors = require('cors');
 
 const app = express();
@@ -32,6 +33,27 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(cookieParser());
+
+// Inside your /impersonate/:userId route or similar
+app.get('/impersonate/:userId', authController.impersonateUser, (req, res) => {
+  // Now req.user contains the target user information
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user: req.user,
+      impersonationActive: true, // Add this flag
+    },
+  });
+});
+
+// Add a new route in your server
+app.post('/stopImpersonation', authController.stopImpersonation, (req, res) => {
+  // Implement logic to stop impersonation (reset user to original user)
+  res.status(200).json({
+    status: 'success',
+    message: 'Impersonation stopped successfully',
+  });
+});
 
 app.use('/', viewRouter);
 app.use('/api/v1/users', userRouter);

@@ -299,3 +299,43 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   // 4) Log user in, send JWT
   createAndSendToken(user, 200, req, res);
 });
+
+exports.stopImpersonation = (req, res, next) => {
+  // Reset req.user to the original user before impersonation
+  req.user = res.locals.originalUser || req.user;
+  next();
+};
+
+exports.impersonateUser = catchAsync(async (req, res, next) => {
+  // Check if the user has the privilege to impersonate
+  if (!req.user.canImpersonate) {
+    return next(
+      new AppError('You do not have permission to impersonate users', 403),
+    );
+  }
+
+  // Extract the user ID to impersonate from the request params or body
+  const targetUserId = req.params.userId || req.body.userId;
+
+  // Fetch the target user from the database
+  const targetUser = await User.findById(targetUserId);
+
+  if (!targetUser) {
+    return next(new AppError('User not found', 404));
+  }
+
+  // Create and send a new JWT for the impersonated user
+  createAndSendToken(targetUser, 200, req, res);
+});
+
+exports.stopImpersonation = (req, res, next) => {
+  // Check if the user is currently impersonating (based on the presence of an originalUser in res.locals)
+  if (!res.locals.originalUser) {
+    return next(
+      new AppError('You are not currently impersonating a user', 400),
+    );
+  }
+
+  // Create and send a new JWT for the original user
+  createAndSendToken(res.locals.originalUser, 200, req, res);
+};

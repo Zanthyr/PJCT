@@ -870,6 +870,51 @@ body {
   justify-self: start; /* Align the content to the left within the cell */
 }
 
+/*$$$$$$$$$$$$$$$$$$$$$$ SubROWS $$$$$$$$$$$$$$$$$$$$$$*/
+
+.subRow-container {
+  max-width: 90rem;
+  display: flexbox;
+  flex-direction: column;
+}
+.subRow-header {
+  display: grid;
+  grid-template-columns: 0.2fr 1fr 1fr 0.5fr;
+  grid-gap: 1rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  margin-bottom: 0.1rem;
+  color: #777;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 150;
+}
+.subRow {
+  display: grid;
+  grid-template-columns: 0.2fr 1fr 1fr 0.5fr;
+  grid-gap: 1rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  margin-bottom: 0.1rem;
+  height: 3rem;
+  background-image: linear-gradient(
+    to bottom right,
+    rgba(125, 213, 111, 0.85),
+    rgba(40, 180, 135, 0.85)
+  );
+  color: #f7f7f7;
+  text-transform: uppercase;
+  font-size: 1rem;
+  font-weight: 200;
+}
+
+.subRow div {
+  place-self: center;
+}
+.le-al {
+  justify-self: start; /* Align the content to the left within the cell */
+}
+
 /* .card {
   border-radius: 3px;
   overflow: hidden;

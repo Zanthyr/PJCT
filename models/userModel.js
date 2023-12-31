@@ -66,6 +66,10 @@ const userSchema = new mongoose.Schema({
     default: true,
     select: false,
   },
+  canImpersonate: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 userSchema.pre(/^find/, function (next) {
