@@ -38,6 +38,17 @@ block content
 
         .line &nbsp;
 
-        each company in companies
-
-          p= company.companyName
+        .row-container
+          .row-header
+            div nr.
+            div Name
+            div Type
+            div Adress
+            div Date
+          each company, index in companies
+            .row
+              div= `${index + 1}`
+              div= company.companyName
+              div= company.companyType
+              div= company.adress
+              div= company.createdAt.toLocaleDateString('en-us', {year: 'numeric',month: 'short'})
