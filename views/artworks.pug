@@ -1,0 +1,62 @@
+extends base
+
+block content
+  main.main
+    .user-view
+      include _sidebar
+      
+
+      .user-view__content.txt-cntr
+        .user-view__form-container
+          h2.heading-secondary.ma-bt-md Your Company's Artworks
+          
+        //- - if (user.company.companyType === 'BrandOwner' || user.role === 'root')
+        a.btn__showAddForm.btn.btn--green.btn--small
+          div.btn-add
+            svg.card__icon-white.mr
+              use(xlink:href='/img/icons.svg#icon-file-plus')
+            | Add Artwork
+
+        .add__content.hidden
+          .user-view__form-container
+            h2.heading-secondary.ma-bt-md ADD Artwork
+            form.form.form-artwork-data(brands = brandList, companies=companies)
+              - if (user.role === 'root')
+                .form__group
+                  label.form__label(for='company') Company
+                  select.form__input(id='company') 
+              .form__group
+                label.form__label(for='artworkId') Artwork ID
+                input#artworkId.form__input(type='text', value=`id`, required, name='artworkId')
+              .form__group.ma-bt-md
+                label.form__label(for='artworkName') Artwork Name
+                input#artworkName.form__input(type='text', value=`name`, required, name='artworkName')
+              .form__group.ma-bt-md
+                label.form__label(for='artworkDescription') Artwork Description
+                input#artworkDescription.form__input(type='text', value=`description`, required, name='artworkDescription')
+              .form__group.ma-bt-md
+                label.form__label(for='selectBrand') Select Brand
+                select.form__input(id='selectBrand')
+
+              .form__group.right
+                button.btn-save-artwork.btn.btn--small.btn--green Next / add image
+
+        .line &nbsp;
+
+        .row-container
+          .row-header
+            div nr.
+            div Id
+            div Name
+            div Description
+            div add Job
+          each artwork, index in myArtworks
+            .row
+              div= `${index + 1}`
+              div= `${artwork.artworkId}`
+              div= `${artwork.artworkName}`
+              div= `${artwork.artworkDescription}`
+              div 
+                a.nav__el.nav__el--cta(href=`/addJob/${artwork.id}`) +
+
+

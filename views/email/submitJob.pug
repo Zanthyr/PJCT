@@ -1,0 +1,16 @@
+extends baseEmail
+
+block content
+  p Hi #{firstName},
+  p You have recieved a Printconnect PrintJob, you can view the details and submit the job using the link/button below!
+  table.btn.btn-primary(role='presentation', border='0', cellpadding='0', cellspacing='0')
+    tbody
+      tr
+        td(align='left')
+          table(role='presentation', border='0', cellpadding='0', cellspacing='0')
+            tbody
+              tr
+                td
+                  a(href= url, target='_blank') Goto Submit Job Page
+  p  If you need any help with your next printJob, please don't hesitate to contact me!
+  p - Zanthyr
