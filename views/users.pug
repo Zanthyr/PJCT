@@ -1,0 +1,89 @@
+extends base
+
+block content
+  main.main
+    .user-view
+      include _sidebar
+
+      .user-view__content.txt-cntr
+        .user-view__form-container
+          h2.heading-secondary.ma-bt-md Your Company's users
+
+        a.btn__showAddForm.btn.btn--green.btn--small
+          div.btn-add
+            svg.card__icon-white.mr
+              use(xlink:href='/img/icons.svg#icon-file-plus')
+            | Add User
+
+        .add__content.hidden
+          .user-view__form-container
+            h2.heading-secondary.ma-bt-md Invite A User
+            form.form.form-user-invite(companies=allCompanies)
+              .form__group
+                label.form__label(for='name') Name
+                input#name.form__input(type='text', value=`User name`, required, name='name')
+              .form__group.ma-bt-md
+                label.form__label(for='email') Email address
+                input#email.form__input(type='email', value=`user@email.com`, required, name='email')
+              .form__group.ma-bt-md
+                - if (user.role === 'root')
+                  .form__group.ma-bt-md
+                    label.form__label(for='company') User Company Name
+                    select.form__input(id='company')  
+              .form__group.ma-bt-md
+                label.form__label(for='role') User Role
+                select#role.form__input(name='role' required)
+                  option(value='user') User
+                  option(value='admin') Admin
+              .form__group.ma-bt-md
+                label.form__label(for='artworkCreator') Artwork Creator
+                div
+                  input#artworkCreator.form__checkbox(type='checkbox', name='artworkCreator', value='')
+                  label.form__label(for='artworkCreator') Check when user may create artworks for your company
+              .form__group.ma-bt-md
+                label.form__label(for='jobreator') Job Creator
+                div
+                  input#jobCreator.form__checkbox(type='checkbox', name='jobreator', value='')
+                  label.form__label(for='jobreator') Check when user may create jobs for your company
+              .form__group.right
+                button.btn.btn--small.btn--green Invite user
+
+        .line &nbsp;
+              
+        .card-container
+          each doc in newDoc
+            .card
+              .card__header
+                .card__picture
+                  - if (user.role === 'root' && doc.role !== 'root')
+                    a.btn(userID=doc.id) impersonate
+                  .card__picture-overlay &nbsp;
+                  img.card__picture-img(src=`/img/users/${doc.photo}`, alt=`${doc.name}`)
+                h3.heading-tertirary
+                  span= doc.name.split(' ')[0]
+
+              .card__details
+                h4.card__sub-heading= doc.company
+                  span.card__textSubHeading= `(${doc.role})`
+                p.card__text= doc.name
+                p.card__data
+                  svg.card__icon
+                    use(xlink:href='/img/icons.svg#icon-mail')
+                  span= doc.email
+                p.card__data
+                  svg.card__icon
+                    use(xlink:href='/img/icons.svg#icon-star')
+                  span= `${doc.artwork ? 'Can create Artworks' : 'Can NOT create Artworks'}`
+                p.card__data
+                  svg.card__icon
+                    use(xlink:href='/img/icons.svg#icon-layout')
+                  span= `${doc.job ? 'Can create Print Jobs' : 'Can NOT create Print Jobs'}`
+
+              .card__footer
+                p
+                  span.card__footer-text Joined:
+                  | 
+                  span.card__footer-value= doc.date
+                div  
+                  a.btn__userDelete.btn.btn--red.btn--small(userID=doc.id) Delete!
+        
