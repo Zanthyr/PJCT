@@ -308,6 +308,7 @@ exports.stopImpersonation = (req, res, next) => {
 
 exports.impersonateUser = catchAsync(async (req, res, next) => {
   // Check if the user has the privilege to impersonate
+  console.log(req.user);
   if (!req.user.canImpersonate) {
     return next(
       new AppError('You do not have permission to impersonate users', 403),
@@ -326,6 +327,14 @@ exports.impersonateUser = catchAsync(async (req, res, next) => {
 
   // Create and send a new JWT for the impersonated user
   createAndSendToken(targetUser, 200, req, res);
+
+  // res.status(200).json({
+  //   status: 'success',
+  //   data: {
+  //     user: req.user,
+  //     impersonationActive: true, // Add this flag
+  //   },
+  // });
 });
 
 exports.stopImpersonation = (req, res, next) => {

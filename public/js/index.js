@@ -3,6 +3,7 @@ import * as httpx from './httpx';
 import { artworkMarker } from './artworkMarker';
 import { artworkPosition } from './artworkPosition';
 import { artworkData } from './artworkData';
+import { showImpMenu } from './alerts';
 
 // DOM ELEMENTS
 const loginForm = document.querySelector('.form--login');
@@ -72,11 +73,33 @@ if (showAddFormBtn)
 
 // User managmet delete user button
 if (deleteUser) {
-  deleteUser.addEventListener('click', function (event) {
+  deleteUser.addEventListener('click', async function (event) {
     const targetButton = event.target.closest('.btn__userDelete');
     if (targetButton) {
       const userID = targetButton.getAttribute('userID');
       httpx.softDelete(userID);
+    }
+
+    const ImpersonateButton = event.target.closest('.btn__userImp');
+
+    if (ImpersonateButton) {
+      const userID = ImpersonateButton.getAttribute('userID');
+      try {
+        const response = await fetch(`/api/v1/users/impersonate/${userID}`, {
+          method: 'GET',
+        });
+        const data = await response.json();
+        console.log(data);
+        // Check if impersonation was successful
+        if (data.status === 'success') {
+          // Display message box with stop impersonation button
+          showImpMenu(userID);
+        } else {
+          console.error('Impersonation failed');
+        }
+      } catch (error) {
+        console.error('Error during impersonation', error);
+      }
     }
   });
 }

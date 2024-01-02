@@ -52,6 +52,18 @@ router.route('/delete/:id').patch(userController.softDeleteUser); // only api
 
 router.use(authController.restrictTo('root'));
 
+// Inside your /impersonate/:userId route or similar
+router.route('/impersonate/:userId').get(authController.impersonateUser);
+
+// // Add a new route in your server
+// app.post('/stopImpersonation', authController.stopImpersonation, (req, res) => {
+//   // Implement logic to stop impersonation (reset user to original user)
+//   res.status(200).json({
+//     status: 'success',
+//     message: 'Impersonation stopped successfully',
+//   });
+// });
+
 router
   .route('/api/:id')
   .get(userController.getUser) // only api

@@ -5420,7 +5420,7 @@ exports.Axios = Axios;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.showAlert = exports.hideAlert = void 0;
+exports.showImpMenu = exports.showAlert = exports.hideImpMenu = exports.hideAlert = void 0;
 var hideAlert = exports.hideAlert = function hideAlert() {
   var el = document.querySelector('.alert');
   if (el) el.parentElement.removeChild(el);
@@ -5431,6 +5431,16 @@ var showAlert = exports.showAlert = function showAlert(type, msg) {
   var markup = "<div class=\"alert alert--".concat(type, "\">").concat(msg, "</div>");
   document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
   window.setTimeout(hideAlert, 5000);
+};
+var hideImpMenu = exports.hideImpMenu = function hideImpMenu() {
+  var el = document.querySelector('.impMenu');
+  if (el) el.parentElement.removeChild(el);
+};
+var showImpMenu = exports.showImpMenu = function showImpMenu(msg) {
+  hideImpMenu();
+  console.log('here', msg);
+  var markup = "<div class=\"impMenu\">".concat(msg, "</div>");
+  document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
 };
 },{}],"httpx.js":[function(require,module,exports) {
 "use strict";
@@ -6041,6 +6051,7 @@ var httpx = _interopRequireWildcard(require("./httpx"));
 var _artworkMarker = require("./artworkMarker");
 var _artworkPosition = require("./artworkPosition");
 var _artworkData = require("./artworkData");
+var _alerts = require("./alerts");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
 function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
@@ -6107,13 +6118,58 @@ if (showAddFormBtn) showAddFormBtn.addEventListener('click', function () {
 
 // User managmet delete user button
 if (deleteUser) {
-  deleteUser.addEventListener('click', function (event) {
-    var targetButton = event.target.closest('.btn__userDelete');
-    if (targetButton) {
-      var userID = targetButton.getAttribute('userID');
-      httpx.softDelete(userID);
-    }
-  });
+  deleteUser.addEventListener('click', /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(event) {
+      var targetButton, userID, ImpersonateButton, _userID, response, data;
+      return _regeneratorRuntime().wrap(function _callee$(_context) {
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            targetButton = event.target.closest('.btn__userDelete');
+            if (targetButton) {
+              userID = targetButton.getAttribute('userID');
+              httpx.softDelete(userID);
+            }
+            ImpersonateButton = event.target.closest('.btn__userImp');
+            if (!ImpersonateButton) {
+              _context.next = 19;
+              break;
+            }
+            _userID = ImpersonateButton.getAttribute('userID');
+            _context.prev = 5;
+            _context.next = 8;
+            return fetch("/api/v1/users/impersonate/".concat(_userID), {
+              method: 'GET'
+            });
+          case 8:
+            response = _context.sent;
+            _context.next = 11;
+            return response.json();
+          case 11:
+            data = _context.sent;
+            console.log(data);
+            // Check if impersonation was successful
+            if (data.status === 'success') {
+              // Display message box with stop impersonation button
+              (0, _alerts.showImpMenu)(_userID);
+            } else {
+              console.error('Impersonation failed');
+            }
+            _context.next = 19;
+            break;
+          case 16:
+            _context.prev = 16;
+            _context.t0 = _context["catch"](5);
+            console.error('Error during impersonation', _context.t0);
+          case 19:
+          case "end":
+            return _context.stop();
+        }
+      }, _callee, null, [[5, 16]]);
+    }));
+    return function (_x) {
+      return _ref.apply(this, arguments);
+    };
+  }());
 }
 
 // submit user data
@@ -6130,10 +6186,10 @@ if (userDataForm) userDataForm.addEventListener('submit', function (e) {
 
 // submit pwd change
 if (userPasswordForm) userPasswordForm.addEventListener('submit', /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e) {
     var url, method, passwordCurrent, password, passwordConfirm;
-    return _regeneratorRuntime().wrap(function _callee$(_context) {
-      while (1) switch (_context.prev = _context.next) {
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) switch (_context2.prev = _context2.next) {
         case 0:
           e.preventDefault();
           url = '/api/v1/users/updateMyPassword';
@@ -6142,7 +6198,7 @@ if (userPasswordForm) userPasswordForm.addEventListener('submit', /*#__PURE__*/f
           passwordCurrent = document.getElementById('password-current').value;
           password = document.getElementById('password').value;
           passwordConfirm = document.getElementById('password-confirm').value;
-          _context.next = 9;
+          _context2.next = 9;
           return httpx.updateSettings({
             passwordCurrent: passwordCurrent,
             password: password,
@@ -6155,12 +6211,12 @@ if (userPasswordForm) userPasswordForm.addEventListener('submit', /*#__PURE__*/f
           document.getElementById('password-confirm').value = '';
         case 13:
         case "end":
-          return _context.stop();
+          return _context2.stop();
       }
-    }, _callee);
+    }, _callee2);
   }));
-  return function (_x) {
-    return _ref.apply(this, arguments);
+  return function (_x2) {
+    return _ref2.apply(this, arguments);
   };
 }());
 
@@ -6288,10 +6344,10 @@ if (addArtwColor) {
 
 // job
 if (addJobDataForm) addJobDataForm.addEventListener('submit', /*#__PURE__*/function () {
-  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e) {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(e) {
     var artworkId, url, method, form, succes;
-    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-      while (1) switch (_context2.prev = _context2.next) {
+    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
         case 0:
           e.preventDefault();
           artworkId = addJobDataForm.getAttribute('artowrkId');
@@ -6308,15 +6364,15 @@ if (addJobDataForm) addJobDataForm.addEventListener('submit', /*#__PURE__*/funct
           }
         case 11:
         case "end":
-          return _context2.stop();
+          return _context3.stop();
       }
-    }, _callee2);
+    }, _callee3);
   }));
-  return function (_x2) {
-    return _ref2.apply(this, arguments);
+  return function (_x3) {
+    return _ref3.apply(this, arguments);
   };
 }());
-},{"./httpx":"httpx.js","./artworkMarker":"artworkMarker.js","./artworkPosition":"artworkPosition.js","./artworkData":"artworkData.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./httpx":"httpx.js","./artworkMarker":"artworkMarker.js","./artworkPosition":"artworkPosition.js","./artworkData":"artworkData.js","./alerts":"alerts.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -6341,7 +6397,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56906" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58216" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
