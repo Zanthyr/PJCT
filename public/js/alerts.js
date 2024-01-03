@@ -12,13 +12,11 @@ export const showAlert = (type, msg) => {
 };
 
 export const hideImpMenu = () => {
-  const el = document.querySelector('.impMenu');
-  if (el) el.parentElement.removeChild(el);
+  localStorage.removeItem('impMenuShown');
+  location.assign('/');
 };
 
-export const showImpMenu = (msg) => {
-  hideImpMenu();
-  console.log('here', msg);
-  const markup = `<div class="impMenu">${msg}</div>`;
+export const showImpMenu = (user) => {
+  const markup = `<div class="impMenu">Impersonating: ${user} <button class="btn-stop-impersonate btn btn--green">Stop</button></div>`;
   document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
 };

@@ -3,7 +3,7 @@ import * as httpx from './httpx';
 import { artworkMarker } from './artworkMarker';
 import { artworkPosition } from './artworkPosition';
 import { artworkData } from './artworkData';
-import { showImpMenu } from './alerts';
+import { showImpMenu, hideImpMenu } from './alerts';
 
 // DOM ELEMENTS
 const loginForm = document.querySelector('.form--login');
@@ -81,19 +81,20 @@ if (deleteUser) {
     }
 
     const ImpersonateButton = event.target.closest('.btn__userImp');
-
     if (ImpersonateButton) {
       const userID = ImpersonateButton.getAttribute('userID');
+      const currentUser = ImpersonateButton.getAttribute('currentUser');
       try {
         const response = await fetch(`/api/v1/users/impersonate/${userID}`, {
           method: 'GET',
         });
         const data = await response.json();
-        console.log(data);
-        // Check if impersonation was successful
         if (data.status === 'success') {
-          // Display message box with stop impersonation button
-          showImpMenu(userID);
+          localStorage.setItem(
+            'impMenuShown',
+            JSON.stringify([data.data.user.userName, currentUser]),
+          );
+          location.reload();
         } else {
           console.error('Impersonation failed');
         }
@@ -102,6 +103,37 @@ if (deleteUser) {
       }
     }
   });
+}
+
+// hideImpMenu
+
+document.addEventListener('DOMContentLoaded', function () {
+  const stopImpersonateBtn = document.querySelector('.btn-stop-impersonate');
+  if (stopImpersonateBtn)
+    stopImpersonateBtn.addEventListener('click', async () => {
+      const oriUser = JSON.parse(localStorage.getItem('impMenuShown'))[1];
+      try {
+        const response = await fetch(
+          `/api/v1/users/stopImpersonation/${oriUser}`,
+          {
+            method: 'GET',
+          },
+        );
+        const data = await response.json();
+        if (data.status === 'success') {
+          hideImpMenu();
+        } else {
+          console.error('Stopping impersonation failed');
+        }
+      } catch (error) {
+        console.error('Error during stopping impersonation', error);
+      }
+    });
+});
+
+if (localStorage.getItem('impMenuShown')) {
+  const name = JSON.parse(localStorage.getItem('impMenuShown'))[0];
+  showImpMenu(name);
 }
 
 // submit user data

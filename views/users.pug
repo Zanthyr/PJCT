@@ -56,7 +56,7 @@ block content
               .card__header
                 .card__picture
                   - if (user.role === 'root' && doc.role !== 'root')
-                    a.btn__userImp.btn(userID=doc.id) impersonate 
+                    a.btn__userImp.btn(userID=doc.id, currentUser=user.id) impersonate 
                   .card__picture-overlay &nbsp;
                   img.card__picture-img(src=`/img/users/${doc.photo}`, alt=`${doc.name}`)
                 h3.heading-tertirary

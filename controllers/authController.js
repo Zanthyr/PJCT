@@ -308,43 +308,30 @@ exports.stopImpersonation = (req, res, next) => {
 
 exports.impersonateUser = catchAsync(async (req, res, next) => {
   // Check if the user has the privilege to impersonate
-  console.log(req.user);
   if (!req.user.canImpersonate) {
     return next(
       new AppError('You do not have permission to impersonate users', 403),
     );
   }
 
-  // Extract the user ID to impersonate from the request params or body
-  const targetUserId = req.params.userId || req.body.userId;
-
-  // Fetch the target user from the database
+  const targetUserId = req.params.id;
   const targetUser = await User.findById(targetUserId);
 
   if (!targetUser) {
     return next(new AppError('User not found', 404));
   }
-
   // Create and send a new JWT for the impersonated user
   createAndSendToken(targetUser, 200, req, res);
-
-  // res.status(200).json({
-  //   status: 'success',
-  //   data: {
-  //     user: req.user,
-  //     impersonationActive: true, // Add this flag
-  //   },
-  // });
 });
 
-exports.stopImpersonation = (req, res, next) => {
-  // Check if the user is currently impersonating (based on the presence of an originalUser in res.locals)
-  if (!res.locals.originalUser) {
-    return next(
-      new AppError('You are not currently impersonating a user', 400),
-    );
+exports.stopImpersonation = catchAsync(async (req, res, next) => {
+  const originalUserId = req.params.id;
+  const originalUser = await User.findById(originalUserId);
+
+  if (!originalUser) {
+    return next(new AppError('User not found', 404));
   }
 
   // Create and send a new JWT for the original user
-  createAndSendToken(res.locals.originalUser, 200, req, res);
-};
+  createAndSendToken(originalUser, 200, req, res);
+});

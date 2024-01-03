@@ -42,7 +42,10 @@ export const logout = async () => {
       method: 'POST',
       url: '/api/v1/users/logout',
     });
-    if ((res.data.status = 'success')) location.assign('/');
+    if ((res.data.status = 'success')) {
+      localStorage.removeItem('impMenuShown');
+      location.assign('/');
+    }
   } catch (err) {
     showAlert('error', 'Error logging out! Try again.');
   }

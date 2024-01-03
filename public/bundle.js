@@ -5433,13 +5433,11 @@ var showAlert = exports.showAlert = function showAlert(type, msg) {
   window.setTimeout(hideAlert, 5000);
 };
 var hideImpMenu = exports.hideImpMenu = function hideImpMenu() {
-  var el = document.querySelector('.impMenu');
-  if (el) el.parentElement.removeChild(el);
+  localStorage.removeItem('impMenuShown');
+  location.assign('/');
 };
-var showImpMenu = exports.showImpMenu = function showImpMenu(msg) {
-  hideImpMenu();
-  console.log('here', msg);
-  var markup = "<div class=\"impMenu\">".concat(msg, "</div>");
+var showImpMenu = exports.showImpMenu = function showImpMenu(user) {
+  var markup = "<div class=\"impMenu\">Impersonating: ".concat(user, " <button class=\"btn-stop-impersonate btn btn--green\">Stop</button></div>");
   document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
 };
 },{}],"httpx.js":[function(require,module,exports) {
@@ -5532,7 +5530,10 @@ var logout = exports.logout = /*#__PURE__*/function () {
           });
         case 3:
           res = _context3.sent;
-          if (res.data.status = 'success') location.assign('/');
+          if (res.data.status = 'success') {
+            localStorage.removeItem('impMenuShown');
+            location.assign('/');
+          }
           _context3.next = 10;
           break;
         case 7:
@@ -6120,7 +6121,7 @@ if (showAddFormBtn) showAddFormBtn.addEventListener('click', function () {
 if (deleteUser) {
   deleteUser.addEventListener('click', /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(event) {
-      var targetButton, userID, ImpersonateButton, _userID, response, data;
+      var targetButton, userID, ImpersonateButton, _userID, currentUser, response, data;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -6135,22 +6136,21 @@ if (deleteUser) {
               break;
             }
             _userID = ImpersonateButton.getAttribute('userID');
-            _context.prev = 5;
-            _context.next = 8;
+            currentUser = ImpersonateButton.getAttribute('currentUser');
+            _context.prev = 6;
+            _context.next = 9;
             return fetch("/api/v1/users/impersonate/".concat(_userID), {
               method: 'GET'
             });
-          case 8:
+          case 9:
             response = _context.sent;
-            _context.next = 11;
+            _context.next = 12;
             return response.json();
-          case 11:
+          case 12:
             data = _context.sent;
-            console.log(data);
-            // Check if impersonation was successful
             if (data.status === 'success') {
-              // Display message box with stop impersonation button
-              (0, _alerts.showImpMenu)(_userID);
+              localStorage.setItem('impMenuShown', JSON.stringify([data.data.user.userName, currentUser]));
+              location.reload();
             } else {
               console.error('Impersonation failed');
             }
@@ -6158,18 +6158,62 @@ if (deleteUser) {
             break;
           case 16:
             _context.prev = 16;
-            _context.t0 = _context["catch"](5);
+            _context.t0 = _context["catch"](6);
             console.error('Error during impersonation', _context.t0);
           case 19:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[5, 16]]);
+      }, _callee, null, [[6, 16]]);
     }));
     return function (_x) {
       return _ref.apply(this, arguments);
     };
   }());
+}
+
+// hideImpMenu
+
+document.addEventListener('DOMContentLoaded', function () {
+  var stopImpersonateBtn = document.querySelector('.btn-stop-impersonate');
+  if (stopImpersonateBtn) stopImpersonateBtn.addEventListener('click', /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    var oriUser, response, data;
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          oriUser = JSON.parse(localStorage.getItem('impMenuShown'))[1];
+          _context2.prev = 1;
+          _context2.next = 4;
+          return fetch("/api/v1/users/stopImpersonation/".concat(oriUser), {
+            method: 'GET'
+          });
+        case 4:
+          response = _context2.sent;
+          _context2.next = 7;
+          return response.json();
+        case 7:
+          data = _context2.sent;
+          if (data.status === 'success') {
+            (0, _alerts.hideImpMenu)();
+          } else {
+            console.error('Stopping impersonation failed');
+          }
+          _context2.next = 14;
+          break;
+        case 11:
+          _context2.prev = 11;
+          _context2.t0 = _context2["catch"](1);
+          console.error('Error during stopping impersonation', _context2.t0);
+        case 14:
+        case "end":
+          return _context2.stop();
+      }
+    }, _callee2, null, [[1, 11]]);
+  })));
+});
+if (localStorage.getItem('impMenuShown')) {
+  var name = JSON.parse(localStorage.getItem('impMenuShown'))[0];
+  (0, _alerts.showImpMenu)(name);
 }
 
 // submit user data
@@ -6186,10 +6230,10 @@ if (userDataForm) userDataForm.addEventListener('submit', function (e) {
 
 // submit pwd change
 if (userPasswordForm) userPasswordForm.addEventListener('submit', /*#__PURE__*/function () {
-  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e) {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(e) {
     var url, method, passwordCurrent, password, passwordConfirm;
-    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-      while (1) switch (_context2.prev = _context2.next) {
+    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
         case 0:
           e.preventDefault();
           url = '/api/v1/users/updateMyPassword';
@@ -6198,7 +6242,7 @@ if (userPasswordForm) userPasswordForm.addEventListener('submit', /*#__PURE__*/f
           passwordCurrent = document.getElementById('password-current').value;
           password = document.getElementById('password').value;
           passwordConfirm = document.getElementById('password-confirm').value;
-          _context2.next = 9;
+          _context3.next = 9;
           return httpx.updateSettings({
             passwordCurrent: passwordCurrent,
             password: password,
@@ -6211,12 +6255,12 @@ if (userPasswordForm) userPasswordForm.addEventListener('submit', /*#__PURE__*/f
           document.getElementById('password-confirm').value = '';
         case 13:
         case "end":
-          return _context2.stop();
+          return _context3.stop();
       }
-    }, _callee2);
+    }, _callee3);
   }));
   return function (_x2) {
-    return _ref2.apply(this, arguments);
+    return _ref3.apply(this, arguments);
   };
 }());
 
@@ -6344,10 +6388,10 @@ if (addArtwColor) {
 
 // job
 if (addJobDataForm) addJobDataForm.addEventListener('submit', /*#__PURE__*/function () {
-  var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(e) {
+  var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(e) {
     var artworkId, url, method, form, succes;
-    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-      while (1) switch (_context3.prev = _context3.next) {
+    return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+      while (1) switch (_context4.prev = _context4.next) {
         case 0:
           e.preventDefault();
           artworkId = addJobDataForm.getAttribute('artowrkId');
@@ -6364,12 +6408,12 @@ if (addJobDataForm) addJobDataForm.addEventListener('submit', /*#__PURE__*/funct
           }
         case 11:
         case "end":
-          return _context3.stop();
+          return _context4.stop();
       }
-    }, _callee3);
+    }, _callee4);
   }));
   return function (_x3) {
-    return _ref3.apply(this, arguments);
+    return _ref4.apply(this, arguments);
   };
 }());
 },{"./httpx":"httpx.js","./artworkMarker":"artworkMarker.js","./artworkPosition":"artworkPosition.js","./artworkData":"artworkData.js","./alerts":"alerts.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
@@ -6397,7 +6441,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58216" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53629" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
