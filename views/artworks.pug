@@ -52,17 +52,21 @@ block content
               div= `${index + 1}`
               div= `${artwork.artworkId}`
               div= `${artwork.artworkName}`
-              div= `${artwork.printJobs.length}`
+              div= `${artwork.artworkDescription}`
               div 
                 a.nav__el.nav__el--cta(href=`/addJob/${artwork.id}`) +
-            .subRow-container
-              .subRow-header
-                div nr.
-                div Id
-                div PrinterName
-                div exp date
-              each job, index2 in artwork.printJobs
-                .subRow
-                  div= `${index2 + 1}`
+            - if(artwork.printJobs.length !== 0)
+              .subRow-container
+                .subRow-header
+                  div nr.
+                  div Id
+                  div PrinterName
+                  div exp date
+                each job, index2 in artwork.printJobs
+                  .subRow
+                    div= `${index2 + 1}`
+                    div= `${job.jobId}`
+                    div= `${job.printerName}`
+                    div= `${job.createdAt.toLocaleDateString('en-us', {year: 'numeric',month: 'short',day: 'numeric'})}`
               
 

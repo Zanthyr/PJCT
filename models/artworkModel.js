@@ -87,6 +87,10 @@ artworkSchema.pre(/^find/, function (next) {
     .populate({
       path: 'artworkForBrand',
       select: 'brandName',
+    })
+    .populate({
+      path: 'printJobs',
+      select: 'jobId printerName createdAt',
     });
   next();
 });

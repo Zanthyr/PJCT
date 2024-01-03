@@ -10,6 +10,35 @@ const crypto = require('crypto');
 const Job = require('./../models/jobModel');
 
 exports.getHome = catchAsync(async (req, res, next) => {
+  if (res.locals.user) {
+    console.log(res.locals.user.company.companyType, res.locals.user.role);
+    if (
+      res.locals.user.role !== 'root' &&
+      res.locals.user.company.companyType !== 'BrandOwner'
+    )
+      req.query.createdByCompany = res.locals.user.company.id;
+    if (
+      res.locals.user.role !== 'root' &&
+      res.locals.user.company.companyType === 'BrandOwner'
+    )
+      req.query.brandOwner = res.locals.user.company.id;
+    console.log(req.query.brandOwner, req.query.createdByCompany);
+    const features = new APIFeatures(Artworks.find(), req.query).filter();
+    const myArtworks = await features.query;
+    const allBrands = await Brand.find();
+    const myBrands = allBrands.filter((element) =>
+      element.allowList.includes(res.locals.user.company.id),
+    );
+
+    const brandList = myBrands.map((item) => ({
+      name: item.brandName,
+      groep: item.productGroup,
+      id: item.id,
+    }));
+
+    console.log(brandList, myArtworks);
+  }
+
   res.status(200).render('home', {
     title: 'Home',
   });
@@ -217,7 +246,6 @@ exports.getArtworks = catchAsync(async (req, res, next) => {
   const features = new APIFeatures(Artworks.find(), req.query).filter();
   const myArtworks = await features.query;
   const allBrands = await Brand.find();
-
   const myBrands = allBrands.filter((element) =>
     element.allowList.includes(req.user.company.id),
   );

@@ -873,7 +873,7 @@ body {
 /*$$$$$$$$$$$$$$$$$$$$$$ SubROWS $$$$$$$$$$$$$$$$$$$$$$*/
 
 .subRow-container {
-  max-width: 90rem;
+  max-width: 100rem;
   display: flexbox;
   flex-direction: column;
 }

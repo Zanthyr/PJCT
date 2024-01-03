@@ -39,13 +39,13 @@ const jobSchema = new mongoose.Schema(
   { toJSON: { virtuals: true }, toObject: { virtuals: true } },
 );
 
-jobSchema.pre(/^find/, function (next) {
-  this.populate({
-    path: 'artworkId',
-    select: '-__v -sharedwithComapnies -_id',
-  });
-  next();
-});
+// jobSchema.pre(/^find/, function (next) {
+//   this.populate({
+//     path: 'artworkId',
+//     select: '-__v -sharedwithComapnies -_id',
+//   });
+//   next();
+// });
 
 jobSchema.methods.createJobSubmitToken = function (numDays = 30) {
   const submitToken = crypto.randomBytes(8).toString('hex');

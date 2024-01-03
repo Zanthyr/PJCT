@@ -300,12 +300,6 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   createAndSendToken(user, 200, req, res);
 });
 
-exports.stopImpersonation = (req, res, next) => {
-  // Reset req.user to the original user before impersonation
-  req.user = res.locals.originalUser || req.user;
-  next();
-};
-
 exports.impersonateUser = catchAsync(async (req, res, next) => {
   // Check if the user has the privilege to impersonate
   if (!req.user.canImpersonate) {
