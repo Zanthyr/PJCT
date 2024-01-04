@@ -832,7 +832,7 @@ body {
 /*$$$$$$$$$$$$$$$$$$$$$$ ROWS $$$$$$$$$$$$$$$$$$$$$$*/
 
 .row-container {
-  max-width: 100rem;
+  max-width: 100%;
   display: flexbox;
   flex-direction: column;
 }
@@ -873,7 +873,7 @@ body {
 /*$$$$$$$$$$$$$$$$$$$$$$ SubROWS $$$$$$$$$$$$$$$$$$$$$$*/
 
 .subRow-container {
-  max-width: 100rem;
+  max-width: 100%;
   display: flexbox;
   flex-direction: column;
 }
@@ -911,21 +911,6 @@ body {
 .subRow div {
   place-self: center;
 }
-.le-al {
-  justify-self: start; /* Align the content to the left within the cell */
-}
-
-/* .card {
-  border-radius: 3px;
-  overflow: hidden;
-  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-  transition: 0.3s all;
-  backface-visibility: hidden;
-  display: flex;
-  flex-direction: column;
-  max-width: 40rem;
-} */
 
 /*$$$$$$$$$$$$$$$$$$$$$$ artowrk image  $$$$$$$$$$$$$$$$$$$$$$*/
 
@@ -1024,4 +1009,16 @@ body {
   padding: 1.6rem 15rem;
   box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.25);
   background-color: #20bf6b;
+}
+
+/* / welcome page logo/ */
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 70vh;
+}
+.welcome__logo {
+  height: 40rem;
 }

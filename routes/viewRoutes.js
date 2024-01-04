@@ -14,9 +14,21 @@ router.get('/users', authController.protect, viewsController.getUsers);
 router.get('/brands', authController.protect, viewsController.getBrands);
 router.get('/colors', authController.protect, viewsController.getColors);
 router.get('/companies', authController.protect, viewsController.getCompanies);
-router.get('/artworks', authController.protect, viewsController.getArtworks);
-router.get('/addImage/:id', authController.protect, viewsController.addImage);
-router.get('/addColors/:id', authController.protect, viewsController.addColors);
+router.get(
+  '/addArtworkData',
+  authController.protect,
+  viewsController.addArtworkData,
+);
+router.get(
+  '/addArtworkImage/:id',
+  authController.protect,
+  viewsController.addArtworkImage,
+);
+router.get(
+  '/addArtworkColors/:id',
+  authController.protect,
+  viewsController.addArtworkColors,
+);
 router.get('/addJob/:id', authController.protect, viewsController.addJob);
 router.get('/submitJob/:token', viewsController.submitJob);
 

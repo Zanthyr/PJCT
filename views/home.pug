@@ -4,6 +4,39 @@ block content
   main.main
     div.constrtuction
       if !user
-        h1 UNDER CONSTRUCTION
+        div.logo-container
+          img.welcome__logo(src=`/img/zanthyr_white.png` alt=`Zanthyr Logo`)
       else
-        h1 Welcome
+        - if (user.role !== 'root')
+          a(href=`/addArtworkData`) Add Artwork
+          svg
+            use(xlink:href=`/img/icons.svg#icon-star`)
+
+        .row-container
+          .row-header
+            div nr.
+            div Id
+            div Name
+            div Description
+            div add Job
+          each artwork, index in myArtworks
+            .row
+              div= `${index + 1}`
+              div= `${artwork.artworkId}`
+              div= `${artwork.artworkName}`
+              div= `${artwork.artworkDescription}`
+              div 
+                a.nav__el.nav__el--cta(href=`/addJob/${artwork.id}`) +
+            - if(artwork.printJobs.length !== 0)
+              .subRow-container
+                .subRow-header
+                  div nr.
+                  div Id
+                  div PrinterName
+                  div exp date
+                each job, index2 in artwork.printJobs
+                  .subRow
+                    div= `${index2 + 1}`
+                    div= `${job.jobId}`
+                    div= `${job.printerName}`
+                    div= `${job.createdAt.toLocaleDateString('en-us', {year: 'numeric',month: 'short',day: 'numeric'})}`

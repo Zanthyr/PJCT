@@ -10,6 +10,7 @@ const crypto = require('crypto');
 const Job = require('./../models/jobModel');
 
 exports.getHome = catchAsync(async (req, res, next) => {
+  let myArtworks = [];
   if (res.locals.user) {
     console.log(res.locals.user.company.companyType, res.locals.user.role);
     if (
@@ -22,25 +23,14 @@ exports.getHome = catchAsync(async (req, res, next) => {
       res.locals.user.company.companyType === 'BrandOwner'
     )
       req.query.brandOwner = res.locals.user.company.id;
-    console.log(req.query.brandOwner, req.query.createdByCompany);
+
     const features = new APIFeatures(Artworks.find(), req.query).filter();
-    const myArtworks = await features.query;
-    const allBrands = await Brand.find();
-    const myBrands = allBrands.filter((element) =>
-      element.allowList.includes(res.locals.user.company.id),
-    );
-
-    const brandList = myBrands.map((item) => ({
-      name: item.brandName,
-      groep: item.productGroup,
-      id: item.id,
-    }));
-
-    console.log(brandList, myArtworks);
+    myArtworks = await features.query;
   }
 
   res.status(200).render('home', {
     title: 'Home',
+    myArtworks,
   });
 });
 
@@ -237,14 +227,8 @@ exports.getColors = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getArtworks = catchAsync(async (req, res, next) => {
-  if (req.user.role !== 'root' && req.user.company.companyType !== 'BrandOwner')
-    req.query.createdByCompany = req.user.company.id;
-  if (req.user.role !== 'root' && req.user.company.companyType === 'BrandOwner')
-    req.query.brandOwner = req.user.company.id;
-
-  const features = new APIFeatures(Artworks.find(), req.query).filter();
-  const myArtworks = await features.query;
+// wegdoen?
+exports.addArtworkData = catchAsync(async (req, res, next) => {
   const allBrands = await Brand.find();
   const myBrands = allBrands.filter((element) =>
     element.allowList.includes(req.user.company.id),
@@ -256,23 +240,20 @@ exports.getArtworks = catchAsync(async (req, res, next) => {
     id: item.id,
   }));
 
-  res.status(200).render('artworks', {
-    activeMenu: 'My Artworks',
-    title: 'My Artworks',
-    myArtworks,
+  res.status(200).render('addArtData', {
+    title: 'add Artwork Data',
     brandList,
   });
 });
 
-exports.addImage = catchAsync(async (req, res, next) => {
-  res.status(200).render('artImage', {
-    activeMenu: 'My Artworks',
-    title: 'Add Image',
+exports.addArtworkImage = catchAsync(async (req, res, next) => {
+  res.status(200).render('addArtImage', {
+    title: 'Add Artwork Image',
     id: req.params.id,
   });
 });
 
-exports.addColors = catchAsync(async (req, res, next) => {
+exports.addArtworkColors = catchAsync(async (req, res, next) => {
   const artwork = await Artwork.findById(req.params.id);
   let spotColors;
   let brandColors = [];
@@ -310,9 +291,8 @@ exports.addColors = catchAsync(async (req, res, next) => {
     })),
   ];
 
-  res.status(200).render('artColors', {
-    title: 'Add Colors',
-    activeMenu: 'My Artworks',
+  res.status(200).render('addArtColors', {
+    title: 'Add Artwork Colors',
     colors: myColors,
     artwork,
   });
@@ -323,7 +303,6 @@ exports.addJob = catchAsync(async (req, res, next) => {
 
   res.status(200).render('addJob', {
     title: 'Add Job',
-    activeMenu: 'My Artworks',
     artworkId: artworkId,
   });
 });

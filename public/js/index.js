@@ -342,6 +342,6 @@ if (addJobDataForm)
     form.append('printerEmail', document.getElementById('printerEmail').value);
     const succes = httpx.createRecord(form, url, method, 'Job');
     if (succes) {
-      window.location.href = '/artworks';
+      window.location.href = '/';
     }
   });

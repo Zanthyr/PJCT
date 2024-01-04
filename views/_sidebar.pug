@@ -5,11 +5,12 @@ mixin navItem(link, menuName, icon)
         use(xlink:href=`/img/icons.svg#icon-${icon}`)
       | #{menuName}
 
+
 nav.user-view__menu
   ul.side-nav
     +navItem('/me', 'My Acount', 'user')
     +navItem('/my', 'My Company', 'briefcase')
-    +navItem('/artworks', 'My Artworks', 'star')
+    //- +navItem('/artworks', 'My Artworks', 'star')
     //- +navItem('#', 'My Jobs', 'layout')
     //- +navItem('#', 'My Settings', 'settings', 5)
 

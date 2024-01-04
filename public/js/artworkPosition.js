@@ -113,7 +113,7 @@ export const artworkPosition = (domElement) => {
       const succes = await httpx.createRecord(form, url, method, 'add Image');
 
       if (succes === 'succes') {
-        window.location.href = '/addColors/' + id;
+        window.location.href = '/addArtworkColors/' + id;
       }
     });
 };

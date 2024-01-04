@@ -5961,7 +5961,7 @@ var artworkPosition = exports.artworkPosition = function artworkPosition(domElem
           case 10:
             succes = _context.sent;
             if (succes === 'succes') {
-              window.location.href = '/addColors/' + id;
+              window.location.href = '/addArtworkColors/' + id;
             }
           case 12:
           case "end":
@@ -6032,7 +6032,7 @@ var artworkData = exports.artworkData = function artworkData(domElement) {
           case 12:
             id = _context.sent;
             if (id) {
-              window.location.href = '/addImage/' + id;
+              window.location.href = '/addArtworkImage/' + id;
             }
           case 14:
           case "end":
@@ -6404,7 +6404,7 @@ if (addJobDataForm) addJobDataForm.addEventListener('submit', /*#__PURE__*/funct
           form.append('printerEmail', document.getElementById('printerEmail').value);
           succes = httpx.createRecord(form, url, method, 'Job');
           if (succes) {
-            window.location.href = '/artworks';
+            window.location.href = '/';
           }
         case 11:
         case "end":
@@ -6441,7 +6441,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56290" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52580" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
