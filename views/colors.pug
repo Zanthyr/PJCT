@@ -67,15 +67,15 @@ block content
         .line &nbsp;
               
         
-        .row-container
-          .row-header
+        .single-row-container
+          .single-row-header
             div nr.
             div Name
             div Type
             div Brand Name
             div Date
           each color, index in cleanColorList
-            .row
+            .single-row
               div= `${index + 1}`
               div= color.name
               div= color.groep

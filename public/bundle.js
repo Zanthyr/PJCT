@@ -5437,7 +5437,7 @@ var hideImpMenu = exports.hideImpMenu = function hideImpMenu() {
   location.assign('/');
 };
 var showImpMenu = exports.showImpMenu = function showImpMenu(user) {
-  var markup = "<div class=\"impMenu\">Impersonating: ".concat(user, " <button class=\"btn-stop-impersonate btn btn--green\">Stop</button></div>");
+  var markup = "<div class=\"impMenu\"><span>Impersonating: ".concat(user, "</span><button class=\"btn-stop-impersonate btn btn--red\">Stop</button></div>");
   document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
 };
 },{}],"httpx.js":[function(require,module,exports) {
@@ -6441,7 +6441,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52580" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55177" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

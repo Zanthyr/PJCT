@@ -2,41 +2,55 @@ extends base
 
 block content
   main.main
-    div.constrtuction
-      if !user
-        div.logo-container
-          img.welcome__logo(src=`/img/zanthyr_white.png` alt=`Zanthyr Logo`)
-      else
-        - if (user.role !== 'root')
-          a(href=`/addArtworkData`) Add Artwork
-          svg
-            use(xlink:href=`/img/icons.svg#icon-star`)
+    if !user
+      div.logo-container
+        img.welcome__logo(src=`/img/zanthyr_white.png` alt=`Zanthyr Logo`)
+    else
+      .row-container
+        .row-header
+          div nr.
+          div Id
+          div Name
+          div Description
+          div img
+          div # Jobs
+          div add Job
+        each artwork, index in myArtworks
+          //- p= artwork
+          .row(data-index=index)
+            div= `${index + 1}`
+            div= `${artwork.artworkId}`
+            div= `${artwork.artworkName}`
+            div= `${artwork.artworkDescription}`
+            div.img-div
+              img.row-image-pict(src=`/img/artworks/${artwork.artworkImage}`)
+            div= `${artwork.printJobs.length}`
+            div.row--link 
+              a.nav__el.nav__el--cta(href=`/addJob/${artwork.id}`) +
+          - if(artwork.printJobs.length !== 0)
+            .subRow-container(data-index=index)
+              .subRow-header
+                div nr.
+                div Id
+                div PrinterName
+                div exp date
+              each job, index2 in artwork.printJobs
+                a.subRow(href=`/`)
+                  div= `${index2 + 1}`
+                  div= `${job.jobId}`
+                  div= `${job.printerName}`
+                  div= `${job.createdAt.toLocaleDateString('en-us', {year: 'numeric',month: 'short',day: 'numeric'})}`
 
-        .row-container
-          .row-header
-            div nr.
-            div Id
-            div Name
-            div Description
-            div add Job
-          each artwork, index in myArtworks
-            .row
-              div= `${index + 1}`
-              div= `${artwork.artworkId}`
-              div= `${artwork.artworkName}`
-              div= `${artwork.artworkDescription}`
-              div 
-                a.nav__el.nav__el--cta(href=`/addJob/${artwork.id}`) +
-            - if(artwork.printJobs.length !== 0)
-              .subRow-container
-                .subRow-header
-                  div nr.
-                  div Id
-                  div PrinterName
-                  div exp date
-                each job, index2 in artwork.printJobs
-                  .subRow
-                    div= `${index2 + 1}`
-                    div= `${job.jobId}`
-                    div= `${job.printerName}`
-                    div= `${job.createdAt.toLocaleDateString('en-us', {year: 'numeric',month: 'short',day: 'numeric'})}`
+    script.
+      document.addEventListener('DOMContentLoaded', function () {
+        const rows = document.querySelectorAll('.row');
+        document.querySelectorAll('.subRow-container').forEach(container => {
+          container.classList.add('hidden');
+        });
+        rows.forEach((row, index) => {
+          const subRowContainer = document.querySelector(`.subRow-container[data-index="${index}"]`);
+          row.addEventListener('click', function () {
+            subRowContainer.classList.toggle('hidden');
+          });
+        });
+      });

@@ -17,6 +17,6 @@ export const hideImpMenu = () => {
 };
 
 export const showImpMenu = (user) => {
-  const markup = `<div class="impMenu">Impersonating: ${user} <button class="btn-stop-impersonate btn btn--green">Stop</button></div>`;
+  const markup = `<div class="impMenu"><span>Impersonating: ${user}</span><button class="btn-stop-impersonate btn btn--red">Stop</button></div>`;
   document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
 };
