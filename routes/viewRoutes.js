@@ -31,5 +31,10 @@ router.get(
 );
 router.get('/addJob/:id', authController.protect, viewsController.addJob);
 router.get('/submitJob/:token', viewsController.submitJob);
+router.get(
+  '/submitJobInt/:token',
+  authController.protect,
+  viewsController.submitJob,
+);
 
 module.exports = router;

@@ -35,7 +35,7 @@ block content
                 div PrinterName
                 div exp date
               each job, index2 in artwork.printJobs
-                a.subRow(href=`/submitJob/${job.submitJobToken}`)
+                a.subRow(href=`/submitJobInt/${job.submitJobToken}`)
                   div= `${index2 + 1}`
                   div= `${job.jobId}`
                   div= `${job.printerName}`
