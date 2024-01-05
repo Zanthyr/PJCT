@@ -64,7 +64,7 @@ exports.resizeBrandLogo = catchAsync(async (req, res, next) => {
   req.file.filename = `brand-${req.user.company.id}-${Date.now()}.jpg`; //// company id lijkt mij n iet het correcte om te gebruiken hier
 
   await sharp(req.file.buffer)
-    .resize(500, 500)
+    .resize(250, 100)
     .toFormat('jpeg')
     .jpeg({ quality: 90 })
     .toFile(`public/img/brands/${req.file.filename}`);

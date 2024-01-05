@@ -50,12 +50,9 @@ const jobSchema = new mongoose.Schema(
 jobSchema.methods.createJobSubmitToken = function (numDays = 30) {
   const submitToken = crypto.randomBytes(8).toString('hex');
 
-  this.submitJobToken = crypto
-    .createHash('sha256')
-    .update(submitToken)
-    .digest('hex');
-
+  this.submitJobToken = submitToken;
   this.submitJobExpires = Date.now() + numDays * 24 * 60 * 60 * 1000;
+
   return submitToken;
 };
 

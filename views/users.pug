@@ -55,8 +55,6 @@ block content
             .card
               .card__header
                 .card__picture
-                  - if (user.role === 'root' && doc.role !== 'root')
-                    a.btn__userImp.btn(userID=doc.id, currentUser=user.id) impersonate 
                   .card__picture-overlay &nbsp;
                   img.card__picture-img(src=`/img/users/${doc.photo}`, alt=`${doc.name}`)
                 h3.heading-tertirary
@@ -84,6 +82,11 @@ block content
                   span.card__footer-text Joined:
                   | 
                   span.card__footer-value= doc.date
+                  if (user.role === 'root' && doc.role !== 'root')
+                    a.btn.btn--xtrasmall.btn__userImp(userID=doc.id, currentUser=user.id)
+                      svg.card__icon
+                       use(xlink:href='/img/icons.svg#icon-user-plus')
+                      span= `impersonate`
                 div  
-                  a.btn__userDelete.btn.btn--red.btn--small(userID=doc.id) Delete!
-        
+                  a.btn__userEdit.btn.btn--green.btn--small(userID=doc.id) Edit!
+              

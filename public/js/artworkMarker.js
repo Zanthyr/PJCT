@@ -81,14 +81,16 @@ export const artworkMarker = (domElement) => {
       form.append('colors', JSON.stringify(selectedValues));
 
       console.log(selectedValues, id);
-      const succes = await httpx.createRecord(
+      const success = await httpx.createRecord(
         form,
         url,
         method,
         'added colors',
       );
-      if (succes) {
-        window.location.href = '/';
+      if (success) {
+        setTimeout(function () {
+          window.location.href = '/';
+        }, 1000);
       }
     });
 };

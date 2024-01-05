@@ -11,7 +11,7 @@ const logOutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
 const userInviteForm = document.querySelector('.form-user-invite');
 const userPasswordForm = document.querySelector('.form-user-password');
-const deleteUser = document.querySelector('.card-container');
+const userCardContainer = document.querySelector('.card-container');
 const showAddFormBtn = document.querySelector('.btn__showAddForm');
 const addContentForm = document.querySelector('.add__content');
 const companyDataForm = document.querySelector('.form-company-data');
@@ -72,12 +72,13 @@ if (showAddFormBtn)
   });
 
 // User managmet delete user button
-if (deleteUser) {
-  deleteUser.addEventListener('click', async function (event) {
-    const targetButton = event.target.closest('.btn__userDelete');
+if (userCardContainer) {
+  userCardContainer.addEventListener('click', async function (event) {
+    const targetButton = event.target.closest('.btn__userEdit');
     if (targetButton) {
       const userID = targetButton.getAttribute('userID');
-      httpx.softDelete(userID);
+
+      //httpx.softDelete(userID);
     }
 
     const ImpersonateButton = event.target.closest('.btn__userImp');
@@ -217,7 +218,12 @@ if (userInviteForm) {
 
     form.append('company', selectedCompanyIds);
 
-    httpx.createRecord(form, url, method, 'User');
+    const succes = httpx.createRecord(form, url, method, 'User');
+    if (succes) {
+      setTimeout(function () {
+        window.location.reload();
+      }, 1000);
+    }
   });
 }
 
@@ -239,6 +245,7 @@ if (colorForm) {
     const method = 'POST';
 
     form.append('colorName', document.getElementById('name').value);
+    form.append('hex', document.getElementById('hexCode').value);
     form.append('cie_l', document.getElementById('cie_l').value);
     form.append('cie_a', document.getElementById('cie_a').value);
     form.append('cie_b', document.getElementById('cie_b').value);
@@ -255,7 +262,12 @@ if (colorForm) {
     ).map((option) => option.value);
     form.append('brand', selectedBrandsIds);
 
-    httpx.createRecord(form, url, method, 'Color');
+    const succes = httpx.createRecord(form, url, method, 'Color');
+    if (succes) {
+      setTimeout(function () {
+        window.location.reload();
+      }, 1000);
+    }
   });
 }
 
@@ -278,9 +290,6 @@ if (brandDataForm) {
     const selectedBrandManagerDropdown = document.getElementById(
       'selectBrandManagers',
     );
-    // const selectedBrandManagerIds = Array.from(
-    //   selectedBrandManagerDropdown.selectedOptions,
-    // ).map((option) => option.value);
     const selectedBrandManagerIds = selectedBrandManagerDropdown
       ? Array.from(selectedBrandManagerDropdown.selectedOptions).map(
           (option) => option.value,
@@ -289,9 +298,6 @@ if (brandDataForm) {
     form.append('brandManagers', selectedBrandManagerIds);
 
     const selectedSupplierDropdown = document.getElementById('selectSuppliers');
-    // const selectedSupplierIds = Array.from(
-    //   selectedSupplierDropdown.selectedOptions,
-    // ).map((option) => option.value);
     const selectedSupplierIds = selectedSupplierDropdown
       ? Array.from(selectedSupplierDropdown.selectedOptions).map(
           (option) => option.value,
@@ -299,7 +305,12 @@ if (brandDataForm) {
       : [];
     form.append('brandSuppliers', selectedSupplierIds);
 
-    httpx.createRecord(form, url, method, 'Brand');
+    const succes = httpx.createRecord(form, url, method, 'Brand');
+    if (succes) {
+      setTimeout(function () {
+        window.location.reload();
+      }, 1000);
+    }
   });
 }
 
@@ -312,8 +323,10 @@ if (addCompany)
     form.append('companyName', document.getElementById('name').value);
     form.append('adress', document.getElementById('adress').value);
     form.append('companyType', document.getElementById('companyType').value);
-    //form.append('photo', document.getElementById('photo').files[0]);
-    httpx.createRecord(form, url, method, 'Company');
+    const succes = httpx.createRecord(form, url, method, 'Company');
+    if (succes) {
+      window.location.reload();
+    }
   });
 
 if (artworkDataForm) {
@@ -328,7 +341,6 @@ if (addArtwColor) {
   artworkMarker(addArtwColor);
 }
 
-// job
 if (addJobDataForm)
   addJobDataForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -342,6 +354,8 @@ if (addJobDataForm)
     form.append('printerEmail', document.getElementById('printerEmail').value);
     const succes = httpx.createRecord(form, url, method, 'Job');
     if (succes) {
-      window.location.href = '/';
+      setTimeout(function () {
+        window.location.href = '/';
+      }, 1000);
     }
   });

@@ -47,6 +47,7 @@ block content
         .single-row-container
           .single-row-header
             div nr.
+            div logo
             div Beand Name
             div Product Group
             div BrandOwner
@@ -54,6 +55,8 @@ block content
           each brand, index in cleanDoc
             .single-row
               div= `${index + 1}`
+              div.img-div
+                img.row-image-pict(src=`/img/brands/${brand.logo}`)
               div= `${brand.name}`
               div= `${brand.groep}`
               div= `${brand.Brandowner}`

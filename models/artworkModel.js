@@ -90,7 +90,7 @@ artworkSchema.pre(/^find/, function (next) {
     })
     .populate({
       path: 'printJobs',
-      select: 'jobId printerName createdAt',
+      select: 'jobId printerName submitJobToken submitJobExpires createdAt',
     });
   next();
 });

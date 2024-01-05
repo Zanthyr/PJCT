@@ -38,16 +38,19 @@ block content
 
         .line &nbsp;
 
-        .row-container
-          .row-header
+        .single-row-container
+          .single-row-header
             div nr.
+            div Logo
             div Name
             div Type
             div Adress
             div Date
           each company, index in companies
-            .row
+            .single-row
               div= `${index + 1}`
+              div.img-div
+                img.row-image-pict(src=`/img/companies/${company.companyPhoto}`)
               div= company.companyName
               div= company.companyType
               div= company.adress

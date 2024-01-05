@@ -110,10 +110,12 @@ export const artworkPosition = (domElement) => {
       form.append('artworkId', id);
       form.append('photo', croppedDataURL);
 
-      const succes = await httpx.createRecord(form, url, method, 'add Image');
+      const success = await httpx.createRecord(form, url, method, 'add Image');
 
-      if (succes === 'succes') {
-        window.location.href = '/addArtworkColors/' + id;
+      if (success === 'succes') {
+        setTimeout(function () {
+          window.location.href = '/addArtworkColors/' + id;
+        }, 1000);
       }
     });
 };

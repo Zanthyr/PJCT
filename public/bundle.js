@@ -5809,7 +5809,7 @@ var artworkMarker = exports.artworkMarker = function artworkMarker(domElement) {
   });
   document.getElementById('saveColors').addEventListener('click', /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
-      var selectedValues, id, form, url, method, succes;
+      var selectedValues, id, form, url, method, success;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -5831,9 +5831,11 @@ var artworkMarker = exports.artworkMarker = function artworkMarker(domElement) {
             _context.next = 11;
             return httpx.createRecord(form, url, method, 'added colors');
           case 11:
-            succes = _context.sent;
-            if (succes) {
-              window.location.href = '/';
+            success = _context.sent;
+            if (success) {
+              setTimeout(function () {
+                window.location.href = '/';
+              }, 1000);
             }
           case 13:
           case "end":
@@ -5944,7 +5946,7 @@ var artworkPosition = exports.artworkPosition = function artworkPosition(domElem
   });
   document.querySelector('.btn-save-artwork').addEventListener('click', /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
-      var croppedDataURL, id, form, url, method, succes;
+      var croppedDataURL, id, form, url, method, success;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -5959,9 +5961,11 @@ var artworkPosition = exports.artworkPosition = function artworkPosition(domElem
             _context.next = 10;
             return httpx.createRecord(form, url, method, 'add Image');
           case 10:
-            succes = _context.sent;
-            if (succes === 'succes') {
-              window.location.href = '/addArtworkColors/' + id;
+            success = _context.sent;
+            if (success === 'succes') {
+              setTimeout(function () {
+                window.location.href = '/addArtworkColors/' + id;
+              }, 1000);
             }
           case 12:
           case "end":
@@ -6032,7 +6036,9 @@ var artworkData = exports.artworkData = function artworkData(domElement) {
           case 12:
             id = _context.sent;
             if (id) {
-              window.location.href = '/addArtworkImage/' + id;
+              setTimeout(function () {
+                window.location.href = '/addArtworkImage/' + id;
+              }, 1000);
             }
           case 14:
           case "end":
@@ -6065,7 +6071,7 @@ var logOutBtn = document.querySelector('.nav__el--logout');
 var userDataForm = document.querySelector('.form-user-data');
 var userInviteForm = document.querySelector('.form-user-invite');
 var userPasswordForm = document.querySelector('.form-user-password');
-var deleteUser = document.querySelector('.card-container');
+var userCardContainer = document.querySelector('.card-container');
 var showAddFormBtn = document.querySelector('.btn__showAddForm');
 var addContentForm = document.querySelector('.add__content');
 var companyDataForm = document.querySelector('.form-company-data');
@@ -6118,17 +6124,16 @@ if (showAddFormBtn) showAddFormBtn.addEventListener('click', function () {
 });
 
 // User managmet delete user button
-if (deleteUser) {
-  deleteUser.addEventListener('click', /*#__PURE__*/function () {
+if (userCardContainer) {
+  userCardContainer.addEventListener('click', /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(event) {
       var targetButton, userID, ImpersonateButton, _userID, currentUser, response, data;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
-            targetButton = event.target.closest('.btn__userDelete');
+            targetButton = event.target.closest('.btn__userEdit');
             if (targetButton) {
-              userID = targetButton.getAttribute('userID');
-              httpx.softDelete(userID);
+              userID = targetButton.getAttribute('userID'); //httpx.softDelete(userID);
             }
             ImpersonateButton = event.target.closest('.btn__userImp');
             if (!ImpersonateButton) {
@@ -6300,7 +6305,12 @@ if (userInviteForm) {
       selectedCompanyIds = '';
     }
     form.append('company', selectedCompanyIds);
-    httpx.createRecord(form, url, method, 'User');
+    var succes = httpx.createRecord(form, url, method, 'User');
+    if (succes) {
+      setTimeout(function () {
+        window.location.reload();
+      }, 1000);
+    }
   });
 }
 if (colorForm) {
@@ -6317,6 +6327,7 @@ if (colorForm) {
     var url = '/api/v1/colors/createMy';
     var method = 'POST';
     form.append('colorName', document.getElementById('name').value);
+    form.append('hex', document.getElementById('hexCode').value);
     form.append('cie_l', document.getElementById('cie_l').value);
     form.append('cie_a', document.getElementById('cie_a').value);
     form.append('cie_b', document.getElementById('cie_b').value);
@@ -6331,7 +6342,12 @@ if (colorForm) {
       return option.value;
     });
     form.append('brand', selectedBrandsIds);
-    httpx.createRecord(form, url, method, 'Color');
+    var succes = httpx.createRecord(form, url, method, 'Color');
+    if (succes) {
+      setTimeout(function () {
+        window.location.reload();
+      }, 1000);
+    }
   });
 }
 if (brandDataForm) {
@@ -6347,22 +6363,21 @@ if (brandDataForm) {
     form.append('productGroup', document.getElementById('group').value);
     form.append('photo', document.getElementById('photo').files[0]);
     var selectedBrandManagerDropdown = document.getElementById('selectBrandManagers');
-    // const selectedBrandManagerIds = Array.from(
-    //   selectedBrandManagerDropdown.selectedOptions,
-    // ).map((option) => option.value);
     var selectedBrandManagerIds = selectedBrandManagerDropdown ? Array.from(selectedBrandManagerDropdown.selectedOptions).map(function (option) {
       return option.value;
     }) : [];
     form.append('brandManagers', selectedBrandManagerIds);
     var selectedSupplierDropdown = document.getElementById('selectSuppliers');
-    // const selectedSupplierIds = Array.from(
-    //   selectedSupplierDropdown.selectedOptions,
-    // ).map((option) => option.value);
     var selectedSupplierIds = selectedSupplierDropdown ? Array.from(selectedSupplierDropdown.selectedOptions).map(function (option) {
       return option.value;
     }) : [];
     form.append('brandSuppliers', selectedSupplierIds);
-    httpx.createRecord(form, url, method, 'Brand');
+    var succes = httpx.createRecord(form, url, method, 'Brand');
+    if (succes) {
+      setTimeout(function () {
+        window.location.reload();
+      }, 1000);
+    }
   });
 }
 if (addCompany) addCompany.addEventListener('submit', function (e) {
@@ -6373,8 +6388,10 @@ if (addCompany) addCompany.addEventListener('submit', function (e) {
   form.append('companyName', document.getElementById('name').value);
   form.append('adress', document.getElementById('adress').value);
   form.append('companyType', document.getElementById('companyType').value);
-  //form.append('photo', document.getElementById('photo').files[0]);
-  httpx.createRecord(form, url, method, 'Company');
+  var succes = httpx.createRecord(form, url, method, 'Company');
+  if (succes) {
+    window.location.reload();
+  }
 });
 if (artworkDataForm) {
   (0, _artworkData.artworkData)(artworkDataForm);
@@ -6385,8 +6402,6 @@ if (addArtwImg) {
 if (addArtwColor) {
   (0, _artworkMarker.artworkMarker)(addArtwColor);
 }
-
-// job
 if (addJobDataForm) addJobDataForm.addEventListener('submit', /*#__PURE__*/function () {
   var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(e) {
     var artworkId, url, method, form, succes;
@@ -6404,7 +6419,9 @@ if (addJobDataForm) addJobDataForm.addEventListener('submit', /*#__PURE__*/funct
           form.append('printerEmail', document.getElementById('printerEmail').value);
           succes = httpx.createRecord(form, url, method, 'Job');
           if (succes) {
-            window.location.href = '/';
+            setTimeout(function () {
+              window.location.href = '/';
+            }, 1000);
           }
         case 11:
         case "end":
@@ -6441,7 +6458,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55177" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65462" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

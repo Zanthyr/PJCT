@@ -25,6 +25,9 @@ block content
                 label.form__label(for='name') ColorName
                 input#name.form__input(type='text', value=`name`, required, name='name')
               .form__group.ma-bt-md
+                label.form__label(for='hexCode') Hex Code
+                input#hexCode.form__input(type='text', value=`hexCode`, required, name='hexCode')
+              .form__group.ma-bt-md
                 label.form__label(for='selectBrand') Select Brand
                 select.form__input(id='selectBrand')  
               div.form__horizontal.ma-bt-md
@@ -60,7 +63,7 @@ block content
                     option(value='Cyan') Cyan
                     option(value='Magenta') Magenta
                     option(value='Yellow') Yellow
-                    option(value='Vlack') Black
+                    option(value='Black') Black
               .form__group.right
                 button.btn.btn--small.btn--green Save Color
 
@@ -70,13 +73,15 @@ block content
         .single-row-container
           .single-row-header
             div nr.
+            div color
             div Name
             div Type
             div Brand Name
-            div Date
+            div Created
           each color, index in cleanColorList
             .single-row
               div= `${index + 1}`
+              div.color--block(style=`background-color: ${color.hex}`)
               div= color.name
               div= color.groep
               div= color.brand

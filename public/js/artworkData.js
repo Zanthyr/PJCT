@@ -46,7 +46,9 @@ export const artworkData = (domElement) => {
 
     const id = await httpx.createArtwork(form, url, method, 'Arwork');
     if (id) {
-      window.location.href = '/addArtworkImage/' + id;
+      setTimeout(function () {
+        window.location.href = '/addArtworkImage/' + id;
+      }, 1000);
     }
   });
 };

@@ -9,7 +9,6 @@ const colorSchema = new mongoose.Schema(
     ColorVersion: {
       type: Number,
       default: 0,
-      select: false,
     },
     colorType: {
       type: String,
@@ -32,6 +31,7 @@ const colorSchema = new mongoose.Schema(
         Density: Number,
         Halftone: Number,
         Filter: String,
+        hex: String,
       },
     ],
     createdByUser: {

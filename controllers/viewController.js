@@ -12,7 +12,6 @@ const Job = require('./../models/jobModel');
 exports.getHome = catchAsync(async (req, res, next) => {
   let myArtworks = [];
   if (res.locals.user) {
-    console.log(res.locals.user.company.companyType, res.locals.user.role);
     if (
       res.locals.user.role !== 'root' &&
       res.locals.user.company.companyType !== 'BrandOwner'
@@ -158,6 +157,7 @@ exports.getBrands = catchAsync(async (req, res, next) => {
 
   const cleanDoc = newDoc.map((item) => ({
     name: item.brandName,
+    logo: item.brandLogo,
     groep: item.productGroup,
     Brandowner: item.brandOwner.companyName,
     brandManagers: item.brandManagers.map((manager) => ({
@@ -210,6 +210,7 @@ exports.getColors = catchAsync(async (req, res, next) => {
     groep: item.colorType,
     id: item.id,
     brand: item.brandName === undefined ? 'none' : item.brandName.brandName,
+    hex: item.values[item.ColorVersion].hex,
     date: item.createdAt,
   }));
 
@@ -309,14 +310,9 @@ exports.addJob = catchAsync(async (req, res, next) => {
 
 exports.submitJob = catchAsync(async (req, res, next) => {
   const submitJobToken = req.params.token;
-  console.log(submitJobToken);
 
-  const hashedToken = crypto
-    .createHash('sha256')
-    .update(req.params.token)
-    .digest('hex');
   const job = await Job.findOne({
-    submitJobToken: hashedToken,
+    submitJobToken, //: hashedToken,
     submitJobExpires: { $gt: Date.now() },
   });
 

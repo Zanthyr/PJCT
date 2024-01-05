@@ -85,6 +85,7 @@ exports.createMyColor = catchAsync(async (req, res, next) => {
     Density: req.body.dens,
     Halftone: req.body.halftone,
     Filter: req.body.filter,
+    hex: req.body.hex,
   };
 
   const doc = await Color.create(filteredBody);
