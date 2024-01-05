@@ -1,0 +1,30 @@
+mixin navItem(link, menuName, icon)
+  li(class=`${menuName === activeMenu ? 'side-nav--active' : ''}`)
+    a(href=`${link}`)
+      svg
+        use(xlink:href=`/img/icons.svg#icon-${icon}`)
+      | #{menuName}
+
+
+nav.user-view__menu
+  ul.side-nav
+    +navItem('/me', 'My Acount', 'user')
+    +navItem('/my', 'My Company', 'briefcase')
+    //- +navItem('/artworks', 'My Artworks', 'star')
+    //- +navItem('#', 'My Jobs', 'layout')
+    //- +navItem('#', 'My Settings', 'settings', 5)
+
+  - if (user.role === 'admin' || user.role === 'root')
+    .admin-nav
+      h5.admin-nav__heading Admin
+      ul.side-nav
+        //- +navItem('#', 'Statistics', 'bar-chart', 6)
+        +navItem('/users', 'Manage users', 'users')
+        +navItem('/brands', 'Manage Brands', 'flag')
+        +navItem('/colors', 'Manage Colors', 'database')
+  
+  - if (user.role === 'root')
+    .admin-nav
+      h5.admin-nav__heading Root Admin
+      ul.side-nav
+        +navItem('/companies', 'Manage companies', 'globe')

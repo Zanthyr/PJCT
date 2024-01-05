@@ -1,0 +1,29 @@
+extends base
+
+block content
+  main.main
+    .user-view
+      //- include _sidebar
+      
+      .user-view__content.txt-cntr
+        //- .user-view__form-container
+        //-   h2.heading-secondary.ma-bt-md Your Company's Artworks
+
+        .add__content
+          .user-view__form-container
+            h2.heading-secondary.ma-bt-md ADD Image and colors
+            form.form.form-artImg-data(artworkID=id)
+              .form__group.form__photo-upload
+                input.form__upload(type='file', accept='image/*', id='photo', name='photo')
+                label(for='photo') Upload Artwork Image
+              
+              div.master-crop-container
+                div.crop-div
+                  .image-box-preview#imagePreview
+                    canvas#cropsCanvas
+
+                div.buttons-crop-container
+                  button.btn-enlarge.btn.btn--small.btn--green +
+                  button.btn-shrink.btn.btn--small.btn--green -
+
+              button.btn-save-artwork.btn.btn--small.btn--green Save image

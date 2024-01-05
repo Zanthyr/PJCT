@@ -1,0 +1,63 @@
+extends base
+
+block content
+  main.main
+    .user-view
+      include _sidebar
+
+      .user-view__content.txt-cntr
+        .user-view__form-container
+          h2.heading-secondary.ma-bt-md Your Company's Colors
+
+        .line &nbsp;
+        
+        .add__content
+          .user-view__form-container
+            h2.heading-secondary.ma-bt-md Edit A Color
+            form.form.form-editColor(brands=cleanBrandList, selectedBrand=color.brandName.brandName, id=color.id)
+              .form__group.ma-bt-md
+                label.form__label(for='name') ColorName
+                input#name.form__input(type='text', value=`${color.colorName}`, required, name='name')
+              .form__group.ma-bt-md
+                label.form__label(for='hexCode') Hex Code
+                input#hexCode.form__input(type='text', value=`${color.values[color.ColorVersion].hex}`, required, name='hexCode')
+              .form__group.ma-bt-md
+                label.form__label(for='selectBrand') Select Brand
+                select.form__input(id='selectBrand', value=`${color.brandName}`)  
+              div.form__horizontal.ma-bt-md
+                .form__groupHori
+                  label.form__label(for='cie_l') Cie-L
+                  input#cie_l.form__input(type='number', value=`${color.values[color.ColorVersion].cie_L}`,step='0.1', required, name='cie_l')
+                .form__groupHori
+                  label.form__label(for='cie_a') Cie-a
+                  input#cie_a.form__input(type='number', value=`${color.values[color.ColorVersion].cie_a}`,step='0.1', required, name='cie_a')
+                .form__groupHori
+                  label.form__label(for='cie_b') Cie-b
+                  input#cie_b.form__input(type='number', value=`${color.values[color.ColorVersion].cie_b}`,step='0.1', required, name='cie_b')
+              div.form__horizontal.ma-bt-md
+                .form__groupHori
+                  label.form__label(for='deltae00') DeltaE00
+                  input#deltae00.form__input(type='number', value=`${color.values[color.ColorVersion].deltae00}`,step='0.1', required, name='deltae00')
+                .form__groupHori
+                  label.form__label(for='delta_c') Delta_C
+                  input#delta_c.form__input(type='number', value=`${color.values[color.ColorVersion].delta_c}`,step='0.1', required, name='delta_c')
+                .form__groupHori
+                  label.form__label(for='delta_h') Delta_H°
+                  input#delta_h.form__input(type='number', value=`${color.values[color.ColorVersion].delta_h}`,step='0.1', required, name='delta_h')
+              div.form__horizontal.ma-bt-md
+                .form__groupHori
+                  label.form__label(for='dens') Dens
+                  input#dens.form__input(type='number', value=`${color.values[color.ColorVersion].Density}`,step='0.1', required, name='dens')
+                .form__groupHori
+                  label.form__label(for='halftone') Halftone
+                  input#halftone.form__input(type='number', value=`${color.values[color.ColorVersion].Halftone}`,step='0.1', required, name='halftone')
+                .form__groupHori
+                  label.form__label(for='filter') Filter
+                  select#filter.form__input(name='filter' required)
+                    option(value=`${color.values[color.ColorVersion].Filter}`)= color.values[color.ColorVersion].Filter
+                    option(value='Cyan') Cyan
+                    option(value='Magenta') Magenta
+                    option(value='Yellow') Yellow
+                    option(value='Black') Black
+              .form__group.right
+                button.btn.btn--small.btn--green Save Color

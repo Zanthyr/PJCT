@@ -1,0 +1,14 @@
+extends base
+
+block content
+  main.main
+  div.login__box
+    div.login-form
+      h2.heading-secondary.ma-bt-lg Request Reset Link
+        div.heading-spacer
+        form.form.form--requestReset
+          .form__group
+            label.form__label(for='email') Email address
+            input#email.form__input(type='email', placeholder='you@example.com', required)
+          .form__group
+            button.btn.btn--green Submit request
