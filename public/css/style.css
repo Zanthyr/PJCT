@@ -235,11 +235,17 @@ body {
 }
 
 .btn--green {
+  background-color: var(--secendary);
+  color: var(--White);
+}
+
+.btn--blue {
   background-color: var(--primary);
   color: var(--White);
 }
+
 .btn--green::after {
-  background-color: var(--primary);
+  background-color: var(--secendary);
 }
 
 .btn--red {
@@ -1162,7 +1168,7 @@ body {
   border-top-right-radius: 5px;
   padding: 1.6rem 10rem;
   box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.25);
-  background-color: var(--primaryDark);
+  background-color: var(--primaryLight);
 }
 
 .impMenu span {

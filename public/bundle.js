@@ -5437,7 +5437,7 @@ var hideImpMenu = exports.hideImpMenu = function hideImpMenu() {
   location.assign('/');
 };
 var showImpMenu = exports.showImpMenu = function showImpMenu(user) {
-  var markup = "<div class=\"impMenu\"><span>Impersonating: ".concat(user, "</span><button class=\"btn-stop-impersonate btn btn--red\">Stop</button></div>");
+  var markup = "<div class=\"impMenu\"><span>Impersonating: ".concat(user, "</span><button class=\"btn-stop-impersonate btn btn--blue\">Stop</button></div>");
   document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
 };
 },{}],"httpx.js":[function(require,module,exports) {

@@ -82,7 +82,10 @@ artworkSchema.pre(/^find/, function (next) {
   })
     .populate({
       path: 'artworkColors',
-      select: 'colorName',
+      populate: {
+        path: 'color',
+        select: 'colorName values',
+      },
     })
     .populate({
       path: 'artworkForBrand',

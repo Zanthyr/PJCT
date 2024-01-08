@@ -2,5 +2,38 @@ extends base
 
 block content
   main.main
-    div.constrtuction
-      h1 Suybmit a job
+    .user-view
+      .user-view__content.txt-cntr
+        .user-view__form-container(artworkID=artwork.id, colors=colors)
+          h2.heading-secondary.ma-bt-md Job Detail
+
+        a.btn.btn--blue.btn--small
+          div.btn-add
+            svg.card__icon-white.mr
+              use(xlink:href='/img/icons.svg#icon-file-plus')
+            | Submit Measurement data
+        .add__content
+          .user-view__form-container
+            h2.heading-secondary.ma-bt-md Job Details
+            
+            P.form__label= `${artwork.artworkId}`
+            P.form__label= `${artwork.artworkName}`
+            P.form__label= `${artwork.artworkDescription}`
+            each color, index in artwork.artworkColors
+              div= `${index + 1}`
+              div= `${color}`
+              div= `${color.color.colorName}`
+              div= `${color.color.values}`
+            
+
+        .add__content
+          .user-view__form-container
+            h2.heading-secondary.ma-bt-md Color Details
+            form.form
+
+                  
+              .form__group.add-colors-form
+                div#markerImage
+                  img(src=`/img/artworks/${artwork.artworkImage}`)
+              
+              

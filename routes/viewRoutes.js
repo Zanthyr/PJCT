@@ -33,7 +33,7 @@ router.get(
 router.get('/addJob/:id', authController.protect, viewsController.addJob);
 router.get('/submitJob/:token', viewsController.submitJob);
 router.get(
-  '/submitJobInt/:token',
+  '/jobDetail/:token',
   authController.protect,
   viewsController.submitJob,
 );
