@@ -12,28 +12,24 @@ block content
             svg.card__icon-white.mr
               use(xlink:href='/img/icons.svg#icon-file-plus')
             | Submit Measurement data
+        
         .add__content
           .user-view__form-container
             h2.heading-secondary.ma-bt-md Job Details
             
-            P.form__label= `${artwork.artworkId}`
-            P.form__label= `${artwork.artworkName}`
-            P.form__label= `${artwork.artworkDescription}`
-            each color, index in artwork.artworkColors
-              div= `${index + 1}`
-              div= `${color}`
-              div= `${color.color.colorName}`
-              div= `${color.color.values}`
-            
+            P.form__label= `ID: ${artwork.artworkId}`
+            P.form__label= `Name: ${artwork.artworkName}`
+            P.form__label= `Description: ${artwork.artworkDescription}`
 
-        .add__content
-          .user-view__form-container
-            h2.heading-secondary.ma-bt-md Color Details
+
+
             form.form
-
-                  
-              .form__group.add-colors-form
+              .form__group.submit-job-form
                 div#markerImage
                   img(src=`/img/artworks/${artwork.artworkImage}`)
-              
-              
+                div#dropdownContainer
+                  each color, index in artwork.artworkColors
+                    div= `${index + 1}`
+                    div= `${color.coords}`
+                    div= `${color.color.colorName}`
+                    div= `${color.color.values}`

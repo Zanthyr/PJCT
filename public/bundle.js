@@ -6119,6 +6119,19 @@ var artworkPosition = exports.artworkPosition = function artworkPosition(domElem
     };
   }());
 };
+},{"./httpx":"httpx.js"}],"submitJob.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.submitJob = void 0;
+var httpx = _interopRequireWildcard(require("./httpx"));
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+var submitJob = exports.submitJob = function submitJob(domElement) {
+  console.log('test', domElement);
+};
 },{"./httpx":"httpx.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
@@ -6126,6 +6139,7 @@ var httpx = _interopRequireWildcard(require("./httpx"));
 var _alerts = require("./alerts");
 var _colors = require("./colors");
 var _artworks = require("./artworks");
+var _submitJob = require("./submitJob");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
 function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
@@ -6152,6 +6166,7 @@ var artworkDataForm = document.querySelector('.form-artwork-data');
 var addArtwImg = document.querySelector('.form-artImg-data');
 var addArtwColor = document.querySelector('.form-artColor-data');
 var addJobDataForm = document.querySelector('.form-addJob-data');
+var submitJobForm = document.querySelector('.submit-job-form');
 
 // load companies for adding brand owner
 function populateDropdown(elementId, list) {
@@ -6467,7 +6482,10 @@ if (addJobDataForm) addJobDataForm.addEventListener('submit', /*#__PURE__*/funct
     return _ref4.apply(this, arguments);
   };
 }());
-},{"./httpx":"httpx.js","./alerts":"alerts.js","./colors":"colors.js","./artworks":"artworks.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+if (submitJobForm) {
+  (0, _submitJob.submitJob)(submitJobForm);
+}
+},{"./httpx":"httpx.js","./alerts":"alerts.js","./colors":"colors.js","./artworks":"artworks.js","./submitJob":"submitJob.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;

@@ -2,6 +2,7 @@ import * as httpx from './httpx';
 import { showImpMenu, hideImpMenu } from './alerts';
 import { addColor, editColor } from './colors';
 import { artworkMarker, artworkPosition, artworkData } from './artworks';
+import { submitJob } from './submitJob';
 
 // DOM ELEMENTS
 const loginForm = document.querySelector('.form--login');
@@ -23,6 +24,7 @@ const artworkDataForm = document.querySelector('.form-artwork-data');
 const addArtwImg = document.querySelector('.form-artImg-data');
 const addArtwColor = document.querySelector('.form-artColor-data');
 const addJobDataForm = document.querySelector('.form-addJob-data');
+const submitJobForm = document.querySelector('.submit-job-form');
 
 // load companies for adding brand owner
 function populateDropdown(elementId, list) {
@@ -320,3 +322,7 @@ if (addJobDataForm)
       }, 1000);
     }
   });
+
+if (submitJobForm) {
+  submitJob(submitJobForm);
+}
