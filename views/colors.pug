@@ -10,7 +10,7 @@ block content
           h2.heading-secondary.ma-bt-md Your Company's Colors
 
         - if (user.role !== 'root')
-          a.btn__showAddForm.btn.btn--green.btn--small
+          a.btn__showAddForm.btn.btn--orange.btn--small
             div.btn-add
               svg.card__icon-white.mr
                 use(xlink:href='/img/icons.svg#icon-file-plus')
@@ -24,9 +24,6 @@ block content
               .form__group.ma-bt-md
                 label.form__label(for='name') ColorName
                 input#name.form__input(type='text', value=`name`, required, name='name')
-              .form__group.ma-bt-md
-                label.form__label(for='hexCode') Hex Code
-                input#hexCode.form__input(type='text', value=`hexCode`, required, name='hexCode')
               .form__group.ma-bt-md
                 label.form__label(for='selectBrand') Select Brand
                 select.form__input(id='selectBrand')  
@@ -50,22 +47,9 @@ block content
                 .form__groupHori
                   label.form__label(for='delta_h') Delta_H°
                   input#delta_h.form__input(type='number', value=`10`,step='0.1', required, name='delta_h')
-              div.form__horizontal.ma-bt-md
-                .form__groupHori
-                  label.form__label(for='dens') Dens
-                  input#dens.form__input(type='number', value=`10`,step='0.1', required, name='dens')
-                .form__groupHori
-                  label.form__label(for='halftone') Halftone
-                  input#halftone.form__input(type='number', value=`10`,step='0.1', required, name='halftone')
-                .form__groupHori
-                  label.form__label(for='filter') Filter
-                  select#filter.form__input(name='filter' required)
-                    option(value='Cyan') Cyan
-                    option(value='Magenta') Magenta
-                    option(value='Yellow') Yellow
-                    option(value='Black') Black
+
               .form__group.right
-                button.btn.btn--small.btn--green Save Color
+                button.btn.btn--small.btn--orange Save Color
 
         .line &nbsp;
               

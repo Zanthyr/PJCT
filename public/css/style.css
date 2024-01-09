@@ -18,8 +18,11 @@
  rgba(40, 180, 135, 0.85) */
 
   --green: #20bf6b;
+  --greenDarker: #187e47;
   --orange: #ff7730;
+  --orangeDarker: #c65518;
   --red: #eb4d4b;
+  --redDarker: #ae2e2c;
 
   --black: #000;
   --White: #fff;
@@ -30,6 +33,7 @@
   --grayLight: #e0e0e0;
   --grayLighter: #f2f2f2;
   --grayLightest: #f7f7f7;
+  --test: rgb(204, 255, 0);
 }
 
 ::selection {
@@ -234,18 +238,21 @@ body {
   background-color: var(--White);
 }
 
+.btn--orange:focus {
+  background-color: var(--grayMedium);
+}
+
 .btn--green {
   background-color: var(--secendary);
   color: var(--White);
 }
 
-.btn--blue {
-  background-color: var(--primary);
-  color: var(--White);
-}
-
 .btn--green::after {
   background-color: var(--secendary);
+}
+
+.btn--green:focus {
+  background-color: var(--greenDarker);
 }
 
 .btn--red {
@@ -254,6 +261,36 @@ body {
 }
 .btn--red::after {
   background-color: var(--red);
+}
+
+.btn--red:focus {
+  background-color: var(--redDarker);
+}
+
+.btn--orange {
+  background-color: var(--orange);
+  color: var(--White);
+}
+
+.btn--orange::after {
+  background-color: var(--orange);
+}
+
+.btn--orange:focus {
+  background-color: var(--orangeDarker);
+}
+
+.btn--blue {
+  background-color: var(--primary);
+  color: var(--White);
+}
+
+.btn--blue::after {
+  background-color: var(--primary);
+}
+
+.btn--blue:focus {
+  background-color: var(--primaryDarker);
 }
 
 .btn--small {

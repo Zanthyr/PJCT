@@ -11,7 +11,7 @@ block content
           h2.heading-secondary.ma-bt-md Your Company's Brands
           
         - if (user.company.companyType === 'BrandOwner')
-          a.btn__showAddForm.btn.btn--green.btn--small
+          a.btn__showAddForm.btn.btn--orange.btn--small
             div.btn-add
               svg.card__icon-white.mr
                 use(xlink:href='/img/icons.svg#icon-file-plus')
@@ -38,7 +38,7 @@ block content
                 label(for='photo') Choose a logo
 
               .form__group.right
-                button.btn.btn--small.btn--green Save Brand
+                button.btn.btn--small.btn--orange Save Brand
               //- each company in cleanCompanies 
               //-   p= `${company.name} / ${company.id}`
 

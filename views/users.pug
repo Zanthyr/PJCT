@@ -9,7 +9,7 @@ block content
         .user-view__form-container
           h2.heading-secondary.ma-bt-md Your Company's users
 
-        a.btn__showAddForm.btn.btn--green.btn--small
+        a.btn__showAddForm.btn.btn--orange.btn--small
           div.btn-add
             svg.card__icon-white.mr
               use(xlink:href='/img/icons.svg#icon-file-plus')
@@ -46,7 +46,7 @@ block content
                   input#jobCreator.form__checkbox(type='checkbox', name='jobreator', value='')
                   label.form__label(for='jobreator') Check when user may create jobs for your company
               .form__group.right
-                button.btn.btn--small.btn--green Invite user
+                button.btn.btn--small.btn--orange Invite user
 
         .line &nbsp;
               
@@ -88,5 +88,5 @@ block content
                        use(xlink:href='/img/icons.svg#icon-user-plus')
                       span= `impersonate`
                 div  
-                  a.btn__userEdit.btn.btn--green.btn--small(userID=doc.id) Edit!
+                  a.btn__userEdit.btn.btn--orange.btn--small(userID=doc.id) Edit!
               

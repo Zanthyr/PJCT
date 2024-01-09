@@ -1,9 +1,7 @@
-/* eslint-disable */
 import * as httpx from './httpx';
-import { artworkMarker } from './artworkMarker';
-import { artworkPosition } from './artworkPosition';
-import { artworkData } from './artworkData';
 import { showImpMenu, hideImpMenu } from './alerts';
+import { addColor, editColor } from './colors';
+import { artworkMarker, artworkPosition, artworkData } from './artworks';
 
 // DOM ELEMENTS
 const loginForm = document.querySelector('.form--login');
@@ -37,6 +35,23 @@ function populateDropdown(elementId, list) {
   });
 }
 
+if (loginForm)
+  loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    httpx.login(email, password);
+  });
+
+if (logOutBtn) logOutBtn.addEventListener('click', httpx.logout);
+
+if (requestReset)
+  requestReset.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    httpx.requestReset(email);
+  });
+
 if (resetPassword)
   resetPassword.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -48,23 +63,6 @@ if (resetPassword)
     const token = urlParts[resetPasswordIndex + 1];
     httpx.resetPassword(password, passwordConfirm, token);
   });
-
-if (requestReset)
-  requestReset.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const email = document.getElementById('email').value;
-    httpx.requestReset(email);
-  });
-
-if (loginForm)
-  loginForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    httpx.login(email, password);
-  });
-
-if (logOutBtn) logOutBtn.addEventListener('click', httpx.logout);
 
 // remove or show add user/brand/color menu
 if (showAddFormBtn)
@@ -106,8 +104,6 @@ if (userCardContainer) {
     }
   });
 }
-
-// hideImpMenu
 
 document.addEventListener('DOMContentLoaded', function () {
   const stopImpersonateBtn = document.querySelector('.btn-stop-impersonate');
@@ -229,101 +225,11 @@ if (userInviteForm) {
 }
 
 if (colorForm) {
-  const brands = JSON.parse(colorForm.getAttribute('brands'));
-  const noneOption = document.createElement('option');
-  noneOption.value = '';
-  noneOption.text = 'None';
-
-  const selectBrand = document.getElementById('selectBrand');
-  selectBrand.appendChild(noneOption);
-  populateDropdown('selectBrand', brands);
-
-  colorForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const form = new FormData();
-    const url = '/api/v1/colors/createMy';
-    const method = 'POST';
-
-    form.append('colorName', document.getElementById('name').value);
-    form.append('hex', document.getElementById('hexCode').value);
-    form.append('cie_l', document.getElementById('cie_l').value);
-    form.append('cie_a', document.getElementById('cie_a').value);
-    form.append('cie_b', document.getElementById('cie_b').value);
-    form.append('deltae00', document.getElementById('deltae00').value);
-    form.append('delta_c', document.getElementById('delta_c').value);
-    form.append('delta_h', document.getElementById('delta_h').value);
-    form.append('dens', document.getElementById('dens').value);
-    form.append('halftone', document.getElementById('halftone').value);
-    form.append('filter', document.getElementById('filter').value);
-
-    const selectedBrandDropdown = document.getElementById('selectBrand');
-    const selectedBrandsIds = Array.from(
-      selectedBrandDropdown.selectedOptions,
-    ).map((option) => option.value);
-    form.append('brand', selectedBrandsIds);
-
-    const succes = httpx.createRecord(form, url, method, 'Color');
-    if (succes) {
-      setTimeout(function () {
-        window.location.reload();
-      }, 1000);
-    }
-  });
+  addColor(colorForm);
 }
 
 if (editColorForm) {
-  const brands = JSON.parse(editColorForm.getAttribute('brands'));
-  const selected = editColorForm.getAttribute('selectedBrand');
-  const noneOption = document.createElement('option');
-  noneOption.value = '';
-  noneOption.text = 'None';
-
-  const selectBrand = document.getElementById('selectBrand');
-  selectBrand.appendChild(noneOption);
-  populateDropdown('selectBrand', brands);
-
-  if (selected) {
-    for (let i = 0; i < selectBrand.options.length; i++) {
-      if (selectBrand.options[i].text === selected) {
-        selectBrand.selectedIndex = i;
-        break;
-      }
-    }
-  }
-
-  editColorForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const id = editColorForm.getAttribute('id');
-    const form = new FormData();
-    const url = `/api/v1/colors/${id}`;
-    const method = 'PATCH';
-
-    form.append('colorName', document.getElementById('name').value);
-    form.append('hex', document.getElementById('hexCode').value);
-    form.append('cie_l', document.getElementById('cie_l').value);
-    form.append('cie_a', document.getElementById('cie_a').value);
-    form.append('cie_b', document.getElementById('cie_b').value);
-    form.append('deltae00', document.getElementById('deltae00').value);
-    form.append('delta_c', document.getElementById('delta_c').value);
-    form.append('delta_h', document.getElementById('delta_h').value);
-    form.append('dens', document.getElementById('dens').value);
-    form.append('halftone', document.getElementById('halftone').value);
-    form.append('filter', document.getElementById('filter').value);
-
-    const selectedBrandDropdown = document.getElementById('selectBrand');
-    const selectedBrandsIds = Array.from(
-      selectedBrandDropdown.selectedOptions,
-    ).map((option) => option.value);
-    form.append('brand', selectedBrandsIds);
-    const succes = httpx.createRecord(form, url, method, 'Color');
-    if (succes) {
-      setTimeout(function () {
-        window.location.href = '/colors';
-      }, 1000);
-    }
-  });
+  editColor(editColorForm);
 }
 
 if (brandDataForm) {

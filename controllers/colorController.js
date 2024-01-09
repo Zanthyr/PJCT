@@ -3,6 +3,7 @@ const Color = require('./../models/colorModel');
 const factory = require('./handlerFactory');
 const APIFeatures = require('../utils/apiFeatures');
 const AppError = require('../utils/appError');
+const utils = require('../utils/utils');
 
 // api and admin
 exports.deleteColor = factory.deleteOne(Color);
@@ -75,6 +76,12 @@ exports.createMyColor = catchAsync(async (req, res, next) => {
     filteredBody.brandName = req.body.brand;
   }
 
+  const hexValues = utils.labToHex(
+    +req.body.cie_l,
+    +req.body.cie_a,
+    +req.body.cie_b,
+  );
+
   filteredBody.values = {
     cie_L: req.body.cie_l,
     cie_a: req.body.cie_a,
@@ -82,10 +89,7 @@ exports.createMyColor = catchAsync(async (req, res, next) => {
     deltae00: req.body.deltae00,
     delta_c: req.body.delta_c,
     delta_h: req.body.delta_h,
-    Density: req.body.dens,
-    Halftone: req.body.halftone,
-    Filter: req.body.filter,
-    hex: req.body.hex,
+    hex: hexValues,
   };
 
   const doc = await Color.create(filteredBody);
@@ -104,14 +108,6 @@ exports.updateColor = catchAsync(async (req, res, next) => {
     return next(new AppError('No document found with that ID', 404));
   }
 
-  if (
-    req.user.company.id !== query.createdByCompany &&
-    req.user.role !== 'root'
-  )
-    return next(
-      new AppError('You can only update colors for your own company!', 401),
-    );
-
   const filteredBody = {};
   filteredBody.ColorVersion = query.ColorVersion;
   filteredBody.colorName = req.body.colorName;
@@ -124,6 +120,11 @@ exports.updateColor = catchAsync(async (req, res, next) => {
     filteredBody.brandName = req.body.brand;
   }
 
+  const hexValues = utils.labToHex(
+    +req.body.cie_l,
+    +req.body.cie_a,
+    +req.body.cie_b,
+  );
   // in future push the new object onto the values array and increment the verion number
   filteredBody.values = {
     cie_L: req.body.cie_l,
@@ -132,10 +133,7 @@ exports.updateColor = catchAsync(async (req, res, next) => {
     deltae00: req.body.deltae00,
     delta_c: req.body.delta_c,
     delta_h: req.body.delta_h,
-    Density: req.body.dens,
-    Halftone: req.body.halftone,
-    Filter: req.body.filter,
-    hex: req.body.hex,
+    hex: hexValues,
   };
 
   const doc = await Color.findByIdAndUpdate(req.params.id, filteredBody, {
