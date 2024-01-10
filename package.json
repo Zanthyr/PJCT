@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server.js",
-    "watch": "parcel watch ./public/js/index.js --out-dir ./public --out-file bundle.js",
-    "build": "parcel watch ./public/js/index.js --out-dir ./public --out-file bundle.js"
+    "compile:sass": "node-sass public/sass/main.scss public/css/style.css -w",
+    "compile:parcel": "parcel watch ./public/js/index.js --out-dir ./public --out-file bundle.js",
+    "build": "node-sass public/sass/main.scss public/css/style.css && parcel build ./public/js/index.js --out-dir ./public --out-file bundle.js"
   },
   "repository": {
     "type": "git",
@@ -46,6 +47,7 @@
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^5.0.1",
+    "node-sass": "^9.0.0",
     "parcel-bundler": "^1.12.5",
     "prettier": "^3.1.0"
   }
