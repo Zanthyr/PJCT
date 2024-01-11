@@ -350,7 +350,6 @@ exports.submitJob = catchAsync(async (req, res, next) => {
 
   const artwork = await Artwork.findById(job.artworkId);
 
-  console.log(artwork.artworkColors[0].color);
   res.status(200).render('submitJob', {
     title: 'submit A Job',
     artwork,

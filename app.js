@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
+const compression = require('compression');
 const cookieParser = require('cookie-parser');
 const brandRouter = require('./routes/brandRoutes');
 const companyRouter = require('./routes/companyRoutes');
@@ -11,7 +12,6 @@ const colorRouter = require('./routes/colorRoutes');
 const viewRouter = require('./routes/viewRoutes');
 const globalErrorHandeler = require('./controllers/errorController');
 const AppError = require('./utils/appError');
-const authController = require('./controllers/authController');
 const cors = require('cors');
 
 const app = express();
@@ -29,6 +29,7 @@ console.log(`App is running in ${process.env.NODE_ENV}...`);
 // middelware method to serve static files or folders
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(compression());
 // add data from body and cookies to request
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
