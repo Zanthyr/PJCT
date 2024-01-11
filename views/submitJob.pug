@@ -4,32 +4,47 @@ block content
   main.main
     .user-view
       .user-view__content.txt-cntr
-        .user-view__form-container(artworkID=artwork.id, colors=colors)
-          h2.heading-secondary.ma-bt-md Job Detail
+        .submit-job__form-container
+          h2.heading-secondary.ma-bt-md Submit Job data
 
+        a.btn.btn--orange.btn--small.mar-right
+          div.btn-add
+            svg.card__icon-white.mr
+              use(xlink:href='/img/icons.svg#icon-download')
+            | Download CXF
         a.btn.btn--blue.btn--small
           div.btn-add
             svg.card__icon-white.mr
-              use(xlink:href='/img/icons.svg#icon-file-plus')
-            | Submit Measurement data
-        
-        .add__content
-          .user-view__form-container
-            h2.heading-secondary.ma-bt-md Job Details
+              use(xlink:href='/img/icons.svg#icon-upload')
+            | Submit Job Data
             
-            P.form__label= `ID: ${artwork.artworkId}`
-            P.form__label= `Name: ${artwork.artworkName}`
-            P.form__label= `Description: ${artwork.artworkDescription}`
-            P test
-
+        .add__content
+          .submit-job__form-container
+            h2.heading-secondary.ma-bt-md Job Details
+            P.form__label= `Job ID: ${job.jobId}`
+            P.form__label= `Printer Name: ${job.printerName}`
+            P.form__label= `Printer Contact: ${job.printerEmail}`
+            P.form__label= `Creation date: ${job.createdAt.toLocaleDateString('en-us', {year: 'numeric',month: 'short',day: 'numeric'})}`
+            P.form__label.ma-bt-md= `Due date: ${job.submitJobExpires.toLocaleDateString('en-us', {year: 'numeric',month: 'short',day: 'numeric'})}`
+            P.form__label= `Artwork ID: ${artwork.artworkId}`
+            P.form__label= `Artwork Name: ${artwork.artworkName}`
+            P.form__label.ma-bt-md= `Description: ${artwork.artworkDescription}`
 
             form.form
-              .form__group.submit-job-form
+              .form__group.submit-job-form(artworkID=artwork.id, colors=artwork.artworkColors)
                 div#markerImage
                   img(src=`/img/artworks/${artwork.artworkImage}`)
                 div#dropdownContainer
                   each color, index in artwork.artworkColors
-                    div= `${index + 1}`
-                    div= `${color.coords}`
-                    div= `${color.color.colorName}`
-                    div= `${color.color.values}`
+                    .color__list
+                      div.mg-bt-small.form__label= `${index + 1} : ${color.color.colorName}`
+                      .color__detail
+                        div.color--block-big(style=`background-color: ${color.color.values[0].hex}`)
+                          p= `Lab:`
+                          p= `${color.color.values[0].cie_L},${color.color.values[0].cie_a},${color.color.values[0].cie_b}`
+                        //- div= `L: ${color.color.values[0].cie_L}, a: ${color.color.values[0].cie_a}, b: ${color.color.values[0].cie_b}`
+                        div.color__detail-details.ma-bt-md
+                          div.form__label= `Delta E 2000: ${color.color.values[0].deltae00}`
+                          div.form__label= `Delta Chroma: ${color.color.values[0].delta_c}`
+                          div.form__label= `Delta hue°: ${color.color.values[0].delta_h}`
+                        
