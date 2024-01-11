@@ -4,7 +4,8 @@
   "description": "Print Job Colaboration tool",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node server.js",
+    "dev": "nodemon server.js",
     "compile:sass": "node-sass public/sass/main.scss public/css/style.css -w",
     "compile:parcel": "parcel watch ./public/js/index.js --out-dir ./public --out-file bundle.js",
     "build": "node-sass public/sass/main.scss public/css/style.css && parcel build ./public/js/index.js --out-dir ./public --out-file bundle.js"
